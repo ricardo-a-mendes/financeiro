@@ -19,7 +19,7 @@
                     </thead>
                     <tbody>
                     <tr class="success">
-                        <th><span id="credit" class="glyphicon glyphicon-triangle-top"></span> Creditos</th>
+                        <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
                         <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
                         <th>{{Number::formatCurrency($totalCredit)}}</th>
                     </tr>
@@ -32,7 +32,7 @@
                     @endforeach
 
                     <tr class="danger">
-                        <th><span id="debit" class="glyphicon glyphicon-triangle-top"></span> Debitos</th>
+                        <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
                         <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
                         <th>{{Number::formatCurrency($totalDebit)}}</th>
                     </tr>
