@@ -45,7 +45,7 @@ class StatementController extends Controller
             ];
         }
 
-        return view('statement', compact(
+        return view('layouts.statement', compact(
             'statementDebit',
             'statementCredit',
             'totalDebit',
@@ -66,6 +66,6 @@ class StatementController extends Controller
             $total += (double) $trans->value;
         }
 
-        return view('category_details', compact('details', 'total'));
+        return view('layouts.category_details', compact('details', 'total'));
     }
 }

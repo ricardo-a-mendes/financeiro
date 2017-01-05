@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+
         <div class="row">
             <div class="col-md-7">
                 <h3>Extrato&nbsp;
@@ -75,14 +76,12 @@
     </div>
 @endsection
 @section('js')
-    <script type="text/javascript" src="{{asset('js/bootstrap/tooltip.js')}}"></script>
+
     <script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts-3d.js')}}"></script>
     <script type="text/javascript">
         $(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-
             $('#credit, #debit').on('click', function (){
                 var type = $(this)[0].id;
                 if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top') {
