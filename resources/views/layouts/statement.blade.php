@@ -1,62 +1,61 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
 
-        <div class="row">
-            <div class="col-md-7">
-                <h3>Extrato&nbsp;
-                    <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
-                    &nbsp;
-                    <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
-                </h3>
-                <table class="table table-responsive table-hover">
-                    <thead>
-                    <tr>
-                        <th style="width: 50%">Descrição</th>
-                        <th style="width: 25%">Provisionado</th>
-                        <th style="width: 25%">Efetivado</th>
+    <div class="row">
+        <div class="col-md-7">
+            <h3>Extrato&nbsp;
+                <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                &nbsp;
+                <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+            </h3>
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th style="width: 50%">Descrição</th>
+                    <th style="width: 25%">Provisionado</th>
+                    <th style="width: 25%">Efetivado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="success">
+                    <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
+                    <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
+                    <th>{{Number::formatCurrency($totalCredit)}}</th>
+                </tr>
+                @foreach($statementCredit as $creditItem)
+                    <tr class="credit-rows">
+                        <td>{{$creditItem->category}}</td>
+                        <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
+                        <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="success">
-                        <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
-                        <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
-                        <th>{{Number::formatCurrency($totalCredit)}}</th>
-                    </tr>
-                    @foreach($statementCredit as $creditItem)
-                        <tr class="credit-rows">
-                            <td>{{$creditItem->category}}</td>
-                            <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
-                            <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
-                        </tr>
-                    @endforeach
+                @endforeach
 
-                    <tr class="danger">
-                        <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
-                        <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
-                        <th>{{Number::formatCurrency($totalDebit)}}</th>
+                <tr class="danger">
+                    <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
+                    <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
+                    <th>{{Number::formatCurrency($totalDebit)}}</th>
+                </tr>
+                @foreach($statementDebit as $debitItem)
+                    <tr class="debit-rows">
+                        <td>
+                            <span data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
+                            </span>
+                            {{$debitItem->category}}
+                        </td>
+                        <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
+                        <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
                     </tr>
-                    @foreach($statementDebit as $debitItem)
-                        <tr class="debit-rows">
-                            <td>
-                                <span data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
-                                    <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
-                                </span>
-                                {{$debitItem->category}}
-                            </td>
-                            <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
-                            <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-5">
-                <div id="MyChart"></div>
-            </div>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <div id="MyChart"></div>
         </div>
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">
         <div class="modal-dialog" role="document">

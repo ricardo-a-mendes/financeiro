@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Model\Category;
+use Session;
 
 class CategoryController extends Controller
 {
@@ -34,7 +35,15 @@ class CategoryController extends Controller
 
 	public function store(CategoryRequest $request)
 	{
+		if ($request->has('save')) {
+			$category = new $this->category;
+			$category->description = $request->input('category');
+			$category->save();
 
+			Session::flash('success', 'Categoria criada com sucesso!');
+		}
+
+		return redirect()->route('category.index');
 	}
 
 	public function edit($id)
@@ -50,6 +59,21 @@ class CategoryController extends Controller
 		$category = $this->category->find($id);
 		$category->description = $request->input('category');
 		$category->save();
+
+		Session::flash('success', 'Categoria atualizada com sucesso!');
+
+		return redirect()->route('category.index');
+    }
+
+	public function destroy($id)
+	{
+		$category = $this->category->find($id);
+		if ($category->transactions->count() == 0) {
+			$category->delete();
+			Session::flash('success', 'Categoria removida com sucesso!');
+		} else {
+			Session::flash('info', 'Categoria "'.$category->description.'"" não pode ser excluída: Existem transações vinculadas.');
+		}
 
 		return redirect()->route('category.index');
     }

@@ -13,6 +13,15 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
 
+    <style type="text/css">
+        a.deco-none {
+            color:#000000 !important;
+            text-decoration:none;
+        }
+    </style>
+
+    @yield('css')
+
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
@@ -86,8 +95,28 @@
             </div><!-- /.container-fluid -->
         </nav>
 
+        <div class="container">
+            <div class="row">
+                @if (Session::has('success'))
+                    <div class="alert alert-success" role="alert">
+                        <strong>Well done \o/ - </strong> {{ Session::get('success') }}
+                    </div>
+                @endif
 
-        @yield('content')
+                @if (Session::has('error'))
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Oh snap :(</strong> {{ Session::get('error') }}
+                    </div>
+                @endif
+
+                @if (Session::has('info'))
+                    <div class="alert alert-info" role="alert">
+                        <strong>Heads up! </strong> {{ Session::get('info') }}
+                    </div>
+                @endif
+            </div>
+            @yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->
