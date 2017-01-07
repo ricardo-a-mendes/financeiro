@@ -7,11 +7,26 @@ use Illuminate\Support\Facades\DB;
 
 class Goal extends Model
 {
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function goalDate()
+    {
+        return $this->hasMany(GoalDate::class);
+    }
+
     public function getGoalsWithoutTransaction($type)
     {
         $fields = DB::raw('
             categories.id,
-            categories.description as category,
+            categories.name as category,
             sum(goals.value) as goal_value,
             0 as effected_value'
         );
@@ -28,6 +43,6 @@ class Goal extends Model
                 goal_dates.id is null
             )')
             ->groupBy('categories.id')
-            ->groupBy('categories.description');
+            ->groupBy('categories.name');
     }
 }

@@ -14,10 +14,8 @@
     <link href="/css/app.css" rel="stylesheet">
 
     <style type="text/css">
-        a.deco-none {
-            color:#000000 !important;
-            text-decoration:none;
-        }
+        a.deco-none {color:#000000 !important; text-decoration:none;}
+        .cursor-pointer {cursor: pointer;}
     </style>
 
     @yield('css')
@@ -115,6 +113,17 @@
                     </div>
                 @endif
             </div>
+
+            @if (count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </div>

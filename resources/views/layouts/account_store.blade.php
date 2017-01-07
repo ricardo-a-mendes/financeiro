@@ -29,7 +29,7 @@
 					<select name="type" class="form-control">
 						<option value="invalid_option">Selecione</option>
 						@foreach($accountTypes as $accountTypeId => $accountType)
-							<option value="{{$accountTypeId}}">{{$accountType}}</option>
+							<option {{($accountTypeId == $account->accountType->id)?'selected':''}} value="{{$accountTypeId}}">{{$accountType}}</option>
 						@endforeach
 					</select>
 				</div>

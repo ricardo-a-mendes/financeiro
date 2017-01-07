@@ -16,7 +16,7 @@
 		<form method="post" action="{{$route}}">
 			<div class="form-group">
 				<label for="exampleInputEmail1">Categoria</label>
-				<input type="text" class="form-control" id="category" name="category" placeholder="Categoria" value="{{$category->description}}">
+				<input type="text" class="form-control" id="category" name="category" placeholder="Categoria" value="{{$category->name}}">
 				<input type="hidden" name="id" value="{{$category->id}}">
 				{{ csrf_field() }}
 				{{ method_field($method) }}

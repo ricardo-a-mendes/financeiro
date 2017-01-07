@@ -49,7 +49,12 @@ class AccountController extends Controller
 
 	public function edit($id)
 	{
+        $method = 'PUT';
+        $route = route('account.store');
+        $account = $this->account->find($id);
+        $accountTypes = $this->accountType->pluck('description', 'id')->all();
 
+        return view('layouts.account_store', compact('method', 'route', 'account', 'accountTypes'));
     }
 
 	public function update(AccountRequest $request)

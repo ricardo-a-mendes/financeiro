@@ -25,7 +25,7 @@
                 </tr>
                 @foreach($statementCredit as $creditItem)
                     <tr class="credit-rows">
-                        <td>{{$creditItem->category}}</td>
+                        <td><a href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
                         <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
                         <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
                     </tr>
@@ -42,7 +42,7 @@
                             <span data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
                                 <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                             </span>
-                            {{$debitItem->category}}
+                        <a href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                         </td>
                         <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
                         <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>

@@ -19,11 +19,11 @@
 			@forelse($categories as $category)
 				<tr>
 					<td>{{$category->id}}</td>
-					<td>{{$category->description}}</td>
+					<td>{{$category->name}}</td>
 					<td>
 						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
-						<span style="cursor: pointer" data-category="{{$category->description}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
+						<span style="cursor: pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
 							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>

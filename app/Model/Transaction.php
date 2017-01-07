@@ -33,7 +33,7 @@ class Transaction extends Model
 
         $fields = DB::raw('
             categories.id,
-            categories.description as category,
+            categories.name as category,
             (select 
                 sum(goals.value)
             from 
@@ -59,7 +59,7 @@ class Transaction extends Model
             ->where('transaction_type_id', '=', $type)
             ->whereBetween('transaction_date', ['2016-12-01 00:00:00', '2016-12-31 23:59:59'])
             ->groupBy('categories.id')
-            ->groupBy('categories.description')
+            ->groupBy('categories.name')
             ->union($goalsWithoutTransaction)
             ->get();
     }

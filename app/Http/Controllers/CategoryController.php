@@ -37,7 +37,7 @@ class CategoryController extends Controller
 	{
 		if ($request->has('save')) {
 			$category = new $this->category;
-			$category->description = $request->input('category');
+			$category->name = $request->input('category');
 			$category->save();
 
 			Session::flash('success', 'Categoria criada com sucesso!');
@@ -57,7 +57,7 @@ class CategoryController extends Controller
 	public function update(CategoryRequest $request, $id)
 	{
 		$category = $this->category->find($id);
-		$category->description = $request->input('category');
+		$category->name = $request->input('category');
 		$category->save();
 
 		Session::flash('success', 'Categoria atualizada com sucesso!');
