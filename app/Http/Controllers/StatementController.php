@@ -11,15 +11,18 @@ class StatementController extends Controller
     public function index(Transaction $transaction)
     {
         try {
-            $statementDebit = $transaction->getStatement(Transaction::STATEMENT_DEBIT);
+            $date = new \DateTime();
+            //$date->setDate('2016', '12', '01');
+            $statementDebit = $transaction->getStatement(Transaction::STATEMENT_DEBIT, $date);
 
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitGoal = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_GOAL);
 
-            $statementCredit = $transaction->getStatement(Transaction::STATEMENT_CREDIT);
+            $statementCredit = $transaction->getStatement(Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
             $totalCreditGoal = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_GOAL);
 
+            /*
             $totalProvisioned = 4500;
             $totalPercent = $totalCredit;
 
@@ -32,6 +35,7 @@ class StatementController extends Controller
                 'provisioned' => $provisionedPercent,
                 'spent' => $spentPercent,
             ];
+            */
 
         } catch (Exception $e) {
             $statementDebit = [];
@@ -51,8 +55,8 @@ class StatementController extends Controller
             'totalDebit',
             'totalDebitGoal',
             'totalCredit',
-            'totalCreditGoal',
-            'graph'));
+            'totalCreditGoal'
+        ));
     }
 
     public function categoryDetails($categoryID)

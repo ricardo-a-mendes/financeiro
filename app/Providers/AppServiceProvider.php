@@ -16,9 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 		Validator::extend('combo', function ($attribute, $value, $parameters, $validator){
-			if (is_array($parameters) && isset($parameters[0]))
-				return ($value !== 'invalid_option');
-			return false;
+            return ($value !== 'invalid_option');
 		});
     }
 

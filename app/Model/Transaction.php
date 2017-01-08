@@ -26,10 +26,17 @@ class Transaction extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function getStatement($type)
+    public function getStatement($type, \DateTime $date = null)
     {
         if (!in_array($type, [self::STATEMENT_CREDIT, self::STATEMENT_DEBIT]))
             throw new \InvalidArgumentException('Invalid Type');
+
+
+        if (is_null($date))
+            $date = new \DateTime();
+
+        $startDate = $date->format('Y-m-01 00:00:00');
+        $endDate = $date->format('Y-m-t 23:59:59');
 
         $fields = DB::raw('
             categories.id,
@@ -43,7 +50,7 @@ class Transaction extends Model
             where 
                 goals.category_id = categories.id
                 and (
-                    goal_dates.target_date between \'2016-12-01 00:00:00\' and \'2016-12-31 23:59:59\' 
+                    goal_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
                     or 
                     goal_dates.id is null
                 )
@@ -51,13 +58,13 @@ class Transaction extends Model
             sum(transactions.value) as effected_value'
         );
 
-        $goalsWithoutTransaction = $this->goal->getGoalsWithoutTransaction($type);
+        $goalsWithoutTransaction = $this->goal->getGoalsWithoutTransaction($type, $date);
 
         return $this->select($fields)
             ->join('transaction_types', 'transaction_types.id', '=', 'transactions.transaction_type_id')
             ->join('categories', 'categories.id', '=', 'transactions.category_id')
             ->where('transaction_type_id', '=', $type)
-            ->whereBetween('transaction_date', ['2016-12-01 00:00:00', '2016-12-31 23:59:59'])
+            ->whereBetween('transaction_date', [$startDate, $endDate])
             ->groupBy('categories.id')
             ->groupBy('categories.name')
             ->union($goalsWithoutTransaction)

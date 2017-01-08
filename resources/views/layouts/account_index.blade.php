@@ -20,7 +20,7 @@
 			<tr>
 				<td>{{$account->id}}</td>
 				<td>{{$account->name}}</td>
-				<td>Tipo da conta</td>
+				<td>{{$account->accountType->name}}</td>
 				<td>
 					<a href="{{route('account.edit', ['id' => $account->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
 					&nbsp;|&nbsp;
