@@ -38,7 +38,7 @@
 				</td>
 				<td class="{{($goal->transactionType->unique_name === 'credit')?'text-green':'text-red'}}">{{$goal->transactionType->name}}</td>
 				<td>
-					<a href="{{route('account.edit', ['id' => $goal->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
+					<a href="{{route('goal.edit', ['id' => $goal->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
 					&nbsp;|&nbsp;
 					<span style="cursor: pointer" data-category="{{$goal->category->name}}" data-category_id="{{$goal->id}}" data-toggle="modal" data-target="#deleteGoal">
 							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>

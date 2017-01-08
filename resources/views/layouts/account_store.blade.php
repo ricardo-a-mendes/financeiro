@@ -1,23 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-	@if (count($errors) > 0)
-		<div class="alert alert-danger">
-			<ul>
-				@foreach ($errors->all() as $error)
-					<li>{{ $error }}</li>
-				@endforeach
-			</ul>
-		</div>
-	@endif
 
 	<form method="post" action="{{$route}}">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="account">Conta</label>
-					<input type="text" class="form-control" id="account" name="account" placeholder="Conta"
-						   value="{{$account->name}}">
+					<input type="text" class="form-control" id="account" name="account" placeholder="Conta" value="{{$account->name}}">
 					<input type="hidden" name="id" value="{{$account->id}}">
 					{{ csrf_field() }}
 					{{ method_field($method) }}

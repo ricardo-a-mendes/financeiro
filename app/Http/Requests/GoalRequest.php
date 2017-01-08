@@ -13,7 +13,7 @@ class GoalRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class GoalRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'value' => 'required',
+            'category' => 'required|combo',
+            'transactionType' => 'required|combo'
         ];
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class Goal extends Model
 {
+    public $timestamps = false;
+
     public function transactionType()
     {
         return $this->belongsTo(TransactionType::class);
@@ -22,8 +24,14 @@ class Goal extends Model
         return $this->hasMany(GoalDate::class);
     }
 
-    public function getGoalsWithoutTransaction($type)
+    public function getGoalsWithoutTransaction($type, \DateTime $date = null)
     {
+        if (is_null($date))
+            $date = new \DateTime();
+
+        $startDate = $date->format('Y-m-01 00:00:00');
+        $endDate = $date->format('Y-m-t 23:59:59');
+
         $fields = DB::raw('
             categories.id,
             categories.name as category,
@@ -38,7 +46,7 @@ class Goal extends Model
             ->where('goals.transaction_type_id', $type)
             ->whereNull('transactions.id')
             ->whereRaw('(
-                goal_dates.target_date between \'2016-12-01 00:00:00\' and \'2016-12-31 23:59:59\' 
+                goal_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\'
                 or 
                 goal_dates.id is null
             )')
