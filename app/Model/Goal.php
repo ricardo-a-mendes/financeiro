@@ -42,7 +42,10 @@ class Goal extends Model
         return $this->select($fields)
             ->leftJoin('goal_dates', 'goal_dates.goal_id', '=', 'goals.id')
             ->leftJoin('categories', 'categories.id', '=', 'goals.category_id')
-            ->leftJoin('transactions', 'transactions.category_id', '=', 'categories.id')
+            ->leftJoin('transactions', function($join) use ($startDate, $endDate){
+                $join->on('transactions.category_id', '=', 'categories.id');
+                $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
+            })
             ->where('goals.transaction_type_id', $type)
             ->whereNull('transactions.id')
             ->whereRaw('(

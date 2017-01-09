@@ -7,7 +7,10 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="exampleInputEmail1">Meta</label>
-					<input type="text" class="form-control" id="meta" name="value" placeholder="Valor" value="{{$goal->value}}">
+					<div class="input-group">
+						<span class="input-group-addon">$</span>
+						<input type="number" step="0.01" min="0.01" class="form-control" id="meta" name="value" placeholder="Valor" value="{{old('value', $goal->value)}}">
+					</div>
 					<input type="hidden" name="id" value="{{$goal->id}}">
 					{{ csrf_field() }}
 					{{ method_field($method) }}
@@ -19,7 +22,7 @@
 					<select name="category" class="form-control">
 						<option value="invalid_option">Selecione</option>
 						@foreach($categories as $categoryId => $categoryName)
-							<option {{($categoryId == $goal->category->id)?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
+							<option {{($categoryId == old('category', $goal->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -30,9 +33,28 @@
 					<select name="transactionType" class="form-control">
 						<option value="invalid_option">Selecione</option>
 						@foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
-							<option {{($transactionTypeId == $goal->transactionType->id)?'selected':''}} value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
+							<option {{($transactionTypeId == old('transactionType', $goal->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
 						@endforeach
 					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="specific_goal_option" id="specific" value="yes" {{(old('specific_goal_option')=='yes')? 'checked="checked"' : ''}}>
+						Cadastrar Meta para uma data específica
+					</label>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group" id="specific_date">
+					<label for="exampleInputEmail1">Data</label>
+					<div class="input-group">
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" placeholder="Valor" value="{{$goal->value}}">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -46,4 +68,24 @@
 		</div>
 	</form>
 
+@endsection
+@section('js')
+	<script type="text/javascript">
+		$(function () {
+
+			var toggle_checkbox = function(){
+				if ($('#specific').is(':checked'))
+					$('#specific_date').show();
+				else
+					$('#specific_date').hide();
+			};
+
+			//for initial state (even when repopulating after validation)
+			toggle_checkbox();
+
+			$('#specific').on('click', function () {
+				toggle_checkbox();
+			});
+		});
+	</script>
 @endsection

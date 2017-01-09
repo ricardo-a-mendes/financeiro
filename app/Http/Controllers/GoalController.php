@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GoalRequest;
 use App\Model\Category;
 use App\Model\Goal;
+use App\Model\GoalDate;
 use App\Model\TransactionType;
+use Carbon\Carbon;
 use Session;
 
 class GoalController extends Controller
@@ -23,10 +25,15 @@ class GoalController extends Controller
      * @var TransactionType
      */
     private $transactionType;
+    /**
+     * @var GoalDate
+     */
+    private $goalDate;
 
-    public function __construct(Goal $goal, Category $category, TransactionType $transactionType)
+    public function __construct(Goal $goal, GoalDate $goalDate, Category $category, TransactionType $transactionType)
     {
         $this->goal = $goal;
+        $this->goalDate = $goalDate;
         $this->category = $category;
         $this->transactionType = $transactionType;
     }
@@ -62,6 +69,14 @@ class GoalController extends Controller
         $goal->value = $request->input('value');
 
         $goal->save();
+
+        if ($request->has('specific_goal_option')) {
+            $goalDate = new GoalDate();
+            $dateTime = new Carbon($request->input('specific_date'));
+            $goalDate->target_date = $dateTime->format('Y-m-d');
+            $goalDate->goal()->associate($goal);
+            $goalDate->save();
+        }
 
         Session::flash('success', 'Meta criada com sucesso!');
         return redirect()->route('goal.index');

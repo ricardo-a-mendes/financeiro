@@ -26,7 +26,8 @@ class GoalRequest extends FormRequest
         return [
             'value' => 'required',
             'category' => 'required|combo',
-            'transactionType' => 'required|combo'
+            'transactionType' => 'required|combo',
+            'specific_date' => 'required_if:specific_goal_option,yes'
         ];
     }
 }
