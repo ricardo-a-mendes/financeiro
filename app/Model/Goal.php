@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,15 @@ class Goal extends Model
     public function goalDate()
     {
         return $this->hasMany(GoalDate::class);
+    }
+
+    public function getSpecificDateAttribute()
+    {
+        if ($this->goalDate->count() > 0) {
+            $specificDate = new Carbon($this->goalDate->first()->target_date);
+            return $specificDate->format('Y-m-d');
+        }
+        return null;
     }
 
     public function getGoalsWithoutTransaction($type, \DateTime $date = null)

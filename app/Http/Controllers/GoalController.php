@@ -51,9 +51,10 @@ class GoalController extends Controller
         $goal->transactionType()->associate(new $this->transactionType);
         $categories = $this->category->pluck('name', 'id')->all();
         $transactionTypes = $this->transactionType->pluck('name', 'id')->all();
+        $hasSpecificGoal = 'no';
         $method = 'POST';
         $route = route('goal.store');
-        return view('layouts.goal_store', compact('goal', 'categories', 'transactionTypes', 'method', 'route'));
+        return view('layouts.goal_store', compact('goal', 'hasSpecificGoal', 'categories', 'transactionTypes', 'method', 'route'));
     }
 
     public function store(GoalRequest $request)
@@ -70,7 +71,7 @@ class GoalController extends Controller
 
         $goal->save();
 
-        if ($request->has('specific_goal_option')) {
+        if ($request->has('specific_goal_option') && $request->has('specific_date')) {
             $goalDate = new GoalDate();
             $dateTime = new Carbon($request->input('specific_date'));
             $goalDate->target_date = $dateTime->format('Y-m-d');
@@ -87,9 +88,10 @@ class GoalController extends Controller
         $goal = $this->goal->find($id);
         $categories = $this->category->pluck('name', 'id')->all();
         $transactionTypes = $this->transactionType->pluck('name', 'id')->all();
+        $hasSpecificGoal = ($goal->goalDate->count() > 0) ? 'yes' : 'no';
         $method = 'PUT';
         $route = route('goal.update', ['id' => $id]);
-        return view('layouts.goal_store', compact('goal', 'categories', 'transactionTypes', 'method', 'route'));
+        return view('layouts.goal_store', compact('goal', 'hasSpecificGoal', 'categories', 'transactionTypes', 'method', 'route'));
     }
 
     public function update(GoalRequest $request, $id)

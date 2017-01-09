@@ -43,17 +43,17 @@
 			<div class="col-md-4">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="specific_goal_option" id="specific" value="yes" {{(old('specific_goal_option')=='yes')? 'checked="checked"' : ''}}>
+						<input type="checkbox" name="specific_goal_option" id="specific" value="yes" {{(old('specific_goal_option', $hasSpecificGoal)=='yes')? 'checked="checked"' : ''}}>
 						Cadastrar Meta para uma data específica
 					</label>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group" id="specific_date">
-					<label for="exampleInputEmail1">Data</label>
+					<label for="specific_date">Data</label>
 					<div class="input-group">
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" placeholder="Valor" value="{{$goal->value}}">
+						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" placeholder="Valor" value="{{$goal->specificDate}}">
 					</div>
 				</div>
 			</div>
