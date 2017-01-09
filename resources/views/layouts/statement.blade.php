@@ -1,55 +1,92 @@
 @extends('layouts.app')
 
 @section('content')
-
+    <!-- TODO: Adicionar combo de data, adicionar também no modal que mostra os detalhes das transações da categoria -->
     <div class="row">
         <div class="col-md-7">
-            <h3>Extrato&nbsp;
-                <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
-                &nbsp;
-                <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
-            </h3>
-            <table class="table table-responsive table-hover">
-                <thead>
-                <tr>
-                    <th style="width: 50%">Descrição</th>
-                    <th style="width: 25%">Provisionado</th>
-                    <th style="width: 25%">Efetivado</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="success">
-                    <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
-                    <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
-                    <th>{{Number::formatCurrency($totalCredit)}}</th>
-                </tr>
-                @foreach($statementCredit as $creditItem)
-                    <tr class="credit-rows">
-                        <td><a href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
-                        <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
-                        <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
-                    </tr>
-                @endforeach
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Extrato&nbsp;
+                        <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                        &nbsp;
+                        <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+                    </h3>
+                </div>
+                <div class="col-md-8">
+                    <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Anterior <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-1 months'))}}</a></li>
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-2 months'))}}</a></li>
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-3 months'))}}</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Mês Atual</a></li>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Posterior <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+1 months'))}}</a></li>
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+2 months'))}}</a></li>
+                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+3 months'))}}</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div><!-- /.navbar-collapse -->
+                        </div><!-- /.container-fluid -->
+                    </nav>
+                </div>
+            </div>
 
-                <tr class="danger">
-                    <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
-                    <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
-                    <th>{{Number::formatCurrency($totalDebit)}}</th>
-                </tr>
-                @foreach($statementDebit as $debitItem)
-                    <tr class="debit-rows">
-                        <td>
+            <div class="row">
+                <h4>Período listado: {{$statementDate}}</h4>
+                <table class="table table-responsive table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 50%">Descrição</th>
+                        <th style="width: 25%">Provisionado</th>
+                        <th style="width: 25%">Efetivado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="success">
+                        <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
+                        <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
+                        <th>{{Number::formatCurrency($totalCredit)}}</th>
+                    </tr>
+                    @foreach($statementCredit as $creditItem)
+                        <tr class="credit-rows">
+                            <td><a href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
+                            <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
+                            <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
+                        </tr>
+                    @endforeach
+
+                    <tr class="danger">
+                        <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
+                        <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
+                        <th>{{Number::formatCurrency($totalDebit)}}</th>
+                    </tr>
+                    @foreach($statementDebit as $debitItem)
+                        <tr class="debit-rows">
+                            <td>
                             <span data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
                                 <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                             </span>
-                        <a href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
-                        </td>
-                        <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
-                        <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+                                <a href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
+                            </td>
+                            <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
+                            <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
         </div>
         <div class="col-md-5">
             <div id="MyChart"></div>

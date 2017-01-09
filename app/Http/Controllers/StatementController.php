@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Model\Category;
 use App\Model\Transaction;
+use Carbon\Carbon;
 use League\Flysystem\Exception;
 
 class StatementController extends Controller
 {
-    public function index(Transaction $transaction)
+    public function index(Transaction $transaction, $monthToAdd = 0)
     {
         try {
-            $date = new \DateTime();
-            //$date->setDate('2016', '12', '01');
+            $date = new Carbon();
+
+            if ($monthToAdd !== 0)
+                $date->addMonth($monthToAdd);
+
+            $statementDate = $date->format('m-Y');
+
             $statementDebit = $transaction->getStatement(Transaction::STATEMENT_DEBIT, $date);
 
             $totalDebit = $transaction->getTotal($statementDebit);
@@ -50,7 +56,8 @@ class StatementController extends Controller
             'totalDebit',
             'totalDebitGoal',
             'totalCredit',
-            'totalCreditGoal'
+            'totalCreditGoal',
+            'statementDate'
         ));
     }
 
