@@ -7,7 +7,9 @@
             <div class="row">
                 <div class="col-md-4">
                     <h3>Resumo&nbsp;
-                        <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                        <span data-toggle="modal" data-target="#modalNewTransaction">
+                            <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                        </span>
                         &nbsp;
                         <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
                     </h3>
@@ -101,7 +103,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Category Details -->
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -113,6 +115,56 @@
 
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal New Transaction -->
+    <div class="modal fade" id="modalNewTransaction" tabindex="-1" role="dialog" aria-labelledby="modalNewTransaction">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Novo Lançamento</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                    <form>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="description">Descrição</label>
+                                <input type="text" class="form-control" name="description" id="description" placeholder="Descrição">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="transaction_value">Valor</label>
+                                <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="Valor">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="transaction_date">Data</label>
+                                <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="category">Categoria</label>
+                                <select name="category" class="form-control">
+                                    <option>Selecione</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Salvar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
