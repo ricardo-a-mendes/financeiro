@@ -1,11 +1,5 @@
 @extends('layouts.app')
 
-@section('css')
-	<style type="text/css">
-		.text-red {color: red;}
-		.text-green {color: green;}
-	</style>
-@endsection
 @section('content')
 	<div class="row">
 		<div class="page-header">

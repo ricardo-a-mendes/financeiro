@@ -16,6 +16,8 @@
     <style type="text/css">
         a.deco-none {color:#000000 !important; text-decoration:none;}
         .cursor-pointer {cursor: pointer;}
+        .text-red {color: red;}
+        .text-green {color: green;}
     </style>
 
     @yield('css')
@@ -51,6 +53,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
+                        <li><a href="{{route('statement')}}">Resumo Mensal</a></li>
+                        <li><a href="{{route('statement')}}">Resumo Anual</a></li>
+                        <li><a href="{{route('statement')}}">Extrato</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -63,6 +68,7 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+                        <li role="presentation" class="active"><a href="#">Lembretes <span class="badge">2</span></a></li>
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ url('/login') }}">Login</a></li>

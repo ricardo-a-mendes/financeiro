@@ -6,7 +6,7 @@
         <div class="col-md-7">
             <div class="row">
                 <div class="col-md-4">
-                    <h3>Extrato&nbsp;
+                    <h3>Resumo&nbsp;
                         <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
                         &nbsp;
                         <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
@@ -21,18 +21,18 @@
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Anterior <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-1 months'))}}</a></li>
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-2 months'))}}</a></li>
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '-3 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => -1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-1 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => -2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-2 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => -3])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-3 months'))}}</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Mês Atual</a></li>
+                                    <li><a href="{{route('statement')}}">Mês Atual ({{date('m-Y')}})</a></li>
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Posterior <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+1 months'))}}</a></li>
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+2 months'))}}</a></li>
-                                            <li><a href="#">{{date('m-Y', strtotime(date('Y-m-d'). '+3 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => 1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+1 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => 2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+2 months'))}}</a></li>
+                                            <li><a href="{{route('statement', ['monthToAdd' => 3])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+3 months'))}}</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -47,12 +47,20 @@
                 <table class="table table-responsive table-hover">
                     <thead>
                     <tr>
-                        <th style="width: 50%">Descrição</th>
+                        <th style="width: 50%">&nbsp;</th>
                         <th style="width: 25%">Provisionado</th>
                         <th style="width: 25%">Efetivado</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <th>Saldo</th>
+                        <th class="{{($totalCreditGoal-$totalDebitGoal >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditGoal-$totalDebitGoal >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditGoal-$totalDebitGoal)}}</th>
+                        <th class="{{($totalCredit-$totalDebit >= 0)?'success text-green':'danger text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit-$totalDebit >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit-$totalDebit)}}</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>
                     <tr class="success">
                         <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
                         <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
@@ -162,18 +170,18 @@
                 },
 
                 title: {
-                    text: 'Controle de Caixa'
+                    text: 'Controle de Caixa {{$statementDate}}'
                 },
 
                 xAxis: {
-                    categories: ['Jan', 'Fev']
+                    categories: ['Provisioned', 'Effectived']
                 },
 
                 yAxis: {
                     allowDecimals: false,
                     min: 0,
                     title: {
-                        text: 'Valores em R$/1.000'
+                        text: 'Valores (R$)'
                     }
                 },
 
@@ -189,23 +197,15 @@
                     }
                 },
 
-                colors: ['#2AB27B', '#90ed7d', '#CBB956', '#BF5329'],
+                colors: ['#2AB27B', '#BF5329'],
 
                 series: [{
-                    name: 'Salary',
-                    data: [6, 6],
+                    name: 'Income',
+                    data: [{{$totalCreditGoal}}, {{$totalCredit}}],
                     stack: 'income'
-                }, {
-                    name: 'Rent',
-                    data: [1, 2],
-                    stack: 'income'
-                }, {
-                    name: 'Provisioned',
-                    data: [6, 9],
-                    stack: 'provisioned'
                 }, {
                     name: 'Spent',
-                    data: [5, 8],
+                    data: [{{$totalDebitGoal}}, {{$totalDebit}}],
                     stack: 'spent'
                 }]
             });
