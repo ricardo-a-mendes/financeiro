@@ -12,4 +12,9 @@ class Account extends Model
     {
         return $this->belongsTo(AccountType::class);
     }
+
+    public function getCombo()
+    {
+        return $this->pluck('name', 'id')->all();
+    }
 }

@@ -49,8 +49,8 @@ class GoalController extends Controller
         $goal = new $this->goal;
         $goal->category()->associate(new $this->category);
         $goal->transactionType()->associate(new $this->transactionType);
-        $categories = $this->category->pluck('name', 'id')->all();
-        $transactionTypes = $this->transactionType->pluck('name', 'id')->all();
+        $categories = $this->category->getCombo();
+        $transactionTypes = $this->transactionType->getCombo();
         $hasSpecificGoal = 'no';
         $method = 'POST';
         $route = route('goal.store');
@@ -86,8 +86,8 @@ class GoalController extends Controller
     public function edit($id)
     {
         $goal = $this->goal->find($id);
-        $categories = $this->category->pluck('name', 'id')->all();
-        $transactionTypes = $this->transactionType->pluck('name', 'id')->all();
+        $categories = $this->category->getCombo();
+        $transactionTypes = $this->transactionType->getCombo();
         $hasSpecificGoal = ($goal->goalDate->count() > 0) ? 'yes' : 'no';
         $method = 'PUT';
         $route = route('goal.update', ['id' => $id]);

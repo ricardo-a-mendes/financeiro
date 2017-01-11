@@ -124,50 +124,79 @@
     <!-- Modal New Transaction -->
     <div class="modal fade" id="modalNewTransaction" tabindex="-1" role="dialog" aria-labelledby="modalNewTransaction">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Novo Lançamento</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                    <form>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="description">Descrição</label>
-                                <input type="text" class="form-control" name="description" id="description" placeholder="Descrição">
-                            </div>
-                        </div>
+            <form method="post" action="{{route('transaction.store')}}">
+                {{ csrf_field() }}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Novo Lançamento</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="transaction_value">Valor</label>
-                                <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="Valor">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="description">Descrição</label>
+                                    <input type="text" class="form-control" name="description" id="description" placeholder="Descrição">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="transaction_date">Data</label>
-                                <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
-                            </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="category">Categoria</label>
-                                <select name="category" class="form-control">
-                                    <option>Selecione</option>
-                                </select>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="transaction_value">Valor</label>
+                                    <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="Valor">
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="transaction_date">Data</label>
+                                    <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="category">Categoria</label>
+                                    <select name="category" class="form-control">
+                                        <option value="invalid_option">Selecione</option>
+                                        @foreach($categories as $categoryId => $categoryName)
+                                            <option value="{{$categoryId}}">{{$categoryName}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="account">Conta</label>
+                                    <select name="account" class="form-control">
+                                        <option value="invalid_option">Selecione</option>
+                                        @foreach($accounts as $accountId => $accountName)
+                                            <option value="{{$accountId}}">{{$accountName}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="transactionType">Tipo</label>
+                                    <select name="transactionType" class="form-control">
+                                        <option value="invalid_option">Selecione</option>
+                                        @foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
+                                            <option value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                    </div>
                 </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Salvar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

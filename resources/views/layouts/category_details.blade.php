@@ -9,7 +9,7 @@
     <tbody>
     @forelse($details as $detail)
     <tr>
-        <td>{{$detail->transaction_date}}</td>
+        <td>{{$detail->TransactionDateBR}}</td>
         <td>{{$detail->description}}</td>
         <td>{{Number::formatCurrency($detail->value)}}</td>
     </tr>

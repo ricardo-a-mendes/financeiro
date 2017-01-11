@@ -2,13 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TransactionRequest;
+use App\Model\Account;
+use App\Model\AccountType;
 use App\Model\Category;
 use App\Model\Transaction;
+use App\Model\TransactionType;
 use Carbon\Carbon;
 use League\Flysystem\Exception;
 
 class StatementController extends Controller
 {
+    /**
+     * @var Category
+     */
+    private $category;
+    /**
+     * @var Account
+     */
+    private $account;
+    /**
+     * @var TransactionType
+     */
+    private $transactionType;
+
+    public function __construct(Category $category, Account $account, TransactionType $transactionType)
+    {
+        $this->category = $category;
+        $this->account = $account;
+        $this->transactionType = $transactionType;
+    }
+
     public function index(Transaction $transaction, $monthToAdd = 0)
     {
         try {
@@ -27,6 +51,10 @@ class StatementController extends Controller
             $statementCredit = $transaction->getStatement(Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
             $totalCreditGoal = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_GOAL);
+
+            $categories = $this->category->getCombo();
+            $accounts = $this->account->getCombo();
+            $transactionTypes = $this->transactionType->getCombo();
 
             /*
             $totalProvisioned = 4500;
@@ -57,7 +85,10 @@ class StatementController extends Controller
             'totalDebitGoal',
             'totalCredit',
             'totalCreditGoal',
-            'statementDate'
+            'statementDate',
+            'categories',
+            'accounts',
+            'transactionTypes'
         ));
     }
 
@@ -74,4 +105,25 @@ class StatementController extends Controller
 
         return view('layouts.category_details', compact('details', 'total'));
     }
+
+    public function store(TransactionRequest $request)
+    {
+        $category = $this->category->find($request->input('category'));
+        $account = $this->account->find($request->input('account'));
+        $transactionType = $this->transactionType->find($request->input('transactionType'));
+
+        $transaction = new Transaction();
+        $transaction->account()->associate($account);
+        $transaction->category()->associate($category);
+        $transaction->transactionType()->associate($transactionType);
+
+        $transaction->description = $request->input('description');
+        $transaction->value = $request->input('transaction_value');
+        $transaction->transaction_date = $request->input('transaction_date');
+
+        $transaction->save();
+
+        return redirect()->route('statement');
+    }
+
 }

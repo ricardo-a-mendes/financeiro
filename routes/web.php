@@ -2,7 +2,8 @@
 
 Auth::routes();
 
-Route::get('/{monthToAdd?}', 'StatementController@index')->name('statement');
+Route::get('extract/{monthToAdd?}', 'StatementController@index')->name('statement');
+Route::post('extract', 'StatementController@store')->name('transaction.store');
 Route::get('category-details/{categoryID}', 'StatementController@categoryDetails')->name('statement.category.details');
 
 Route::get('/home', 'HomeController@index');

@@ -9,5 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TransactionType extends Model
 {
-    //
+    public function getCombo()
+    {
+        return $this->pluck('name', 'id')->all();
+    }
 }

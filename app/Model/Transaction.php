@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Http\Requests\TransactionRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -14,16 +15,35 @@ class Transaction extends Model
     const TOTAL_TYPE_EFFECTED = 'effected_value';
     const TOTAL_TYPE_GOAL = 'goal_value';
 
-    private $goal;
+    public $goal;
+    public $transaction;
+
+    public $timestamps = false;
 
     public function __construct()
     {
         $this->goal = new Goal();
+        //$this->transaction = new Transaction();
     }
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class);
+    }
+
+    public function getTransactionDateBRAttribute()
+    {
+        return date('d/m/Y', strtotime($this->transaction_date));
     }
 
     public function getStatement($type, \DateTime $date = null)
