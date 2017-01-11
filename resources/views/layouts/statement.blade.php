@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- TODO: Adicionar combo de data, adicionar também no modal que mostra os detalhes das transações da categoria -->
     <div class="row">
         <div class="col-md-7">
             <div class="row">
@@ -70,7 +69,7 @@
                     </tr>
                     @foreach($statementCredit as $creditItem)
                         <tr class="credit-rows">
-                            <td><a href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
+                            <td><a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
                             <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
                             <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
                         </tr>
@@ -84,10 +83,10 @@
                     @foreach($statementDebit as $debitItem)
                         <tr class="debit-rows">
                             <td>
-                            <span data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                            <span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
                                 <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                             </span>
-                                <a href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
+                                <a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
                             <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
@@ -133,7 +132,6 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="description">Descrição</label>
@@ -188,8 +186,7 @@
                                     </select>
                                 </div>
                             </div>
-
-                    </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Salvar</button>
@@ -225,13 +222,14 @@
                 var span = $(event.relatedTarget) // Span that triggered the modal
                 var category = span.data('category') // Extract info from data-* attributes
                 var category_id = span.data('category_id') // Extract info from data-* attributes
+                var monthToAdd = span.data('month_to_add') // Extract info from data-* attributes
                 var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';
 
                 var modal = $(this);
                 modal.find('.modal-title').text('Detalhes da categoria "' + category + '"');
 
                 $.ajax({
-                    url: url_details+'/'+category_id,
+                    url: url_details+'/'+category_id+'/'+monthToAdd,
                     success: function (tableDetails) {
                         modal.find('.modal-body').html(tableDetails);
                     }
@@ -255,7 +253,7 @@
                 },
 
                 xAxis: {
-                    categories: ['Provisioned', 'Effectived']
+                    categories: ['Provisioned', 'Effected']
                 },
 
                 yAxis: {

@@ -88,19 +88,31 @@ class StatementController extends Controller
             'statementDate',
             'categories',
             'accounts',
-            'transactionTypes'
+            'transactionTypes',
+            'monthToAdd'
         ));
     }
 
-    public function categoryDetails($categoryID)
+    public function categoryDetails($categoryID, $monthToAdd = 0)
     {
         $details = [];
         $total = 0;
-        $cat = new Category();
-        $catFinanceiro = $cat->find($categoryID);
-        foreach ($catFinanceiro->transactions as $trans) {
-            $details[] = $trans;
-            $total += (double) $trans->value;
+        $date = new Carbon();
+
+        if ($monthToAdd !== 0)
+            $date->addMonth($monthToAdd);
+
+        $startDate = $date->format('Y-m-01 00:00:00');
+        $endDate = $date->format('Y-m-t 23:59:59');
+
+        $category = $this->category->find($categoryID);
+        $categoryTransactions = $category->transactions()
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->get();
+
+        foreach ($categoryTransactions as $transaction) {
+            $details[] = $transaction;
+            $total += (double) $transaction->value;
         }
 
         return view('layouts.category_details', compact('details', 'total'));
