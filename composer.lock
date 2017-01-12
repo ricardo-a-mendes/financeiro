@@ -4,9 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab9687ffa6a50d9882428e9f51a80e3b",
-    "content-hash": "b6be8dd31010533af98397ba269fc784",
+    "hash": "fc3109036bcf54c49a1d1075418d0fc3",
+    "content-hash": "a539b12fb0426ee06ae5177882f6252c",
     "packages": [
+        {
+            "name": "asgrim/ofxparser",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/asgrim/ofxparser.git",
+                "reference": "8ba143295be666ae2cac05674f7d526d8e0ebed7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/asgrim/ofxparser/zipball/8ba143295be666ae2cac05674f7d526d8e0ebed7",
+                "reference": "8ba143295be666ae2cac05674f7d526d8e0ebed7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6|~7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~5.5",
+                "squizlabs/php_codesniffer": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OfxParser": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guillaume Bailleul",
+                    "email": "contact@guillaume-bailleul.fr",
+                    "homepage": "http://www.guillaume-bailleul.fr"
+                },
+                {
+                    "name": "James Titcumb",
+                    "email": "hello@jamestitcumb.com",
+                    "homepage": "http://www.jamestitcumb.com/"
+                },
+                {
+                    "name": "Oliver Lowe",
+                    "email": "mrtriangle@gmail.com"
+                }
+            ],
+            "description": "Simple OFX file parser",
+            "keywords": [
+                "finance",
+                "ofx",
+                "open financial exchange",
+                "parser"
+            ],
+            "time": "2016-09-26 11:36:23"
+        },
         {
             "name": "classpreloader/classpreloader",
             "version": "3.1.0",

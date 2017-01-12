@@ -1,7 +1,14 @@
 <?php
 
+use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
+
 Auth::routes();
 
+Route::get('/', function (){
+	return redirect()->route('statement');
+});
+
+Route::get('import', 'ImportController@index')->name('import');
 Route::get('statement/{monthToAdd?}', 'StatementController@index')->name('statement');
 Route::post('statement', 'StatementController@store')->name('transaction.store');
 Route::get('category-details/{categoryID}/{monthToAdd?}', 'StatementController@categoryDetails')->name('statement.category.details');
