@@ -97,7 +97,7 @@ return [
     |
     */
 
-    'combo' => 'Please, select a valid value for :attribute field.',
+    'combo' => 'Please, select a valid value for :attribute field. :value',
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

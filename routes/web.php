@@ -9,6 +9,7 @@ Route::get('/', function (){
 });
 
 Route::get('import', 'ImportController@index')->name('import');
+Route::post('import', 'ImportController@store')->name('import.store');
 Route::get('statement/{monthToAdd?}', 'StatementController@index')->name('statement');
 Route::post('statement', 'StatementController@store')->name('transaction.store');
 Route::get('category-details/{categoryID}/{monthToAdd?}', 'StatementController@categoryDetails')->name('statement.category.details');

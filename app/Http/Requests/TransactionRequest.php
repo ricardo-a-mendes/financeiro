@@ -24,7 +24,12 @@ class TransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => 'required'
+            'description' => 'required',
+			'transaction_value' => 'required',
+			'transaction_date' => 'required',
+			'category' => 'required|combo',
+			'account' => 'required|combo',
+			'transactionType' => 'required|combo',
         ];
     }
 }
