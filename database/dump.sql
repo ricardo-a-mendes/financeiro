@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Servidor:                     127.0.0.1
--- Versão do servidor:           10.1.9-MariaDB - mariadb.org binary distribution
+-- Servidor:                     localhost
+-- Versão do servidor:           10.0.17-MariaDB - mariadb.org binary distribution
 -- OS do Servidor:               Win32
--- HeidiSQL Versão:              9.4.0.5133
+-- HeidiSQL Versão:              9.4.0.5141
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,11 +10,6 @@
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-
--- Copiando estrutura do banco de dados para financeiro
-CREATE DATABASE IF NOT EXISTS `financeiro` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `financeiro`;
 
 -- Copiando estrutura para tabela financeiro.accounts
 DROP TABLE IF EXISTS `accounts`;
@@ -28,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   CONSTRAINT `fk_accounts_account_types` FOREIGN KEY (`account_type_id`) REFERENCES `account_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela financeiro.accounts: ~4 rows (aproximadamente)
+-- Copiando dados para a tabela financeiro.accounts: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
 INSERT INTO `accounts` (`id`, `account_type_id`, `name`, `status`) VALUES
 	(1, 1, 'Itau', 1),
@@ -61,17 +56,26 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `name` varchar(145) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela financeiro.categories: ~6 rows (aproximadamente)
+-- Copiando dados para a tabela financeiro.categories: ~15 rows (aproximadamente)
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
 INSERT INTO `categories` (`id`, `name`, `status`) VALUES
+	(0, 'Indefinida', 1),
 	(1, 'Aluguel', 1),
 	(2, 'Salário', 1),
 	(3, 'Teka', 1),
 	(4, 'Farmácia', 1),
 	(5, 'Padaria', 1),
-	(6, 'Financiamento Apartamento', 1);
+	(6, 'Financiamento Apartamento', 1),
+	(7, 'Seguro', 1),
+	(8, 'Telefonia', 1),
+	(9, 'Imposto Bancário', 1),
+	(11, 'abc', 1),
+	(12, 'sdf', 1),
+	(13, 'sdfsd', 1),
+	(14, 'poiuy', 1),
+	(15, 'indefinida2', 1);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela financeiro.goals
@@ -112,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `goal_dates` (
   CONSTRAINT `fk_goal_dates_goals` FOREIGN KEY (`goal_id`) REFERENCES `goals` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela financeiro.goal_dates: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela financeiro.goal_dates: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `goal_dates` DISABLE KEYS */;
 INSERT INTO `goal_dates` (`id`, `goal_id`, `target_date`) VALUES
 	(2, 8, '2016-12-13 21:01:26'),
@@ -176,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `account_id` int(10) unsigned NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
   `transaction_type_id` int(10) unsigned NOT NULL,
-  `description` varchar(45) DEFAULT NULL,
+  `description` varchar(150) DEFAULT NULL,
   `value` decimal(14,2) DEFAULT NULL,
   `transaction_date` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -186,9 +190,9 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   CONSTRAINT `fk_transactions_accounts` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_transactions_categories1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_transactions_transaction_types1` FOREIGN KEY (`transaction_type_id`) REFERENCES `transaction_types` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela financeiro.transactions: ~7 rows (aproximadamente)
+-- Copiando dados para a tabela financeiro.transactions: ~12 rows (aproximadamente)
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
 INSERT INTO `transactions` (`id`, `account_id`, `category_id`, `transaction_type_id`, `description`, `value`, `transaction_date`) VALUES
 	(3, 1, 1, 1, 'Recebimento Aluguel', 1438.00, '2016-12-13 19:19:46'),
@@ -198,8 +202,39 @@ INSERT INTO `transactions` (`id`, `account_id`, `category_id`, `transaction_type
 	(9, 1, 2, 1, 'Salario Mensal', 5300.00, '2016-12-24 03:00:09'),
 	(11, 1, 3, 2, 'Ração Teka', 129.00, '2016-12-01 23:57:07'),
 	(12, 2, 3, 2, 'Pagamento Teka', 300.00, '2017-01-09 23:12:30'),
-	(13, 2, 4, 2, 'Dorflex', 35.03, '2017-01-01 00:00:00');
+	(13, 2, 4, 2, 'Dorflex', 35.03, '2017-01-01 00:00:00'),
+	(14, 1, 0, 2, 'RSHOP-STATIONE   -23/12', 15.00, '2017-01-23 00:00:00'),
+	(16, 1, 1, 1, 'SISPAG  NOVA BARAO IMOV', 1437.48, '2017-01-09 00:00:00'),
+	(17, 1, 0, 1, 'TED DIFERENTE TITULARIDADE CIP RICARDO ANDRIETTA MENDES', 250.00, '2016-12-01 00:00:00'),
+	(18, 1, 9, 2, 'IOF IMPOSTO OPERACOES FINANCEIRAS', 0.01, '2016-12-01 00:00:00');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela financeiro.transaction_references
+DROP TABLE IF EXISTS `transaction_references`;
+CREATE TABLE IF NOT EXISTS `transaction_references` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(250) NOT NULL,
+  `category_id` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela financeiro.transaction_references: ~13 rows (aproximadamente)
+/*!40000 ALTER TABLE `transaction_references` DISABLE KEYS */;
+INSERT INTO `transaction_references` (`id`, `description`, `category_id`) VALUES
+	(1, 'TED DIFERENTE TITULARIDADE CIP RICARDO ANDRIETTA MENDES', 0),
+	(2, 'SAQUE NO ATM INTERAGENCIA', NULL),
+	(3, 'IOF IMPOSTO OPERACOES FINANCEIRAS', 9),
+	(4, 'IOF ADICIONAL AUTOMATICO', NULL),
+	(5, 'TED MESMA TITULARIDADE CIP', NULL),
+	(6, 'REMUNERACAO CONTAMAX CDB DI', NULL),
+	(7, 'RESTITUICAO IMPOSTO DE RENDA PF DOC IRPF', NULL),
+	(8, 'COMPRA CARTAO MAESTRO CACAU SHOW', NULL),
+	(9, 'TED DIFERENTE TITULARIDADE CIP AMANDA NERIS FERREIRA', NULL),
+	(10, 'PAGAMENTO CARTAO CREDITO BCE CARTAO MASTER', NULL),
+	(11, 'PAGAMENTO CARTAO CREDITO BCE CARTAO VISA', NULL),
+	(12, 'DEBITO CONTRIBUICAO PREVIDENCIA SANTANDER SEGUR', NULL),
+	(13, 'DOC E RECEBIDOTIT DISTINTA RICARDO ANDRIETTA MENDES', NULL);
+/*!40000 ALTER TABLE `transaction_references` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela financeiro.transaction_types
 DROP TABLE IF EXISTS `transaction_types`;
