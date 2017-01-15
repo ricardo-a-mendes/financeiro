@@ -1,52 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-
 	<div class="row">
 		<div class="page-header">
-			<h3>Categorias <small><a href="{{route('category.create')}}" data-toggle="tooltip" data-placement="top" title="Nova Categoria" class="deco-none glyphicon glyphicon-plus" style="cursor: pointer"></a></small></h3>
+			<h3>Referências</h3>
 		</div>
 
 		<table class="table table-striped">
 			<thead>
 			<tr>
 				<th>ID</th>
+				<th>Referência</th>
 				<th>Categoria</th>
 				<th>Ações</th>
 			</tr>
 			</thead>
 			<tbody>
-			@forelse($categories as $category)
+			@forelse($references as $reference)
 				<tr>
-					<td>{{$category->id}}</td>
-					<td>{{$category->name}}</td>
+					<td>{{$reference->id}}</td>
+					<td>{{$reference->description}}</td>
+					<td>{{$reference->category->name}}</td>
 					<td>
-						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
+						<a href="{{route('reference.edit', ['id' => $reference->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
-						<span style="cursor: pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
+						<span class="cursor-pointer" data-reference="{{$reference->description}}" data-reference_id="{{$reference->id}}" data-toggle="modal" data-target="#deleteReference">
 							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>
 				</tr>
 			@empty
 				<tr>
-					<td colspan="3">Nenhuma categoria cadastrada.</td>
+					<td colspan="4">Nenhuma conta cadastrada.</td>
 				</tr>
 			@endforelse
 			</tbody>
 		</table>
+
 	</div>
 
-	<!-- Modal Delete Category -->
-	<div class="modal fade" id="deleteCategory" tabindex="-1" role="dialog" aria-labelledby="deleteCategory">
+	<!-- Modal Delete Reference -->
+	<div class="modal fade" id="deleteReference" tabindex="-1" role="dialog" aria-labelledby="deleteReferenceLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<form id="formDestroy" class="form " method="post" action="{{route('category.destroy', ['categoryID' => ''])}}">
+				<form id="formDestroy" class="form " method="post" action="{{route('reference.destroy', ['referenceID' => ''])}}">
 					{{ csrf_field() }}
 					{{ method_field('DELETE') }}
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myModalLabel">Confirmação de exclusão de categoria.</h4>
+						<h4 class="modal-title" id="myModalLabel">Confirmação de exclusão da referência.</h4>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
@@ -63,17 +65,17 @@
 	<script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
 	<script type="text/javascript">
 		$(function(){
-			//Modal for Dete a Category
-			$('#deleteCategory').on('show.bs.modal', function (event) {
+			//Modal for Dete Reference
+			$('#deleteReference').on('show.bs.modal', function (event) {
 				var span = $(event.relatedTarget) // Span that triggered the modal
-				var category = span.data('category') // Extract info from data-* attributes
-				var category_id = span.data('category_id') // Extract info from data-* attributes
+				var reference = span.data('reference') // Extract info from data-* attributes
+				var reference_id = span.data('reference_id') // Extract info from data-* attributes
 
 				var modal = $(this);
 				var formDestroy = modal.find('form#formDestroy');
-				modal.find('.modal-body').html('Deseja excluir a categoria "' + category + '"?');
+				modal.find('.modal-body').html('Deseja excluir a referencia "' + reference + '"?');
 
-				var url_cation = formDestroy.attr('action') + '/' + category_id;
+				var url_cation = formDestroy.attr('action') + '/' + reference_id;
 				formDestroy.attr('action', url_cation);
 
 			}).modal({'backdrop': 'static', 'show': false});

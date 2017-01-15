@@ -18,6 +18,9 @@
         .cursor-pointer {cursor: pointer;}
         .text-red {color: red;}
         .text-green {color: green;}
+        body {
+            background-color: white !important;
+        }
     </style>
 
     @yield('css')
@@ -62,6 +65,7 @@
                                 <li><a href="{{route('account.index')}}">Contas</a></li>
                                 <li><a href="{{route('category.index')}}">Categorias</a></li>
                                 <li><a href="{{route('goal.index')}}">Metas</a></li>
+                                <li><a href="{{route('reference.index')}}">Referências</a></li>
                             </ul>
                         </li>
                     </ul>

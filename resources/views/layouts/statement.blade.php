@@ -9,8 +9,9 @@
                         <span data-toggle="modal" data-target="#modalNewTransaction">
                             <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
                         </span>
-                        &nbsp;
-                        <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+                        <span data-toggle="modal" data-target="#modalImportStatement">&nbsp;
+                            <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+                        </span>
                     </h3>
                 </div>
                 <div class="col-md-8">
@@ -69,7 +70,12 @@
                     </tr>
                     @foreach($statementCredit as $creditItem)
                         <tr class="credit-rows">
-                            <td><a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a></td>
+                            <td>
+                                 <span data-month_to_add="{{$monthToAdd}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                    <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
+                                </span>
+                                <a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
+                            </td>
                             <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
                             <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
                         </tr>
@@ -83,9 +89,9 @@
                     @foreach($statementDebit as $debitItem)
                         <tr class="debit-rows">
                             <td>
-                            <span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
-                                <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
-                            </span>
+                                <span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                    <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
+                                </span>
                                 <a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
@@ -102,6 +108,32 @@
         </div>
     </div>
 
+    <!-- Modal Import Statement Files -->
+    <div class="modal fade" id="modalImportStatement" tabindex="-1" role="dialog" aria-labelledby="modalImportStatementLabel">
+        <div class="modal-dialog" role="document">
+            <form id="import_file_form" method="post" enctype="multipart/form-data" action="{{route('import.upload')}}">
+                {{csrf_field()}}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modalImportStatementLabel">Importar Arquivo</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="description">Selecione o arquivo (OFX ou CSV)</label>
+                        <input type="file" class="form-control" name="import_file" id="import_file" placeholder="Arquivo">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="import_file_button">Importar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
     <!-- Modal Category Details -->
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">
         <div class="modal-dialog" role="document">
@@ -235,6 +267,13 @@
                     }
                 });
             }).modal({'backdrop': 'static', 'show': false});
+
+            $('#modalImportStatement').modal({'backdrop': 'static', 'show': false});
+
+            $('#import_file_button').click(function () {
+                $(this).attr('disabled', 'disabled');
+                $('#import_file_form').submit();
+            });
 
             var myChart = Highcharts.chart('MyChart', {
                 chart: {

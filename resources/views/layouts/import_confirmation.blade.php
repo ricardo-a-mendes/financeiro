@@ -20,22 +20,22 @@
 			</tr>
 			</thead>
 			<tbody>
-			@forelse($improvedTransactions as $improvedTransaction)
-				<input type="hidden" name="transaction[{{$improvedTransaction->uniqueId}}]" value="{{json_encode($improvedTransaction)}}">
+			@forelse($enhancedTransactions as $enhancedTransaction)
+				<input type="hidden" name="transaction[{{$enhancedTransaction->uniqueId}}]" value="{{json_encode($enhancedTransaction)}}">
 				<tr>
-					<td><input type="checkbox" {{($improvedTransaction->existent_transaction)?'':'checked'}} name="import[]" value="{{$improvedTransaction->uniqueId}}"></td>
-					<td>{{$improvedTransaction->date->format('d/m/Y')}}</td>
+					<td><input type="checkbox" {{($enhancedTransaction->existent_transaction)?'':'checked'}} name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+					<td>{{$enhancedTransaction->date->format('d/m/Y')}}</td>
 
-					@if($improvedTransaction->existent_transaction)
-						<td class="warning"><span class="glyphicon glyphicon-pushpin" data-toggle="tooltip" title="Transação Existente"></span> {{$improvedTransaction->description}}</td>
+					@if($enhancedTransaction->existent_transaction)
+						<td class="warning"><span class="glyphicon glyphicon-pushpin" data-toggle="tooltip" title="Transação Existente"></span> {{$enhancedTransaction->description}}</td>
 					@else
-						<td>{{$improvedTransaction->description}}</td>
+						<td>{{$enhancedTransaction->description}}</td>
 					@endif
 
-					<td class="{{($improvedTransaction->type == 'credit')?'text-green success':'text-red danger'}}">{{Number::formatCurrency($improvedTransaction->value)}}</td>
+					<td class="{{($enhancedTransaction->type == 'credit')?'text-green success':'text-red danger'}}">{{Number::formatCurrency($enhancedTransaction->value)}}</td>
 					<td>
-						@if(is_null($improvedTransaction->category_id))
-							<select name="category[{{$improvedTransaction->uniqueId}}]" class="form-control combo_category">
+						@if(is_null($enhancedTransaction->category_id) || $enhancedTransaction->category_id == 0)
+							<select name="category[{{$enhancedTransaction->uniqueId}}]" class="form-control combo_category">
 								<option value="invalid_option">Selecione</option>
 								@foreach($categories as $categoryId => $categoryName)
 									<option {{($categoryId == 0)?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
@@ -46,7 +46,7 @@
 								</span>
 							</span>
 						@else
-							{{$improvedTransaction->category_name}}
+							{{$enhancedTransaction->category_name}}
 						@endif
 					</td>
 				</tr>
@@ -59,7 +59,12 @@
 			<tfoot>
 			<tr>
 				<td colspan="5">
-					<input class="btn btn-success" type="submit" name="save" value="Salvar">
+					@if (count($enhancedTransactions))
+						<input class="btn btn-success" type="submit" name="save" value="Salvar">
+						<a href="{{route('statement')}}" class="btn btn-danger">Cancelar</a>
+					@else
+						<a href="{{route('statement')}}" class="btn btn-danger">Voltar</a>
+					@endif
 				</td>
 			</tr>
 			</tfoot>
@@ -67,80 +72,5 @@
 		</form>
 	</div>
 
-	<!-- Modal New Category -->
-	<div class="modal fade" id="modalNewCategory" tabindex="-1" role="dialog" aria-labelledby="modalNewCategoryLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Nova Categoria</h4>
-				</div>
-				<div class="modal-body">
-					<div id="divMessage"></div>
-					<div class="form-group">
-						<label for="category">Name da Categoria</label>
-						<input type="text" class="form-control" id="category" name="category" placeholder="Categoria">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success" id="save">Salvar</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-@endsection
-@section('js')
-
-	<script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
-	<script type="text/javascript">
-		$(function(){
-			//Modal for New Category
-			$('#modalNewCategory').on('show.bs.modal', function (event) {
-				$('#save').removeAttr('disabled');
-				$('#divMessage').html('').removeAttr('class');
-				$('#category').val('');
-			}).modal({'backdrop': 'static', 'show': false});
-
-			$('#save').click(function(){
-				var url_save = '{{route('category.store')}}';
-				$.ajax({
-					url: url_save,
-					method: 'POST',
-					data: {
-						category: $('#category').val(),
-						_token: '{{csrf_token()}}'
-					},
-					dataType: 'json',
-					beforeSend: function () {
-						$('#save').attr('disabled', 'disabled');
-					},
-					success: function (dataReturn) {
-						var classAlert = 'alert alert-success';
-						if (dataReturn.success == true) {
-							$.each($('.combo_category'), function(){
-								$(this).append($('<option>', {
-									value: dataReturn.category_id,
-									text: dataReturn.category_name
-								}));
-							});
-						} else {
-							$('#save').removeAttr('disabled');
-							classAlert = 'alert alert-info';
-						}
-
-						$('#divMessage').attr('class', classAlert).html(dataReturn.message);
-					},
-					statusCode: {
-						422: function(dataError) {
-							var errors = dataError.responseJSON;
-							$('#divMessage').attr('class', 'alert alert-danger').html(errors.category[0]);
-							$('#save').removeAttr('disabled');
-						}
-					}
-				});
-
-			});
-		});
-	</script>
+	@include('layouts.modal_new_category');
 @endsection
