@@ -17,7 +17,7 @@
 				<div class="form-group">
 					<label for="category">Categoria</label>
 					<select name="category" class="form-control combo_category">
-						<option value="invalid_option">Selecione</option>
+						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($categories as $categoryId => $categoryName)
 							<option {{($categoryId == old('category', $transactionReference->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 						@endforeach

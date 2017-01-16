@@ -2,22 +2,18 @@
 
 namespace App\Model;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use App\FinancialModel;
 
-class Category extends Model
+class Category extends FinancialModel
 {
-	public $timestamps = false;
+    protected $fillable = [
+        'name',
+        'status'
+    ];
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
-    }
-
-    public function getCombo()
-    {
-		//TODO: Get only active categories (replicate to others)
-        return $this->pluck('name', 'id')->all();
     }
 
 	public function find($id)

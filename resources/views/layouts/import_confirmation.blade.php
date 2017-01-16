@@ -36,7 +36,7 @@
 					<td>
 						@if(is_null($enhancedTransaction->category_id) || $enhancedTransaction->category_id == 0)
 							<select name="category[{{$enhancedTransaction->uniqueId}}]" class="form-control combo_category">
-								<option value="invalid_option">Selecione</option>
+								<option value="invalid_option">{{trans('app.labels.select')}}</option>
 								@foreach($categories as $categoryId => $categoryName)
 									<option {{($categoryId == 0)?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 								@endforeach

@@ -2,15 +2,15 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\FinancialModel;
 
-    const TRANSACTION_CREDIT = 'credit';
+const TRANSACTION_CREDIT = 'credit';
     const TRANSACTION_DEBIT = 'debit';
 
-class TransactionType extends Model
+class TransactionType extends FinancialModel
 {
-    public function getCombo()
+    public function getNameAttribute()
     {
-        return $this->pluck('name', 'id')->all();
+        return trans('transaction.'.$this->unique_name);
     }
 }

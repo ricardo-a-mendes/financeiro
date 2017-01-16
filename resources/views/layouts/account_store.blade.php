@@ -17,9 +17,9 @@
 				<div class="form-group">
 					<label for="type">Tipo da Conta</label>
 					<select name="type" class="form-control">
-						<option value="invalid_option">Selecione</option>
+						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($accountTypes as $accountTypeId => $accountType)
-							<option {{($accountTypeId == $account->accountType->id)?'selected':''}} value="{{$accountTypeId}}">{{$accountType}}</option>
+							<option {{($accountTypeId == $account->accountType->id)?'selected':''}} value="{{$accountTypeId}}">{{trans('account.'.$accountType)}}</option>
 						@endforeach
 					</select>
 				</div>

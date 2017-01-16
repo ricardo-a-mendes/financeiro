@@ -38,7 +38,7 @@ class AccountController extends Controller
 		$route = route('account.store');
 		$account = new $this->account;
         $account->accountType()->associate(new $this->accountType);
-		$accountTypes = $this->accountType->pluck('description', 'id')->all();
+		$accountTypes = $this->accountType->getCombo('id', 'unique_name');
 
 		return view('layouts.account_store', compact('method', 'route', 'account', 'accountTypes'));
 	}
@@ -60,7 +60,7 @@ class AccountController extends Controller
         $method = 'PUT';
         $route = route('account.update', ['id' => $id]);
         $account = $this->account->find($id);
-        $accountTypes = $this->accountType->pluck('name', 'id')->all();
+        $accountTypes = $this->accountType->getCombo('id', 'unique_name');
 
         return view('layouts.account_store', compact('method', 'route', 'account', 'accountTypes'));
     }

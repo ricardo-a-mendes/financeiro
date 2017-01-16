@@ -188,7 +188,7 @@
                                 <div class="form-group">
                                     <label for="category">Categoria</label>
                                     <select name="category" class="form-control">
-                                        <option value="invalid_option">Selecione</option>
+                                        <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($categories as $categoryId => $categoryName)
                                             <option value="{{$categoryId}}">{{$categoryName}}</option>
                                         @endforeach
@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <label for="account">Conta</label>
                                     <select name="account" class="form-control">
-                                        <option value="invalid_option">Selecione</option>
+                                        <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($accounts as $accountId => $accountName)
                                             <option value="{{$accountId}}">{{$accountName}}</option>
                                         @endforeach
@@ -211,7 +211,7 @@
                                 <div class="form-group">
                                     <label for="transactionType">Tipo</label>
                                     <select name="transactionType" class="form-control">
-                                        <option value="invalid_option">Selecione</option>
+                                        <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
                                             <option value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
                                         @endforeach

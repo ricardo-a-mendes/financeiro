@@ -2,19 +2,12 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\FinancialModel;
 
-class Account extends Model
+class Account extends FinancialModel
 {
-    public $timestamps = false;
-
-    public function accountType()
+   public function accountType()
     {
         return $this->belongsTo(AccountType::class);
-    }
-
-    public function getCombo()
-    {
-        return $this->pluck('name', 'id')->all();
     }
 }

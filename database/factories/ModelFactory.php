@@ -15,9 +15,15 @@
 $factory->define(App\User::class, function (Faker\Generator $faker) {
 
     return [
-        'name' => 'Ricardo',
-        'email' => 'eng.rmendes@gmail.com',
+        'name' => 'Adminstrador',
+        'email' => 'admin@financeiro.com.br',
         'password' => bcrypt('secret'),
         'remember_token' => 'secret',
     ];
 });
+
+$factory->define(App\Model\Category::class, function (Faker\Generator $faker) { return []; });
+$factory->define(App\Model\TransactionType::class, function (Faker\Generator $faker) { return []; });
+$factory->define(App\Model\AccountType::class, function (Faker\Generator $faker) { return []; });
+$factory->define(App\Model\Account::class, function (Faker\Generator $faker) { return []; });
+$factory->define(App\Model\Goal::class, function (Faker\Generator $faker) { return []; });

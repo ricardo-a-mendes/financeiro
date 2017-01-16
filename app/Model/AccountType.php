@@ -2,9 +2,14 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\FinancialModel;
 
-class AccountType extends Model
+class AccountType extends FinancialModel
 {
-    //
+    protected $fillable = ['unique_name'];
+
+    public function getNameAttribute()
+    {
+        return trans('account.'.$this->unique_name);
+    }
 }

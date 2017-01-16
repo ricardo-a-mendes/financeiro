@@ -20,7 +20,7 @@
 				<div class="form-group">
 					<label for="category">Categoria</label>
 					<select name="category" class="form-control">
-						<option value="invalid_option">Selecione</option>
+						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($categories as $categoryId => $categoryName)
 							<option {{($categoryId == old('category', $goal->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 						@endforeach
@@ -31,7 +31,7 @@
 				<div class="form-group">
 					<label for="transactionType">Tipo de Transação</label>
 					<select name="transactionType" class="form-control">
-						<option value="invalid_option">Selecione</option>
+						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
 							<option {{($transactionTypeId == old('transactionType', $goal->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
 						@endforeach
