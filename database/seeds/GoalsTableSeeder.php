@@ -14,20 +14,20 @@ class GoalsTableSeeder extends Seeder
         $transactionType = new \App\Model\TransactionType();
         $category = new \App\Model\Category();
 
-        $credit = $transactionType->getByUniqueName('credit');
-        $debit = $transactionType->getByUniqueName('debit');
+        $credit = $transactionType->findByUniqueName('credit');
+        $debit = $transactionType->findByUniqueName('debit');
 
-        $salario = $category->findByName('Salário');
+        $salario = $category->findByName('Salário'); //dd($salario);
         $aluguel = $category->findByName('Aluguel');
         $teka = $category->findByName('Teka Maria');
         $financiamento = $category->findByName('Financiamento Apartamento');
 
-        factory(\App\Model\Account::class)->create([
+        factory(\App\Model\Goal::class)->create([
             'category_id' => $salario->id,
             'transaction_type_id' => $credit->id,
             'value' => 5600,
         ]);
-
+/*
         factory(\App\Model\Account::class)->create([
             'category_id' => $aluguel->id,
             'transaction_type_id' => $debit->id,
@@ -45,5 +45,6 @@ class GoalsTableSeeder extends Seeder
             'transaction_type_id' => $debit->id,
             'value' => 3125,
         ]);
+*/
     }
 }

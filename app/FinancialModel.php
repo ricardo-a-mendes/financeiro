@@ -19,6 +19,6 @@ class FinancialModel extends Model
 
     public function findByName($name)
     {
-        return $this->where('name', $name)->get();
+        return $this->where('name', $name)->first();
     }
 }
