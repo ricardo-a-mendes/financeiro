@@ -9,6 +9,7 @@ use App\Model\Category;
 use App\Model\Transaction;
 use App\Model\TransactionType;
 use Carbon\Carbon;
+use  Illuminate\Support\Facades\Auth;
 use League\Flysystem\Exception;
 
 class StatementController extends Controller
@@ -43,12 +44,12 @@ class StatementController extends Controller
 
             $statementDate = $date->format('m-Y');
 
-            $statementDebit = $transaction->getStatement(Transaction::STATEMENT_DEBIT, $date);
+            $statementDebit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_DEBIT, $date);
 
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitGoal = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_GOAL);
 
-            $statementCredit = $transaction->getStatement(Transaction::STATEMENT_CREDIT, $date);
+            $statementCredit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
             $totalCreditGoal = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_GOAL);
 

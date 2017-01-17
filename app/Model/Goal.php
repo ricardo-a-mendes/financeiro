@@ -34,7 +34,7 @@ class Goal extends Model
         return null;
     }
 
-    public function getGoalsWithoutTransaction($type, \DateTime $date = null)
+    public function getGoalsWithoutTransaction($userID, $type, \DateTime $date = null)
     {
         if (is_null($date))
             $date = new \DateTime();
@@ -50,12 +50,20 @@ class Goal extends Model
         );
 
         return $this->select($fields)
-            ->leftJoin('goal_dates', 'goal_dates.goal_id', '=', 'goals.id')
-            ->leftJoin('categories', 'categories.id', '=', 'goals.category_id')
-            ->leftJoin('transactions', function($join) use ($startDate, $endDate){
-                $join->on('transactions.category_id', '=', 'categories.id');
+            ->leftJoin('goal_dates', function ($join) use ($userID){
+				$join->where('goal_dates.user_id', $userID);
+				$join->on('goal_dates.goal_id', 'goals.id');
+			})
+            ->leftJoin('categories', function ($join) use ($userID){
+				$join->where('categories.user_id', $userID);
+				$join->on('categories.id', 'goals.category_id');
+			})
+            ->leftJoin('transactions', function($join) use ($userID, $startDate, $endDate){
+                $join->where('transactions.user_id', $userID);
+                $join->on('transactions.category_id', 'categories.id');
                 $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
             })
+            ->where('goals.user_id', $userID)
             ->where('goals.transaction_type_id', $type)
             ->whereNull('transactions.id')
             ->whereRaw('(
