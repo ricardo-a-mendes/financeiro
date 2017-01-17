@@ -55,6 +55,7 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    @if (Auth::user())
                     <ul class="nav navbar-nav">
                         <li><a href="{{route('statement')}}">Resumo Mensal</a></li>
                         <li><a href="{{route('statement')}}">Resumo Anual</a></li>
@@ -69,15 +70,17 @@
                             </ul>
                         </li>
                     </ul>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li role="presentation" class="active"><a href="#">Lembretes <span class="badge">2</span></a></li>
+
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
+                            <li role="presentation" class="active"><a href="#">Lembretes <span class="badge">2</span></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
