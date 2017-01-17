@@ -13,13 +13,15 @@ class CreateGoalDatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('goal_dates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('goal_id');
-            $table->foreign('goal_id')->references('id')->on('goals');
-            $table->timestamp('target_date');
-            $table->timestamps();
-        });
+		if (!Schema::hasTable('goal_dates')) {
+			Schema::create('goal_dates', function (Blueprint $table) {
+				$table->increments('id');
+				$table->unsignedInteger('goal_id');
+				$table->foreign('goal_id')->references('id')->on('goals');
+				$table->timestamp('target_date');
+				$table->timestamps();
+			});
+		}
     }
 
     /**

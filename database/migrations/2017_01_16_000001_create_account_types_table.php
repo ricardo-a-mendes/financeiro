@@ -13,11 +13,13 @@ class CreateAccountTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('account_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('unique_name', 70)->unique();
-            $table->timestamps();
-        });
+		if (!Schema::hasTable('account_types')) {
+			Schema::create('account_types', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('unique_name', 70)->unique();
+				$table->timestamps();
+			});
+		}
     }
 
     /**

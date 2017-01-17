@@ -13,14 +13,16 @@ class CreateIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::create('incomes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('account_id');
-            $table->foreign('account_id')->references('id')->on('accounts');
-            $table->decimal('values', 14, 2);
-            $table->unsignedSmallInteger('status')->default(1);
-            $table->timestamps();
-        });
+		if (!Schema::hasTable('incomes')) {
+			Schema::create('incomes', function (Blueprint $table) {
+				$table->increments('id');
+				$table->unsignedInteger('account_id');
+				$table->foreign('account_id')->references('id')->on('accounts');
+				$table->decimal('values', 14, 2);
+				$table->unsignedSmallInteger('status')->default(1);
+				$table->timestamps();
+			});
+		}
     }
 
     /**

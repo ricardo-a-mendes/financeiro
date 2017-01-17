@@ -13,12 +13,14 @@ class CreateTransactionReferencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_references', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('description');
-            $table->unsignedInteger('category_id')->default(0);
-            $table->timestamps();
-        });
+		if (!Schema::hasTable('transaction_references')) {
+			Schema::create('transaction_references', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('description');
+				$table->unsignedInteger('category_id')->default(0);
+				$table->timestamps();
+			});
+		}
     }
 
     /**

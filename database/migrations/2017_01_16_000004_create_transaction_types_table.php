@@ -13,11 +13,13 @@ class CreateTransactionTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('unique_name')->unique();
-            $table->timestamps();
-        });
+		if (!Schema::hasTable('transaction_types')) {
+			Schema::create('transaction_types', function (Blueprint $table) {
+				$table->increments('id');
+				$table->string('unique_name')->unique();
+				$table->timestamps();
+			});
+		}
     }
 
     /**
