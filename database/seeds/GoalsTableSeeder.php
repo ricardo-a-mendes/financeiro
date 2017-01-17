@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class GoalsTableSeeder extends Seeder
@@ -17,34 +18,41 @@ class GoalsTableSeeder extends Seeder
         $credit = $transactionType->findByUniqueName('credit');
         $debit = $transactionType->findByUniqueName('debit');
 
-        $salario = $category->findByName('Salário'); //dd($salario);
+        $salario = $category->findByName('Salário');
         $aluguel = $category->findByName('Aluguel');
         $teka = $category->findByName('Teka Maria');
         $financiamento = $category->findByName('Financiamento Apartamento');
 
+		$userModel = new User();
+		$user = $userModel->where('name', 'Ricardo')->first();
+
         factory(\App\Model\Goal::class)->create([
             'category_id' => $salario->id,
             'transaction_type_id' => $credit->id,
+			'user_id' => $user->id,
             'value' => 5600,
         ]);
-/*
-        factory(\App\Model\Account::class)->create([
+
+        factory(\App\Model\Goal::class)->create([
             'category_id' => $aluguel->id,
             'transaction_type_id' => $debit->id,
+			'user_id' => $user->id,
             'value' => 1430,
         ]);
 
-        factory(\App\Model\Account::class)->create([
+        factory(\App\Model\Goal::class)->create([
             'category_id' => $teka->id,
             'transaction_type_id' => $debit->id,
+			'user_id' => $user->id,
             'value' => 300,
         ]);
 
-        factory(\App\Model\Account::class)->create([
+        factory(\App\Model\Goal::class)->create([
             'category_id' => $financiamento->id,
             'transaction_type_id' => $debit->id,
+			'user_id' => $user->id,
             'value' => 3125,
         ]);
-*/
+
     }
 }

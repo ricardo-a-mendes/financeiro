@@ -18,6 +18,8 @@ class CreateGoalDatesTable extends Migration
 				$table->increments('id');
 				$table->unsignedInteger('goal_id');
 				$table->foreign('goal_id')->references('id')->on('goals');
+				$table->unsignedInteger('user_id');
+				$table->foreign('user_id')->references('id')->on('users');
 				$table->timestamp('target_date');
 				$table->timestamps();
 			});

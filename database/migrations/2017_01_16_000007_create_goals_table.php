@@ -20,6 +20,8 @@ class CreateGoalsTable extends Migration
 				$table->foreign('category_id')->references('id')->on('categories');
 				$table->unsignedInteger('transaction_type_id');
 				$table->foreign('transaction_type_id')->references('id')->on('transaction_types');
+				$table->unsignedInteger('user_id');
+				$table->foreign('user_id')->references('id')->on('users');
 				$table->decimal('value', 14, 2);
 				$table->unsignedSmallInteger('status')->default(1);
 				$table->timestamps();

@@ -17,5 +17,12 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('secret'),
             'remember_token' => 'secret',
         ]);
+
+        factory(\App\User::class)->create([
+            'name' => 'Ricardo',
+            'email' => 'ricardo@financeiro.com.br',
+            'password' => bcrypt('secret'),
+            'remember_token' => 'secret',
+        ]);
     }
 }

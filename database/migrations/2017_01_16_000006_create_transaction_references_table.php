@@ -17,6 +17,8 @@ class CreateTransactionReferencesTable extends Migration
 			Schema::create('transaction_references', function (Blueprint $table) {
 				$table->increments('id');
 				$table->string('description');
+				$table->unsignedInteger('user_id');
+				$table->foreign('user_id')->references('id')->on('users');
 				$table->unsignedInteger('category_id')->default(0);
 				$table->timestamps();
 			});

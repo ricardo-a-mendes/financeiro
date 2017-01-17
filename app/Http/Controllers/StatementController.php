@@ -54,7 +54,7 @@ class StatementController extends Controller
 
             $categories = $this->category->getCombo();
             $accounts = $this->account->getCombo();
-            $transactionTypes = $this->transactionType->getCombo();
+            $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
 
             /*
             $totalProvisioned = 4500;

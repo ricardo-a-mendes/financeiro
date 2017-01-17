@@ -3,13 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
+use League\Flysystem\Exception;
 
 class FinancialModel extends Model
 {
-    public function getCombo($optionField = 'id', $valueField = 'name', $onlyActive = true)
+    public function getCombo($identifierField = 'id', $valueField = 'name', $onlyActive = true)
     {
-        //TODO: Get only active categories (replicate to others)
-        return $this->pluck($valueField, $optionField)->all();
+		if ($onlyActive && Schema::hasColumn($this->getTable(), 'status'))
+			return $this->where('status', 1)->pluck($valueField, $identifierField);
+
+		return $this->pluck($valueField, $identifierField);
     }
 
     public function findByUniqueName($uniqueName)
