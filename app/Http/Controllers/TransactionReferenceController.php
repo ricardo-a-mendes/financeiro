@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransactionReferenceRequest;
 use App\Model\Category;
 use App\Model\TransactionReference;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 class TransactionReferenceController extends Controller

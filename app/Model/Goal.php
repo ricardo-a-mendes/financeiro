@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class Goal extends FinancialModel
 {
-    public $timestamps = false;
-
     public function transactionType()
     {
         return $this->belongsTo(TransactionType::class);

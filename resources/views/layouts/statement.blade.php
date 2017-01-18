@@ -120,9 +120,25 @@
                 </div>
                 <div class="modal-body">
 
+
                     <div class="form-group">
+
                         <label for="description">Selecione o arquivo (OFX ou CSV)</label>
-                        <input type="file" class="form-control" name="import_file" id="import_file" placeholder="Arquivo">
+                        <div class="input-group">
+                            <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                Browse&hellip; <input type="file" name="import_file" id="import_file" style="display: none;">
+                            </span>
+                            </label>
+                            <input type="text" id="import_file_name" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Veja o modelo do arquivo CSV: </label>
+                        <a href="{{asset('files/Exemplo_Importacao_Transacoes.csv')}}">Download</a>
+
+                        <div class="alert alert-warning small"><p><span  class="glyphicon glyphicon-info-sign"></span> A primeira linha no arquivo CSV será ignorada!</p></div>
                     </div>
 
                 </div>
@@ -134,6 +150,7 @@
             </form>
         </div>
     </div>
+
     <!-- Modal Category Details -->
     <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">
         <div class="modal-dialog" role="document">
@@ -236,6 +253,13 @@
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts-3d.js')}}"></script>
     <script type="text/javascript">
         $(function(){
+            //
+            $(document).on('change', ':file', function() {
+                var input = $(this);
+                var label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                $('#import_file_name').val(label);
+            });
+
             $('#credit, #debit').on('click', function (){
                 var type = $(this)[0].id;
                 if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top') {

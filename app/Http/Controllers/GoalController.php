@@ -68,6 +68,7 @@ class GoalController extends Controller
         $transactionType = $this->transactionType->find($request->input('transactionType'));
         $goal->transactionType()->associate($transactionType);
 
+        $goal->user_id = Auth::id();
         $goal->value = $request->input('value');
 
         $goal->save();
@@ -75,6 +76,7 @@ class GoalController extends Controller
         if ($request->has('specific_goal_option') && $request->has('specific_date')) {
             $goalDate = new GoalDate();
             $dateTime = new Carbon($request->input('specific_date'));
+            $goalDate->user_id = Auth::id();
             $goalDate->target_date = $dateTime->format('Y-m-d');
             $goalDate->goal()->associate($goal);
             $goalDate->save();
@@ -88,7 +90,7 @@ class GoalController extends Controller
     {
         $goal = $this->goal->find($id);
         $categories = $this->category->getCombo();
-        $transactionTypes = $this->transactionType->getCombo();
+        $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
         $hasSpecificGoal = ($goal->goalDate->count() > 0) ? 'yes' : 'no';
         $method = 'PUT';
         $route = route('goal.update', ['id' => $id]);

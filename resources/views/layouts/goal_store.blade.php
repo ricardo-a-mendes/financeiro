@@ -33,7 +33,7 @@
 					<select name="transactionType" class="form-control">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
-							<option {{($transactionTypeId == old('transactionType', $goal->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{$transactionTypeName}}</option>
+							<option {{($transactionTypeId == old('transactionType', $goal->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{trans('transaction.'.$transactionTypeName)}}</option>
 						@endforeach
 					</select>
 				</div>

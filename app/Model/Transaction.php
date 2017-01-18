@@ -17,8 +17,6 @@ class Transaction extends Model
     public $goal;
     public $transaction;
 
-    public $timestamps = false;
-
     public function __construct()
     {
         $this->goal = new Goal();

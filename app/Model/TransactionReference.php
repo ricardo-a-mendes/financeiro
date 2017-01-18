@@ -2,12 +2,10 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\FinancialModel;
 
-class TransactionReference extends Model
+class TransactionReference extends FinancialModel
 {
-	public $timestamps = false;
-
 	public function category()
 	{
 		return $this->belongsTo(Category::class);

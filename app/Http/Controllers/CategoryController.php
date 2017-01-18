@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Model\Category;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 class CategoryController extends Controller
@@ -21,7 +22,7 @@ class CategoryController extends Controller
 
 	public function index()
 	{
-		$categories = $this->category-findAll(Auth::id());
+		$categories = $this->category->findAll(Auth::id());
 		return view('layouts.category_index', compact('categories'));
 	}
 
@@ -44,6 +45,7 @@ class CategoryController extends Controller
 		if (is_null($existentCategory)) {
 			$category = new $this->category;
 			$category->name = $categoryName;
+			$category->user_id = Auth::id();
 			$category->save();
 		} else {
 			$category = $existentCategory;

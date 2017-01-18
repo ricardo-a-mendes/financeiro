@@ -9,6 +9,8 @@ use App\Model\TransactionReference;
 use App\Model\TransactionType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Session;
 
 /**
  * Class ImportController
@@ -89,6 +91,7 @@ class ImportController extends Controller
             } else {
                 $transactionReference = new $this->transactionReference;
                 $transactionReference->description = $transaction['description'];
+                $transactionReference->user_id = Auth::id();
                 $transactionReference->save();
             }
             $transaction['transaction_reference_id'] = $transactionReference->id;
@@ -103,8 +106,6 @@ class ImportController extends Controller
     {
         $allowedExtensions = ['csv', 'ofx'];
         $parsedTransactions = [];
-        $enhancedTransactions = [];
-        $categories = [];
         $canProcess = true;
         $originalExt = '';
 
@@ -133,9 +134,12 @@ class ImportController extends Controller
             }
 
             $enhancedTransactions = $this->enhanceTransaction($parsedTransactions);
+            return view('layouts.import_confirmation', compact('enhancedTransactions', 'categories'));
         }
 
-        return view('layouts.import_confirmation', compact('enhancedTransactions', 'categories'));
+        //Can't Process =(
+        Session::flash('info', 'Arquivo não permitido para importação.');
+        return redirect()->route('statement');
     }
 
     private function parseCSV($path)
@@ -199,6 +203,7 @@ class ImportController extends Controller
             } else {
                 $transactionReference = new $this->transactionReference;
                 $transactionReference->description = $transaction['description'];
+                $transactionReference->user_id = Auth::id();
                 $transactionReference->save();
             }
             $transaction['transaction_reference_id'] = $transactionReference->id;
@@ -241,6 +246,7 @@ class ImportController extends Controller
             if (is_null($transactionInfo->category_id) || $transactionInfo->category_id == 0) {
                 $transactionReference = $this->transactionReference->find($transactionInfo->transaction_reference_id);
                 $transactionReference->category()->associate($category);
+                $transactionReference->user_id = Auth::id();
                 $transactionReference->save();
             }
 
@@ -249,6 +255,7 @@ class ImportController extends Controller
             $transaction->category()->associate($category);
             $transaction->transactionType()->associate($transactionType);
 
+            $transaction->user_id = Auth::id();
             $transaction->description = $transactionInfo->description;
             $transaction->value = $transactionInfo->value;
             $transactionDate = new Carbon($transactionInfo->date->date);

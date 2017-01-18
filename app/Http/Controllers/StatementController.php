@@ -130,6 +130,7 @@ class StatementController extends Controller
         $transaction->category()->associate($category);
         $transaction->transactionType()->associate($transactionType);
 
+        $transaction->user_id = Auth::id();
         $transaction->description = $request->input('description');
         $transaction->value = $request->input('transaction_value');
         $transaction->transaction_date = $request->input('transaction_date');

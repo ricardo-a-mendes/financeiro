@@ -48,6 +48,7 @@ class AccountController extends Controller
 	{
         $account = new $this->account;
         $account->name = $request->input('account');
+        $account->user_id = Auth::id();
         $accountType = $this->accountType->find($request->input('type'));
         $account->accountType()->associate($accountType);
 		$account->save();
