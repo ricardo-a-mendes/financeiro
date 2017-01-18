@@ -8,6 +8,7 @@ use App\Model\Goal;
 use App\Model\GoalDate;
 use App\Model\TransactionType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 class GoalController extends Controller
@@ -40,7 +41,7 @@ class GoalController extends Controller
 
     public function index()
     {
-        $goals = $this->goal->all();
+        $goals = $this->goal->findAll(Auth::id());
         return view('layouts.goal_index', compact('goals'));
     }
 
@@ -50,7 +51,7 @@ class GoalController extends Controller
         $goal->category()->associate(new $this->category);
         $goal->transactionType()->associate(new $this->transactionType);
         $categories = $this->category->getCombo();
-        $transactionTypes = $this->transactionType->getCombo();
+        $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
         $hasSpecificGoal = 'no';
         $method = 'POST';
         $route = route('goal.store');

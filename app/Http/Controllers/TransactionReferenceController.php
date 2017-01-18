@@ -26,7 +26,7 @@ class TransactionReferenceController extends Controller
 
     public function index()
     {
-        $references = $this->reference->all();
+        $references = $this->reference->findAll(Auth::id());
         return view('layouts.reference_index', compact('references'));
     }
 

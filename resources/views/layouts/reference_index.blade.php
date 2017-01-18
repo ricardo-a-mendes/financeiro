@@ -31,7 +31,7 @@
 				</tr>
 			@empty
 				<tr>
-					<td colspan="4">Nenhuma conta cadastrada.</td>
+					<td colspan="4">Nenhuma Referência cadastrada.</td>
 				</tr>
 			@endforelse
 			</tbody>

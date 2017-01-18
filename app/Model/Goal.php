@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
+use App\FinancialModel;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Goal extends Model
+class Goal extends FinancialModel
 {
     public $timestamps = false;
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AccountRequest;
 use App\Model\Account;
 use App\Model\AccountType;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 class AccountController extends Controller
@@ -28,7 +29,7 @@ class AccountController extends Controller
 
 	public function index()
 	{
-		$accounts = $this->account->all();
+		$accounts = $this->account->findAll(Auth::id());
 		return view('layouts.account_index', compact('accounts'));
     }
 

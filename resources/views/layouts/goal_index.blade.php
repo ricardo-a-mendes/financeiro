@@ -21,7 +21,7 @@
 			@forelse($goals as $goal)
 			<tr>
 				<td>{{$goal->id}}</td>
-				<td><a href="{{route('category.edit', ['id' => $goal->category->id])}}">{{$goal->category->name}}</a></td>
+				<td><a data-toggle="tooltip" title="Editar Categoria" href="{{route('category.edit', ['id' => $goal->category->id])}}">{{$goal->category->name}}</a></td>
 				<td>{{Number::formatCurrency($goal->value)}}</td>
 				<td>
 					@if($goal->goalDate->count() > 0)
@@ -34,9 +34,9 @@
 				<td>
 					<a href="{{route('goal.edit', ['id' => $goal->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
 					&nbsp;|&nbsp;
-					<span style="cursor: pointer" data-category="{{$goal->category->name}}" data-category_id="{{$goal->id}}" data-toggle="modal" data-target="#deleteGoal">
-							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
-						</span>
+					<span class="cursor-pointer" data-category="{{$goal->category->name}}" data-category_id="{{$goal->id}}" data-toggle="modal" data-target="#deleteGoal">
+						<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
+					</span>
 				</td>
 			</tr>
 			@empty
