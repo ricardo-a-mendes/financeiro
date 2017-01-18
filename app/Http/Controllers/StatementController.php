@@ -140,4 +140,9 @@ class StatementController extends Controller
         return redirect()->route('statement');
     }
 
+    public function destroy($id)
+    {
+        //Todo: Implement 'destroy' method (Delete Data)
+    }
+
 }

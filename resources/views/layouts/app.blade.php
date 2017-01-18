@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- TODO: Refactor views into respective folders -->
 <html lang="en">
 <head>
     <meta charset="utf-8">

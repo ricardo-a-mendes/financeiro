@@ -87,6 +87,7 @@ class CategoryController extends Controller
 
 	public function destroy($id)
 	{
+        //Todo: Change implementation to Alter status to "0"'
 		$category = $this->category->find($id);
 		if ($category->transactions->count() == 0) {
 			$category->delete();

@@ -81,6 +81,7 @@ class AccountController extends Controller
 
 	public function destroy($id)
 	{
+        //Todo: Implement 'destroy' method (Alter status to "0"'
         /*
         $account = $this->account->find($id);
         if ($account->transactions->count() == 0) {

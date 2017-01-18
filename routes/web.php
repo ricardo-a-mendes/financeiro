@@ -1,6 +1,10 @@
 <?php
 
 use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
+//TODO: Translate Everything
+//TODO: Create Resumo Anual
+//TODO: Create Extrato
+//TODO: Use GULP to compact common CSS
 
 Auth::routes();
 Route::get('/home', 'HomeController@index');

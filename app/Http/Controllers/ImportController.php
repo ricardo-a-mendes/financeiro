@@ -50,58 +50,6 @@ class ImportController extends Controller
         $this->transaction = $transaction;
     }
 
-    public function index()
-    {
-        $ofxParser = new \OfxParser\Parser();
-        //$ofx = $ofxParser->loadFromFile('C:\\ricardo\\financeiro\\extrato_itau.ofx');
-        $ofx = $ofxParser->loadFromFile('D:\\xampp_56\\htdocs\\financeiro\\source\\extrato.ofx');
-        $bankAccount = reset($ofx->bankAccounts);
-
-        foreach ($bankAccount->statement->transactions as $bankTransaction)
-            $transactions[] = [
-                'description' => $this->sanitize($bankTransaction->memo),
-                'uniqueId' => $bankTransaction->uniqueId,
-                'type' => ($bankTransaction->amount > 0) ? 'credit' : 'debit',
-                'value' => abs($bankTransaction->amount),
-                'date' => $bankTransaction->date,
-            ];
-        $improvedTransactions = [];
-        foreach ($transactions as $transaction) {
-            $transactionReference = $this->transactionReference->findByDescription($transaction['description']);
-
-            //Check if transaction already exists
-            $existentTransaction = $this->transaction
-                ->where('description', $transaction['description'])
-                ->where('value', $transaction['value'])
-                ->whereBetween('transaction_date', [
-                    $transaction['date']->format('Y-m-d 00:00:00'),
-                    $transaction['date']->format('Y-m-d 23:59:59')
-                ])
-                ->first();
-
-            $transaction['existent_transaction'] = (!is_null($existentTransaction));
-            $transaction['transaction_reference_id'] = null;
-            $transaction['category_id'] = 0;
-            $transaction['category_name'] = null;
-            if ($transactionReference instanceof TransactionReference) {
-                if ($transactionReference->category instanceof Category) {
-                    $transaction['category_id'] = $transactionReference->category->id;
-                    $transaction['category_name'] = $transactionReference->category->name;
-                }
-            } else {
-                $transactionReference = new $this->transactionReference;
-                $transactionReference->description = $transaction['description'];
-                $transactionReference->user_id = Auth::id();
-                $transactionReference->save();
-            }
-            $transaction['transaction_reference_id'] = $transactionReference->id;
-            $improvedTransactions[] = (object)$transaction;
-        }
-
-        $categories = $this->category->getCombo();
-        return view('layouts.import_confirmation', compact('improvedTransactions', 'categories'));
-    }
-
     public function import(Request $request)
     {
         $allowedExtensions = ['csv', 'ofx'];

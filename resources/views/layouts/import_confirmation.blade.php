@@ -12,6 +12,7 @@
 		<table class="table table-striped">
 			<thead>
 			<tr>
+				<!-- TODO: Add checkbox to select/deselect all -->
 				<th>#</th>
 				<th>Data</th>
 				<th>Descrição</th>

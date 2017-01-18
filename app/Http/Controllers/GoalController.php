@@ -117,6 +117,6 @@ class GoalController extends Controller
 
     public function destroy($id)
     {
-
+        //Todo: Implement 'destroy' method (Alter status to "0"'
     }
 }
