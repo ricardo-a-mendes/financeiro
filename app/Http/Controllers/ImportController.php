@@ -92,13 +92,29 @@ class ImportController extends Controller
 
     private function parseCSV($path)
     {
-        $transactions[] = [
-            'description' => $this->sanitize(''),
-            'uniqueId' => '',
-            'type' => ('' > 0) ? 'credit' : 'debit',
-            'value' => abs(''),
-            'date' => '', // \DateTime()
-        ];
+		$transactions = [];
+		$header = ['date', 'description', 'value'];
+		if (($handle = fopen($path, 'r')) !== FALSE)
+		{
+			while (($row = fgetcsv($handle, filesize($path), ';')) !== FALSE)
+			{
+				$csv[] = array_combine($header, $row);
+			}
+
+			fclose($handle);
+
+			$csv = array_slice($csv, 1); //Remove Header
+			foreach($csv as $transaction) {
+				$value = filter_var($transaction['value'], FILTER_SANITIZE_NUMBER_FLOAT)/100;
+				$transactions[] = [
+					'description' => $this->sanitize($transaction['description']),
+					'uniqueId' => '',
+					'type' => ($value > 0) ? 'credit' : 'debit',
+					'value' => abs($value),
+					'date' => Carbon::createFromFormat('d/m/Y', $transaction['date']) // \DateTime()
+				];
+			}
+		}
 
         return $transactions;
     }
