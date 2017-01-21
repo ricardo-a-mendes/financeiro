@@ -6,8 +6,8 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="account">Conta</label>
-					<input type="text" class="form-control" id="account" name="account" placeholder="Conta" value="{{$account->name}}">
+					<label for="account">{{trans_choice('account.labels.account', 1)}}</label>
+					<input type="text" class="form-control" id="account" name="account" placeholder="{{trans_choice('account.labels.account', 1)}}" value="{{$account->name}}">
 					<input type="hidden" name="id" value="{{$account->id}}">
 					{{ csrf_field() }}
 					{{ method_field($method) }}
@@ -15,7 +15,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="type">Tipo da Conta</label>
+					<label for="type">{{trans('account.labels.account_type')}}</label>
 					<select name="type" class="form-control">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($accountTypes as $accountTypeId => $accountType)
@@ -28,8 +28,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class=" form-group">
-					<button type="submit" name="save" value="save" class="btn btn-success">Salvar</button>
-					<a href="{{route('account.index')}}" class="btn btn-danger">Cancelar</a>
+					<button type="submit" name="save" value="save" class="btn btn-success">{{trans('app.labels.save')}}</button>
+					<a href="{{route('account.index')}}" class="btn btn-danger">{{trans('app.labels.cancel')}}</a>
 				</div>
 			</div>
 		</div>

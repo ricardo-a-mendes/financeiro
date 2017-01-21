@@ -53,7 +53,7 @@ class AccountController extends Controller
         $account->accountType()->associate($accountType);
 		$account->save();
 
-        Session::flash('success', 'Conta criada com sucesso!');
+        Session::flash('success', trans('account.messages.created_successfully'));
         return redirect()->route('account.index');
     }
 
@@ -75,13 +75,13 @@ class AccountController extends Controller
         $account->accountType()->associate($accountType);
         $account->save();
 
-        Session::flash('success', 'Conta atualizada com sucesso!');
+        Session::flash('success', trans('account.messages.updated_successfully'));
         return redirect()->route('account.index');
     }
 
 	public function destroy($id)
 	{
-        //Todo: Implement 'destroy' method (Alter status to "0"'
+        //Todo: Implement 'destroy' method (Alter status to "0"')
         /*
         $account = $this->account->find($id);
         if ($account->transactions->count() == 0) {

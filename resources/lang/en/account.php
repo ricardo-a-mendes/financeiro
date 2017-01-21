@@ -16,5 +16,15 @@ return [
     'conta_corrente' => 'Conta Corrente',
     'conta_poupanca' => 'Conta Poupança',
     'cartao_credito' => 'Cartão de Crédito',
-
+    'labels' => [
+        'account' => 'Account|Accounts',
+        'account_type' => 'Account Type',
+        'new_account' => 'New Account',
+        '' => '',
+        '' => '',
+    ],
+    'messages' => [
+        'create_success' => 'Account created successfully!',
+        'updated_successfully' => 'Account updated successfully!',
+    ]
 ];

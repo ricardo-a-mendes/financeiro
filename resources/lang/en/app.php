@@ -14,7 +14,14 @@ return [
     */
 
     'labels' => [
-        'select' => 'Select'
+        'actions' => 'Actions',
+        'cancel' => 'Cancel',
+        'delete' => 'Delete',
+        'edit' => 'Edit',
+        'no_items_found' => 'No Items Found',
+        'save' => 'Save',
+        'select' => 'Select',
+        'type' => 'Type',
     ],
 
     'messages' => [
