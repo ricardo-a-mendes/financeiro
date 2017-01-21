@@ -58,11 +58,11 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     @if (Auth::check())
                     <ul class="nav navbar-nav">
-                        <li><a href="{{route('statement')}}">Resumo Mensal</a></li>
-                        <li><a href="{{route('statement')}}">Resumo Anual</a></li>
-                        <li><a href="{{route('statement')}}">Extrato</a></li>
+                        <li><a href="{{route('statement')}}">{{trans('app.menu.extract_monthly')}}</a></li>
+                        <li><a href="{{route('statement')}}">{{trans('app.menu.extract_yearly')}}</a></li>
+                        <li><a href="{{route('statement')}}">{{trans('app.menu.statement')}}</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.menu.registration')}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{route('account.index')}}">{{trans_choice('account.labels.account', 2)}}</a></li>
                                 <li><a href="{{route('category.index')}}">{{trans_choice('category.labels.category', 2)}}</a></li>
@@ -78,10 +78,10 @@
 
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">Login</a></li>
-                            <li><a href="{{ url('/register') }}">Register</a></li>
+                            <li><a href="{{ url('/login') }}">{{trans('app.menu.login')}}</a></li>
+                            <li><a href="{{ url('/register') }}">{{trans('app.menu.register')}}</a></li>
                         @else
-                            <li role="presentation" class="active"><a href="#">Lembretes <span class="badge">2</span></a></li>
+                            <li role="presentation" class="active"><a href="#">{{trans('app.menu.alerts')}} <span class="badge">2</span></a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -92,7 +92,7 @@
                                         <a href="{{ url('/logout') }}"
                                            onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
+                                            {{trans('app.menu.logout')}}
                                         </a>
 
                                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">

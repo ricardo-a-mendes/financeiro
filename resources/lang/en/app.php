@@ -28,7 +28,16 @@ return [
         'type' => 'Type',
         'value' => 'Value',
     ],
-
+    'menu' => [
+        'alerts' => 'Alerts',
+        'extract_yearly' => 'Yearly Extract',
+        'extract_monthly' => 'Monthly Extract',
+        'login' => 'Login',
+        'logout' => 'Logout',
+        'register' => 'Register',
+        'registration' => 'Registration',
+        'statement' => 'Statement',
+    ],
     'messages' => [
         'no_items_found' => 'No Items Found.',
         'delete_confirmation' => 'Are you sure that you want to delete the follow item'
