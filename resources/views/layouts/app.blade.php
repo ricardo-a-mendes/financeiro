@@ -67,7 +67,7 @@
                                 <li><a href="{{route('account.index')}}">{{trans_choice('account.labels.account', 2)}}</a></li>
                                 <li><a href="{{route('category.index')}}">{{trans_choice('category.labels.category', 2)}}</a></li>
                                 <li><a href="{{route('goal.index')}}">Metas</a></li>
-                                <li><a href="{{route('reference.index')}}">Referências</a></li>
+                                <li><a href="{{route('reference.index')}}">{{trans_choice('reference.labels.reference', 2)}}</a></li>
                             </ul>
                         </li>
                     </ul>

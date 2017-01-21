@@ -3,16 +3,16 @@
 @section('content')
 	<div class="row">
 		<div class="page-header">
-			<h3>Referências</h3>
+			<h3>{{trans_choice('reference.labels.reference', 2)}}</h3>
 		</div>
 
 		<table class="table table-striped">
 			<thead>
 			<tr>
 				<th>ID</th>
-				<th>Referência</th>
-				<th>Categoria</th>
-				<th>Ações</th>
+				<th>{{trans_choice('reference.labels.reference', 1)}}</th>
+				<th>{{trans_choice('category.labels.category', 1)}}</th>
+				<th>{{trans('app.labels.actions')}}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -22,10 +22,10 @@
 					<td>{{$reference->description}}</td>
 					<td>{{$reference->category->name}}</td>
 					<td>
-						<a href="{{route('reference.edit', ['id' => $reference->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
+						<a href="{{route('reference.edit', ['id' => $reference->id])}}" data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
 						<span class="cursor-pointer" data-reference="{{$reference->description}}" data-reference_id="{{$reference->id}}" data-toggle="modal" data-target="#deleteReference">
-							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
+							<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>
 				</tr>

@@ -24,7 +24,7 @@
 						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
 						<span style="cursor: pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
-							<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-trash"></span>
+							<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>
 				</tr>

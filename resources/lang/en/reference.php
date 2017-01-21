@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Account Language Lines
+    | References Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -13,18 +13,13 @@ return [
     |
     */
 
-    'conta_corrente' => 'Conta Corrente',
-    'conta_poupanca' => 'Conta Poupança',
-    'cartao_credito' => 'Cartão de Crédito',
     'labels' => [
-        'account' => 'Account|Accounts',
-        'account_type' => 'Account Type',
-        'new_account' => 'New Account',
+        'reference' => 'Reference|References',
         '' => '',
         '' => '',
     ],
     'messages' => [
-        'created_successfully' => 'Account created successfully!',
-        'updated_successfully' => 'Account updated successfully!',
+        'updated_successfully' => 'Reference updated successfully!',
+        'deleted_successfully' => 'Reference deleted successfully!',
     ]
 ];

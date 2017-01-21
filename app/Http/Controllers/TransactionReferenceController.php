@@ -46,7 +46,7 @@ class TransactionReferenceController extends Controller
         $reference->category()->associate($category);
         $reference->save();
 
-        Session::flash('success', 'Referência alterada!');
+        Session::flash('success', trans('reference.messages.updated_successfully'));
         return redirect()->route('reference.index');
     }
 
@@ -55,7 +55,7 @@ class TransactionReferenceController extends Controller
         $reference = $this->reference->find($id);
         $reference->delete();
 
-        Session::flash('success', 'Referência removida!');
+        Session::flash('success', trans('reference.messages.deleted_successfully'));
         return redirect()->route('reference.index');
     }
 }

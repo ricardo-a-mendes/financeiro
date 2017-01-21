@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Account Language Lines
+    | Category Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
