@@ -36,8 +36,8 @@ class CategoryController extends Controller
 
 	public function store(CategoryRequest $request)
 	{
-		$message = 'Categoria criada com sucesso!';
-		$messageAjax = 'Categoria Criada! Você já pode seleciná-la!';
+		$message = trans('category.messages.create_successfully');
+		$messageAjax = trans('category.messages.create_successfully_ajax');
 		$messageType = 'success';
 		$categoryName = $request->input('category');
 		$success = true;
@@ -49,7 +49,7 @@ class CategoryController extends Controller
 			$category->save();
 		} else {
 			$category = $existentCategory;
-			$message = $messageAjax = "Categoria '{$categoryName}' já existe!";
+			$message = $messageAjax = trans('category.messages.exists', compact('categoryName'));
 			$messageType = 'info';
 			$success = false;
 		}
@@ -81,20 +81,16 @@ class CategoryController extends Controller
 		$category->name = $request->input('category');
 		$category->save();
 
-		Session::flash('success', 'Categoria atualizada com sucesso!');
+		Session::flash('success', trans('category.messages.updated_successfully'));
 		return redirect()->route('category.index');
 	}
 
 	public function destroy($id)
 	{
-        //Todo: Change implementation to Alter status to "0"'
-		$category = $this->category->find($id);
-		if ($category->transactions->count() == 0) {
-			$category->delete();
-			Session::flash('success', 'Categoria removida com sucesso!');
-		} else {
-			Session::flash('info', 'Categoria "'.$category->name.'"" não pode ser excluída: Existem transações vinculadas.');
-		}
+        $category = $this->category->find($id);
+        $category->status = 0;
+        $category->save();
+        Session::flash('success', trans('category.messages.deleted_successfully'));
 
 		return redirect()->route('category.index');
 	}

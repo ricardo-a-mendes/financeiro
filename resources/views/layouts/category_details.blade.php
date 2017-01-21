@@ -1,9 +1,9 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>Data</th>
-        <th>Descrição</th>
-        <th>Valor</th>
+        <th>{{trans('app.labels.date')}}</th>
+        <th>{{trans('app.labels.description')}}</th>
+        <th>{{trans('app.labels.value')}}</th>
     </tr>
     </thead>
     <tbody>
@@ -15,13 +15,13 @@
     </tr>
     @empty
         <tr>
-            <td colspan="3">Nenhuma Transação para esta categoria!</td>
+            <td colspan="3">{{trans('app.messages.no_items_found')}}</td>
         </tr>
     @endforelse
     </tbody>
     <tfoot>
     <tr>
-        <td colspan="2">Total</td>
+        <td colspan="2">{{trans('app.labels.total')}}</td>
         <td>{{Number::formatCurrency($total)}}</td>
     </tr>
     </tfoot>

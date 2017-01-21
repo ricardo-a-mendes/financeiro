@@ -4,15 +4,15 @@
 
 	<div class="row">
 		<div class="page-header">
-			<h3>Categorias <small><a href="{{route('category.create')}}" data-toggle="tooltip" data-placement="top" title="Nova Categoria" class="deco-none glyphicon glyphicon-plus" style="cursor: pointer"></a></small></h3>
+			<h3>{{trans_choice('category.labels.category', 2)}} <small><a href="{{route('category.create')}}" data-toggle="tooltip" data-placement="top" title="{{trans('category.labels.new_category')}}" class="deco-none glyphicon glyphicon-plus cursor-pointer"></a></small></h3>
 		</div>
 
 		<table class="table table-striped">
 			<thead>
 			<tr>
 				<th>ID</th>
-				<th>Categoria</th>
-				<th>Ações</th>
+				<th>{{trans_choice('category.labels.category', 1)}}</th>
+				<th>{{trans('app.labels.actions')}}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -21,16 +21,16 @@
 					<td>{{$category->id}}</td>
 					<td>{{$category->name}}</td>
 					<td>
-						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="Editar" class="deco-none glyphicon glyphicon-pencil"></a>
+						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
 						<span style="cursor: pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
-							<span data-toggle="tooltip" data-placement="top" title="Excluir" class="glyphicon glyphicon-trash"></span>
+							<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>
 				</tr>
 			@empty
 				<tr>
-					<td colspan="3">Nenhuma categoria cadastrada.</td>
+					<td colspan="3">{{trans('app.messages.no_items_found')}}</td>
 				</tr>
 			@endforelse
 			</tbody>
@@ -46,12 +46,12 @@
 					{{ method_field('DELETE') }}
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="myModalLabel">Confirmação de exclusão de categoria.</h4>
+						<h4 class="modal-title" id="myModalLabel">{{trans('app.labels.delete_confirmation', ['itemToConfirm' => trans_choice('category.labels.category', 1)])}}.</h4>
 					</div>
 					<div class="modal-body"></div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-danger">Excluir</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+						<button type="submit" class="btn btn-danger">{{trans('app.labels.delete')}}</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">{{trans('app.labels.close')}}</button>
 					</div>
 				</form>
 			</div>
@@ -63,7 +63,7 @@
 	<script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
 	<script type="text/javascript">
 		$(function(){
-			//Modal for Dete a Category
+			//Modal for Delete a Category
 			$('#deleteCategory').on('show.bs.modal', function (event) {
 				var span = $(event.relatedTarget) // Span that triggered the modal
 				var category = span.data('category') // Extract info from data-* attributes
@@ -71,7 +71,7 @@
 
 				var modal = $(this);
 				var formDestroy = modal.find('form#formDestroy');
-				modal.find('.modal-body').html('Deseja excluir a categoria "' + category + '"?');
+				modal.find('.modal-body').html('{{trans('app.messages.delete_confirmation')}} "' + category + '"?');
 
 				var url_cation = formDestroy.attr('action') + '/' + category_id;
 				formDestroy.attr('action', url_cation);

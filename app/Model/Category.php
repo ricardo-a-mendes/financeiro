@@ -11,6 +11,11 @@ class Category extends FinancialModel
         'status'
     ];
 
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);

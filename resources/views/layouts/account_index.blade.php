@@ -41,7 +41,7 @@
 			</tr>
 			@empty
 			<tr>
-				<td colspan="4">{{trans('app.labels.no_items_found')}}.</td>
+				<td colspan="4">{{trans('app.messages.no_items_found')}}</td>
 			</tr>
 			@endforelse
 			</tbody>

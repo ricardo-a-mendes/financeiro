@@ -65,7 +65,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{route('account.index')}}">{{trans_choice('account.labels.account', 2)}}</a></li>
-                                <li><a href="{{route('category.index')}}">Categorias</a></li>
+                                <li><a href="{{route('category.index')}}">{{trans_choice('category.labels.category', 2)}}</a></li>
                                 <li><a href="{{route('goal.index')}}">Metas</a></li>
                                 <li><a href="{{route('reference.index')}}">Referências</a></li>
                             </ul>

@@ -16,16 +16,22 @@ return [
     'labels' => [
         'actions' => 'Actions',
         'cancel' => 'Cancel',
+        'close' => 'Close',
+        'date' => 'Date',
         'delete' => 'Delete',
+        'delete_confirmation' => 'Delete confirmation of ":itemToConfirm"',
+        'description' => 'Description',
         'edit' => 'Edit',
-        'no_items_found' => 'No Items Found',
         'save' => 'Save',
         'select' => 'Select',
+        'total' => 'Total',
         'type' => 'Type',
+        'value' => 'Value',
     ],
 
     'messages' => [
-
+        'no_items_found' => 'No Items Found.',
+        'delete_confirmation' => 'Are you sure that you want to delete the follow item'
     ]
 
 ];
