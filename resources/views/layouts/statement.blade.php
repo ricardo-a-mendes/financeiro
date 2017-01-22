@@ -57,7 +57,7 @@
                     <tbody>
                     <tr>
                         <th>{{trans('app.labels.amount')}}</th>
-                        <th class="{{($totalCreditGoal-$totalDebitGoal >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditGoal-$totalDebitGoal >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditGoal-$totalDebitGoal)}}</th>
+                        <th class="{{($totalCreditProvision-$totalDebitProvision >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditProvision-$totalDebitProvision >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditProvision-$totalDebitProvision)}}</th>
                         <th class="{{($totalCredit-$totalDebit >= 0)?'success text-green':'danger text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit-$totalDebit >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit-$totalDebit)}}</th>
                     </tr>
                     <tr>
@@ -65,7 +65,7 @@
                     </tr>
                     <tr class="success">
                         <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
-                        <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
+                        <th>{{Number::formatCurrency($totalCreditProvision)}}</th>
                         <th>{{Number::formatCurrency($totalCredit)}}</th>
                     </tr>
                     @foreach($statementCredit as $creditItem)
@@ -76,14 +76,14 @@
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
                             </td>
-                            <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
+                            <td>{{Number::formatCurrency($creditItem->provision_value)}}</td>
                             <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
                         </tr>
                     @endforeach
 
                     <tr class="danger">
                         <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
-                        <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
+                        <th>{{Number::formatCurrency($totalDebitProvision)}}</th>
                         <th>{{Number::formatCurrency($totalDebit)}}</th>
                     </tr>
                     @foreach($statementDebit as $debitItem)
@@ -94,7 +94,7 @@
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                             </td>
-                            <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
+                            <td>{{Number::formatCurrency($debitItem->provision_value)}}</td>
                             <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
                         </tr>
                     @endforeach
@@ -342,11 +342,11 @@
 
                 series: [{
                     name: 'Income',
-                    data: [{{$totalCreditGoal}}, {{$totalCredit}}],
+                    data: [{{$totalCreditProvision}}, {{$totalCredit}}],
                     stack: 'income'
                 }, {
                     name: 'Spent',
-                    data: [{{$totalDebitGoal}}, {{$totalDebit}}],
+                    data: [{{$totalDebitProvision}}, {{$totalDebit}}],
                     stack: 'spent'
                 }]
             });

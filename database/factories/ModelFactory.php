@@ -26,4 +26,4 @@ $factory->define(App\Model\Category::class, function (Faker\Generator $faker) { 
 $factory->define(App\Model\TransactionType::class, function (Faker\Generator $faker) { return []; });
 $factory->define(App\Model\AccountType::class, function (Faker\Generator $faker) { return []; });
 $factory->define(App\Model\Account::class, function (Faker\Generator $faker) { return []; });
-$factory->define(App\Model\Goal::class, function (Faker\Generator $faker) { return []; });
+$factory->define(App\Model\Provision::class, function (Faker\Generator $faker) { return []; });

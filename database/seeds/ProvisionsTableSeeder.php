@@ -3,7 +3,7 @@
 use App\User;
 use Illuminate\Database\Seeder;
 
-class GoalsTableSeeder extends Seeder
+class ProvisionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -26,28 +26,28 @@ class GoalsTableSeeder extends Seeder
 		$userModel = new User();
 		$user = $userModel->where('name', 'Ricardo')->first();
 
-        factory(\App\Model\Goal::class)->create([
+        factory(\App\Model\Provision::class)->create([
             'category_id' => $salario->id,
             'transaction_type_id' => $credit->id,
 			'user_id' => $user->id,
             'value' => 5600,
         ]);
 
-        factory(\App\Model\Goal::class)->create([
+        factory(\App\Model\Provision::class)->create([
             'category_id' => $aluguel->id,
             'transaction_type_id' => $debit->id,
 			'user_id' => $user->id,
             'value' => 1430,
         ]);
 
-        factory(\App\Model\Goal::class)->create([
+        factory(\App\Model\Provision::class)->create([
             'category_id' => $teka->id,
             'transaction_type_id' => $debit->id,
 			'user_id' => $user->id,
             'value' => 300,
         ]);
 
-        factory(\App\Model\Goal::class)->create([
+        factory(\App\Model\Provision::class)->create([
             'category_id' => $financiamento->id,
             'transaction_type_id' => $debit->id,
 			'user_id' => $user->id,

@@ -21,6 +21,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('account', 'AccountController', ['except' => ['show']]);
-    Route::resource('goal', 'GoalController', ['except' => ['show']]);
+    Route::resource('provision', 'ProvisionController', ['except' => ['show']]);
     Route::resource('reference', 'TransactionReferenceController', ['except' => ['show']]);
 });

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGoalsTable extends Migration
+class CreateProvisionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateGoalsTable extends Migration
      */
     public function up()
     {
-		if (!Schema::hasTable('goals')) {
-			Schema::create('goals', function (Blueprint $table) {
+		if (!Schema::hasTable('provisions')) {
+			Schema::create('provisions', function (Blueprint $table) {
 				$table->increments('id');
 				$table->unsignedInteger('category_id');
 				$table->foreign('category_id')->references('id')->on('categories');
@@ -36,6 +36,6 @@ class CreateGoalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goals');
+        Schema::dropIfExists('provisions');
     }
 }

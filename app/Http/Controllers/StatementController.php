@@ -47,11 +47,11 @@ class StatementController extends Controller
             $statementDebit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_DEBIT, $date);
 
             $totalDebit = $transaction->getTotal($statementDebit);
-            $totalDebitGoal = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_GOAL);
+            $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
 
             $statementCredit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
-            $totalCreditGoal = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_GOAL);
+            $totalCreditProvision = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_PROVISION);
 
             $categories = $this->category->getCombo();
             $accounts = $this->account->getCombo();
@@ -83,9 +83,9 @@ class StatementController extends Controller
             'statementDebit',
             'statementCredit',
             'totalDebit',
-            'totalDebitGoal',
+            'totalDebitProvision',
             'totalCredit',
-            'totalCreditGoal',
+            'totalCreditProvision',
             'statementDate',
             'categories',
             'accounts',

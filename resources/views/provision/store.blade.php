@@ -9,9 +9,9 @@
 					<label for="exampleInputEmail1">{{trans_choice('provision.labels.provision', 1)}}</label>
 					<div class="input-group">
 						<span class="input-group-addon">$</span>
-						<input type="number" step="0.01" min="0.01" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('value', $goal->value)}}">
+						<input type="number" step="0.01" min="0.01" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('value', $provision->value)}}">
 					</div>
-					<input type="hidden" name="id" value="{{$goal->id}}">
+					<input type="hidden" name="id" value="{{$provision->id}}">
 					{{ csrf_field() }}
 					{{ method_field($method) }}
 				</div>
@@ -22,7 +22,7 @@
 					<select name="category" class="form-control">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($categories as $categoryId => $categoryName)
-							<option {{($categoryId == old('category', $goal->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
+							<option {{($categoryId == old('category', $provision->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -33,7 +33,7 @@
 					<select name="transactionType" class="form-control">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
-							<option {{($transactionTypeId == old('transactionType', $goal->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{trans('transaction.'.$transactionTypeName)}}</option>
+							<option {{($transactionTypeId == old('transactionType', $provision->transactionType->id))?'selected':''}} value="{{$transactionTypeId}}">{{trans('transaction.'.$transactionTypeName)}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -43,7 +43,7 @@
 			<div class="col-md-4">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="specific_goal_option" id="specific" value="yes" {{(old('specific_goal_option', $hasSpecificGoal)=='yes')? 'checked="checked"' : ''}}>
+						<input type="checkbox" name="specific_provision_option" id="specific" value="yes" {{(old('specific_provision_option', $hasSpecificProvision)=='yes')? 'checked="checked"' : ''}}>
 						{{trans('provision.labels.new_specific_provision')}}
 					</label>
 				</div>
@@ -53,7 +53,7 @@
 					<label for="specific_date">{{trans('app.labels.date')}}</label>
 					<div class="input-group">
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" value="{{$goal->specificDate}}">
+						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" value="{{$provision->specificDate}}">
 					</div>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 			<div class="col-md-12">
 				<div class=" form-group">
 					<button type="submit" name="save" value="save" class="btn btn-success">{{trans('app.labels.save')}}</button>
-					<a href="{{route('goal.index')}}" class="btn btn-danger">{{trans('app.labels.cancel')}}</a>
+					<a href="{{route('provision.index')}}" class="btn btn-danger">{{trans('app.labels.cancel')}}</a>
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GoalRequest extends FormRequest
+class ProvisionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class GoalRequest extends FormRequest
             'value' => 'required',
             'category' => 'required|combo',
             'transactionType' => 'required|combo',
-            'specific_date' => 'required_if:specific_goal_option,yes'
+            'specific_date' => 'required_if:specific_provision_option,yes'
         ];
     }
 }

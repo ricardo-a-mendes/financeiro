@@ -6,7 +6,7 @@ use App\FinancialModel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class Goal extends FinancialModel
+class Provision extends FinancialModel
 {
     public function transactionType()
     {
@@ -18,21 +18,21 @@ class Goal extends FinancialModel
         return $this->belongsTo(Category::class);
     }
 
-    public function goalDate()
+    public function provisionDate()
     {
-        return $this->hasMany(GoalDate::class);
+        return $this->hasMany(ProvisionDate::class);
     }
 
     public function getSpecificDateAttribute()
     {
-        if ($this->goalDate->count() > 0) {
-            $specificDate = new Carbon($this->goalDate->first()->target_date);
+        if ($this->provisionDate->count() > 0) {
+            $specificDate = new Carbon($this->provisionDate->first()->target_date);
             return $specificDate->format('Y-m-d');
         }
         return null;
     }
 
-    public function getGoalsWithoutTransaction($userID, $type, \DateTime $date = null)
+    public function getWithoutTransaction($userID, $type, \DateTime $date = null)
     {
         if (is_null($date))
             $date = new \DateTime();
@@ -43,31 +43,31 @@ class Goal extends FinancialModel
         $fields = DB::raw('
             categories.id,
             categories.name as category,
-            sum(goals.value) as goal_value,
+            sum(provisions.value) as provision_value,
             0 as effected_value'
         );
 
         return $this->select($fields)
-            ->leftJoin('goal_dates', function ($join) use ($userID){
-				$join->where('goal_dates.user_id', $userID);
-				$join->on('goal_dates.goal_id', 'goals.id');
+            ->leftJoin('provision_dates', function ($join) use ($userID){
+				$join->where('provision_dates.user_id', $userID);
+				$join->on('provision_dates.provision_id', 'provisions.id');
 			})
             ->leftJoin('categories', function ($join) use ($userID){
 				$join->where('categories.user_id', $userID);
-				$join->on('categories.id', 'goals.category_id');
+				$join->on('categories.id', 'provisions.category_id');
 			})
             ->leftJoin('transactions', function($join) use ($userID, $startDate, $endDate){
                 $join->where('transactions.user_id', $userID);
                 $join->on('transactions.category_id', 'categories.id');
                 $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
             })
-            ->where('goals.user_id', $userID)
-            ->where('goals.transaction_type_id', $type)
+            ->where('provisions.user_id', $userID)
+            ->where('provisions.transaction_type_id', $type)
             ->whereNull('transactions.id')
             ->whereRaw('(
-                goal_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\'
+                provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\'
                 or 
-                goal_dates.id is null
+                provision_dates.id is null
             )')
             ->groupBy('categories.id')
             ->groupBy('categories.name');

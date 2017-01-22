@@ -12,14 +12,14 @@ class Transaction extends Model
     const STATEMENT_DEBIT = 2;
     const TOTAL_TYPE_VALUE = 'value';
     const TOTAL_TYPE_EFFECTED = 'effected_value';
-    const TOTAL_TYPE_GOAL = 'goal_value';
+    const TOTAL_TYPE_PROVISION = 'provision_value';
 
-    public $goal;
+    public $provision;
     public $transaction;
 
     public function __construct()
     {
-        $this->goal = new Goal();
+        $this->provision = new Provision();
         //$this->transaction = new Transaction();
     }
 
@@ -59,24 +59,24 @@ class Transaction extends Model
             categories.id,
             categories.name as category,
             (select 
-                sum(goals.value)
+                sum(provisions.value)
             from 
-                goals
-            left join goal_dates on goal_dates.goal_id = goals.id and goal_dates.user_id = '.$userID.'
+                provisions
+            left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.user_id = '.$userID.'
                 
             where 
-            	goals.user_id = '.$userID.'
-                and goals.category_id = categories.id
+            	provisions.user_id = '.$userID.'
+                and provisions.category_id = categories.id
                 and (
-                    goal_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
+                    provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
                     or 
-                    goal_dates.id is null
+                    provision_dates.id is null
                 )
-            ) as goal_value,
+            ) as provision_value,
             sum(transactions.value) as effected_value'
         );
 
-        $goalsWithoutTransaction = $this->goal->getGoalsWithoutTransaction($userID, $type, $date);
+        $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($userID, $type, $date);
 
         return $this->select($fields)
             ->join('transaction_types', 'transaction_types.id', '=', 'transactions.transaction_type_id')
@@ -89,13 +89,13 @@ class Transaction extends Model
             ->whereBetween('transaction_date', ["'".$startDate."'", "'".$endDate."'"])
             ->groupBy('categories.id')
             ->groupBy('categories.name')
-            ->union($goalsWithoutTransaction)
+            ->union($provisionsWithoutTransaction)
             ->get();
     }
 
     public function getTotal($statement, $type = 'effected_value')
     {
-        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_GOAL, self::TOTAL_TYPE_EFFECTED]))
+        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_PROVISION, self::TOTAL_TYPE_EFFECTED]))
             throw new \InvalidArgumentException('Invalid Type');
 
         $total = 0;

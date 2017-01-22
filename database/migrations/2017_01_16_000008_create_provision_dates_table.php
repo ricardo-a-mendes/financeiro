@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGoalDatesTable extends Migration
+class CreateProvisionDatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateGoalDatesTable extends Migration
      */
     public function up()
     {
-		if (!Schema::hasTable('goal_dates')) {
-			Schema::create('goal_dates', function (Blueprint $table) {
+		if (!Schema::hasTable('provision_dates')) {
+			Schema::create('provision_dates', function (Blueprint $table) {
 				$table->increments('id');
-				$table->unsignedInteger('goal_id');
-				$table->foreign('goal_id')->references('id')->on('goals');
+				$table->unsignedInteger('provision_id');
+				$table->foreign('provision_id')->references('id')->on('provisions');
 				$table->unsignedInteger('user_id');
 				$table->foreign('user_id')->references('id')->on('users');
 				$table->timestamp('target_date');
@@ -33,6 +33,6 @@ class CreateGoalDatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goal_dates');
+        Schema::dropIfExists('provision_dates');
     }
 }
