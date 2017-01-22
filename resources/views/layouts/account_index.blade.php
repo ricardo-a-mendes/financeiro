@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row">
 		<div class="page-header">
-			<h3>{{trans_choice('account.labels.account', 2)}} <small><a href="{{route('account.create')}}" data-toggle="tooltip" data-placement="top" title="{{trans('account.labels.new_account')}}" class="deco-none glyphicon glyphicon-plus cursor-pointer"></a></small></h3>
+			<h3>{{trans_choice('account.labels.account', 2)}} <small><a href="{{route('account.create')}}" data-toggle="tooltip" data-placement="top" title="{{trans('account.labels.new')}}" class="deco-none glyphicon glyphicon-plus cursor-pointer"></a></small></h3>
 		</div>
 
 		<table class="table table-striped">

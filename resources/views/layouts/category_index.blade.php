@@ -4,7 +4,7 @@
 
 	<div class="row">
 		<div class="page-header">
-			<h3>{{trans_choice('category.labels.category', 2)}} <small><a href="{{route('category.create')}}" data-toggle="tooltip" data-placement="top" title="{{trans('category.labels.new_category')}}" class="deco-none glyphicon glyphicon-plus cursor-pointer"></a></small></h3>
+			<h3>{{trans_choice('category.labels.category', 2)}} <small><a href="{{route('category.create')}}" data-toggle="tooltip" data-placement="top" title="{{trans('category.labels.new')}}" class="deco-none glyphicon glyphicon-plus cursor-pointer"></a></small></h3>
 		</div>
 
 		<table class="table table-striped">
@@ -23,7 +23,7 @@
 					<td>
 						<a href="{{route('category.edit', ['id' => $category->id])}}" data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
-						<span style="cursor: pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
+						<span class="cursor-pointer" data-category="{{$category->name}}" data-category_id="{{$category->id}}" data-toggle="modal" data-target="#deleteCategory">
 							<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="glyphicon glyphicon-trash"></span>
 						</span>
 					</td>

@@ -22,7 +22,7 @@
 						@endforeach
 					</select>
 					<span data-toggle="modal" data-target="#modalNewCategory">
-						<span class="glyphicon glyphicon-plus cursor-pointer" data-toggle="tooltip" title="{{trans('category.labels.new_category')}}">
+						<span class="glyphicon glyphicon-plus cursor-pointer" data-toggle="tooltip" title="{{trans('category.labels.new')}}">
 						</span>
 					</span>
 				</div>

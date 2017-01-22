@@ -19,7 +19,7 @@ return [
     'labels' => [
         'account' => 'Account|Accounts',
         'account_type' => 'Account Type',
-        'new_account' => 'New Account',
+        'new' => 'New Account',
         '' => '',
         '' => '',
     ],

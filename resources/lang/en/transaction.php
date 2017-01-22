@@ -13,6 +13,11 @@ return [
     |
     */
 
-    'debit' => 'Débito',
-    'credit' => 'Crédito',
+    'debit' => 'Debit',
+    'credit' => 'Credit',
+    'labels' => [
+        'import' => 'Import Transactions',
+        'new' => 'New Transaction',
+        'type' => 'Transaction Type',
+    ],
 ];

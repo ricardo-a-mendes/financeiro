@@ -15,8 +15,8 @@ return [
 
     'labels' => [
         'category' => 'Category|Categories',
-        'new_category' => 'New Category',
-        '' => '',
+        'new' => 'New Category',
+        'edit' => 'Edit Category',
         '' => '',
     ],
     'messages' => [

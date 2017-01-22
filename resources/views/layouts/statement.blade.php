@@ -7,10 +7,10 @@
                 <div class="col-md-4">
                     <h3>Resumo&nbsp;
                         <span data-toggle="modal" data-target="#modalNewTransaction">
-                            <span data-toggle="tooltip" data-placement="top" title="Novo Lançamento" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new')}}" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
                         </span>
                         <span data-toggle="modal" data-target="#modalImportStatement">&nbsp;
-                            <span data-toggle="tooltip" data-placement="top" title="Importar Extrato" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.import')}}" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
                         </span>
                     </h3>
                 </div>
