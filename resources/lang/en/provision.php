@@ -14,7 +14,9 @@ return [
     */
 
     'labels' => [
+        'effected' => 'Effected',
         'provision' => 'Provision|Provisions',
+        'provisioned' => 'Provisioned',
         'new' => 'New Provision',
         'new_specific_provision' => 'Create new provision for a specific date',// 'Cadastrar Meta para uma data específica',
     ],

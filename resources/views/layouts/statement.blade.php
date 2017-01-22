@@ -5,12 +5,12 @@
         <div class="col-md-7">
             <div class="row">
                 <div class="col-md-4">
-                    <h3>Resumo&nbsp;
+                    <h3>{{trans('app.labels.monthly')}}&nbsp;
                         <span data-toggle="modal" data-target="#modalNewTransaction">
-                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new')}}" class="glyphicon glyphicon-plus small" style="cursor: pointer"></span>
+                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new')}}" class="glyphicon glyphicon-plus small cursor-pointer"></span>
                         </span>
                         <span data-toggle="modal" data-target="#modalImportStatement">&nbsp;
-                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.import')}}" class="glyphicon glyphicon-import small" style="cursor: pointer"></span>
+                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.import')}}" class="glyphicon glyphicon-import small cursor-pointer"></span>
                         </span>
                     </h3>
                 </div>
@@ -21,16 +21,16 @@
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="nav navbar-nav">
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Anterior <span class="caret"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.labels.prior')}} <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="{{route('statement', ['monthToAdd' => -1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-1 months'))}}</a></li>
                                             <li><a href="{{route('statement', ['monthToAdd' => -2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-2 months'))}}</a></li>
                                             <li><a href="{{route('statement', ['monthToAdd' => -3])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-3 months'))}}</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{route('statement')}}">Mês Atual ({{date('m-Y')}})</a></li>
+                                    <li><a href="{{route('statement')}}">{{trans('app.labels.current_month')}} ({{date('m-Y')}})</a></li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Posterior <span class="caret"></span></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.labels.next')}} <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="{{route('statement', ['monthToAdd' => 1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+1 months'))}}</a></li>
                                             <li><a href="{{route('statement', ['monthToAdd' => 2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+2 months'))}}</a></li>
@@ -45,18 +45,18 @@
             </div>
 
             <div class="row">
-                <h4>Período listado: {{$statementDate}}</h4>
+                <h4>{{trans('app.labels.listed_month')}}: {{$statementDate}}</h4>
                 <table class="table table-responsive table-hover">
                     <thead>
                     <tr>
                         <th style="width: 50%">&nbsp;</th>
-                        <th style="width: 25%">Provisionado</th>
-                        <th style="width: 25%">Efetivado</th>
+                        <th style="width: 25%">{{trans('provision.labels.provisioned')}}</th>
+                        <th style="width: 25%">{{trans('provision.labels.effected')}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <th>Saldo</th>
+                        <th>{{trans('app.labels.amount')}}</th>
                         <th class="{{($totalCreditGoal-$totalDebitGoal >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditGoal-$totalDebitGoal >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditGoal-$totalDebitGoal)}}</th>
                         <th class="{{($totalCredit-$totalDebit >= 0)?'success text-green':'danger text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit-$totalDebit >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit-$totalDebit)}}</th>
                     </tr>
@@ -64,7 +64,7 @@
                         <td colspan="3"></td>
                     </tr>
                     <tr class="success">
-                        <th><span id="credit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Creditos</th>
+                        <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
                         <th>{{Number::formatCurrency($totalCreditGoal)}}</th>
                         <th>{{Number::formatCurrency($totalCredit)}}</th>
                     </tr>
@@ -72,9 +72,9 @@
                         <tr class="credit-rows">
                             <td>
                                  <span data-month_to_add="{{$monthToAdd}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">
-                                    <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
+                                    <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                                 </span>
-                                <a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
+                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($creditItem->goal_value)}}</td>
                             <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
@@ -82,7 +82,7 @@
                     @endforeach
 
                     <tr class="danger">
-                        <th><span id="debit" class="glyphicon glyphicon-triangle-top" style="cursor: pointer"></span> Debitos</th>
+                        <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
                         <th>{{Number::formatCurrency($totalDebitGoal)}}</th>
                         <th>{{Number::formatCurrency($totalDebit)}}</th>
                     </tr>
@@ -90,9 +90,9 @@
                         <tr class="debit-rows">
                             <td>
                                 <span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
-                                    <span data-toggle="tooltip" data-placement="left" title="Ver Detalhes" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
+                                    <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>
                                 </span>
-                                <a data-toggle="tooltip" data-placement="right" title="Editar Categoria" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
+                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($debitItem->goal_value)}}</td>
                             <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
@@ -116,18 +116,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalImportStatementLabel">Importar Arquivo</h4>
+                    <h4 class="modal-title" id="modalImportStatementLabel">{{trans('app.labels.import_file')}}</h4>
                 </div>
                 <div class="modal-body">
-
-
                     <div class="form-group">
 
-                        <label for="description">Selecione o arquivo (OFX ou CSV)</label>
+                        <label for="description">{{trans('app.labels.select_ofx_vcs')}}</label>
                         <div class="input-group">
                             <label class="input-group-btn">
                             <span class="btn btn-primary">
-                                Browse&hellip; <input type="file" name="import_file" id="import_file" style="display: none;">
+                                {{trans('app.labels.browse_file')}}&hellip; <input type="file" name="import_file" id="import_file" style="display: none;">
                             </span>
                             </label>
                             <input type="text" id="import_file_name" class="form-control" readonly>
@@ -135,16 +133,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Veja o modelo do arquivo CSV: </label>
-                        <a href="{{asset('files/Exemplo_Importacao_Transacoes.csv')}}">Download</a>
+                        <label for="description">{{trans('app.labels.check_out_csv_model')}}: </label>
+                        <a href="{{asset('files/Exemplo_Importacao_Transacoes.csv')}}">{{trans('app.labels.download')}}</a>
 
-                        <div class="alert alert-warning small"><p><span  class="glyphicon glyphicon-info-sign"></span> A primeira linha no arquivo CSV será ignorada!</p></div>
+                        <div class="alert alert-warning small"><p><span  class="glyphicon glyphicon-info-sign">&nbsp;</span>{{trans('app.labels.header_line_ignored')}}!</p></div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" id="import_file_button">Importar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success" id="import_file_button">{{trans('app.labels.import')}}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('app.labels.close')}}</button>
                 </div>
             </div>
             </form>
@@ -253,16 +251,24 @@
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts-3d.js')}}"></script>
     <script type="text/javascript">
         $(function(){
-            //
+            //Upload Styled Input
             $(document).on('change', ':file', function() {
                 var input = $(this);
                 var label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
                 $('#import_file_name').val(label);
             });
 
+            $('#modalImportStatement').modal({'backdrop': 'static', 'show': false});
+
+            $('#import_file_button').click(function () {
+                $(this).attr('disabled', 'disabled');
+                $('#import_file_form').submit();
+            });
+
+            //Show/Hide details
             $('#credit, #debit').on('click', function (){
                 var type = $(this)[0].id;
-                if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top') {
+                if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top cursor-pointer') {
                     $('.'+type+'-rows').hide();
                     $(this).removeClass('glyphicon-triangle-top');
                     $(this).addClass('glyphicon-triangle-bottom');
@@ -291,13 +297,6 @@
                     }
                 });
             }).modal({'backdrop': 'static', 'show': false});
-
-            $('#modalImportStatement').modal({'backdrop': 'static', 'show': false});
-
-            $('#import_file_button').click(function () {
-                $(this).attr('disabled', 'disabled');
-                $('#import_file_form').submit();
-            });
 
             var myChart = Highcharts.chart('MyChart', {
                 chart: {
@@ -351,6 +350,8 @@
                     stack: 'spent'
                 }]
             });
+
+            $('.highcharts-credits').hide();
         });
     </script>
 @endsection
