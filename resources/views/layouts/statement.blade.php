@@ -175,33 +175,33 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Novo Lançamento</h4>
+                        <h4 class="modal-title" id="myModalLabel">{{trans('transaction.labels.new')}}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="description">Descrição</label>
-                                    <input type="text" class="form-control" name="description" id="description" placeholder="Descrição">
+                                    <label for="description">{{trans('app.labels.description')}}</label>
+                                    <input type="text" class="form-control" name="description" id="description" placeholder="{{trans('app.labels.description')}}">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="transaction_value">Valor</label>
+                                    <label for="transaction_value">{{trans('app.labels.value')}}</label>
                                     <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="{{trans('app.labels.value')}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="transaction_date">Data</label>
+                                    <label for="transaction_date">{{trans('app.labels.date')}}</label>
                                     <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="category">Categoria</label>
+                                    <label for="category">{{trans_choice('category.labels.dategpry', 1)}}</label>
                                     <select name="category" class="form-control">
                                         <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($categories as $categoryId => $categoryName)
@@ -213,7 +213,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account">Conta</label>
+                                    <label for="account">{{trans_choice('account.labels.account', 1)}}</label>
                                     <select name="account" class="form-control">
                                         <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($accounts as $accountId => $accountName)
@@ -224,7 +224,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="transactionType">Tipo</label>
+                                    <label for="transactionType">{{trans('transaction.labels.type')}}</label>
                                     <select name="transactionType" class="form-control">
                                         <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
@@ -236,8 +236,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Salvar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success">{{trans('app.labels.save')}}</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">{{trans('app.labels.close')}}</button>
                     </div>
                 </div>
             </form>
@@ -311,18 +311,18 @@
                 },
 
                 title: {
-                    text: 'Controle de Caixa {{$statementDate}}'
+                    text: '{{trans('app.labels.comparative_graph')}} ({{$statementDate}})'
                 },
 
                 xAxis: {
-                    categories: ['Provisioned', 'Effected']
+                    categories: ['{{trans('provision.labels.provisioned')}}', '{{trans('provision.labels.effected')}}']
                 },
 
                 yAxis: {
                     allowDecimals: false,
                     min: 0,
                     title: {
-                        text: 'Valores (R$)'
+                        text: '{{trans('app.labels.values')}} ({{trans('app.labels.currency_symbol')}})'
                     }
                 },
 
@@ -341,11 +341,11 @@
                 colors: ['#2AB27B', '#BF5329'],
 
                 series: [{
-                    name: 'Income',
+                    name: '{{trans('app.labels.income')}}',
                     data: [{{$totalCreditProvision}}, {{$totalCredit}}],
                     stack: 'income'
                 }, {
-                    name: 'Spent',
+                    name: '{{trans('app.labels.spent')}}',
                     data: [{{$totalDebitProvision}}, {{$totalDebit}}],
                     stack: 'spent'
                 }]

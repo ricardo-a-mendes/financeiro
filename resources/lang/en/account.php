@@ -18,7 +18,7 @@ return [
     'cartao_credito' => 'Cartão de Crédito',
     'labels' => [
         'account' => 'Account|Accounts',
-        'account_type' => 'Account Type',
+        'type' => 'Account Type',
         'new' => 'New Account',
         '' => '',
         '' => '',

@@ -15,7 +15,7 @@
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="type">{{trans('account.labels.account_type')}}</label>
+					<label for="type">{{trans('account.labels.type')}}</label>
 					<select name="type" class="form-control">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($accountTypes as $accountTypeId => $accountType)

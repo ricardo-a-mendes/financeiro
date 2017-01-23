@@ -61,6 +61,7 @@ class Provision extends FinancialModel
                 $join->on('transactions.category_id', 'categories.id');
                 $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
             })
+            ->where('provisions.status', 1)
             ->where('provisions.user_id', $userID)
             ->where('provisions.transaction_type_id', $type)
             ->whereNull('transactions.id')

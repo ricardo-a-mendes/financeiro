@@ -20,6 +20,8 @@ return [
         'cancel' => 'Cancel',
         'close' => 'Close',
         'check_out_csv_model' => 'Check out the CSV file model',//Veja o modelo do arquivo CSV
+        'comparative_graph' => 'Comparative Graph',
+        'currency_symbol' => 'US$',
         'current' => 'Current',
         'current_month' => 'Current Month',
         'current_year' => 'Current Year',
@@ -33,6 +35,7 @@ return [
         'header_line_ignored' => 'First CSV\'s line will be ignored', //A primeira linha no arquivo CSV será ignorada
         'import' => 'Import',
         'import_file' => 'Import File',
+        'income' => 'Income',
         'listed_month' => 'Listed Month',
         'listed_year' => 'Listed Year',
         'monthly' => 'Monthly',
@@ -42,9 +45,11 @@ return [
         'select' => 'Select',
         'select_ofx_vcs' => 'Select file  (OFX or CSV)',
         'specific' => 'Specific',
+        'spent' => 'Spent',
         'total' => 'Total',
         'type' => 'Type',
         'value' => 'Value',
+        'values' => 'Values',
         'view' => 'View',
         'yearly' => 'Yearly',
     ],

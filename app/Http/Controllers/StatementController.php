@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
 use App\Model\Account;
-use App\Model\AccountType;
 use App\Model\Category;
 use App\Model\Transaction;
 use App\Model\TransactionType;
 use Carbon\Carbon;
-use  Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\Exception;
 
 class StatementController extends Controller
@@ -71,6 +71,8 @@ class StatementController extends Controller
                 'spent' => $spentPercent,
             ];
             */
+
+
 
         } catch (Exception $e) {
             $statementDebit = [];

@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
@@ -20,7 +21,6 @@ class Transaction extends Model
     public function __construct()
     {
         $this->provision = new Provision();
-        //$this->transaction = new Transaction();
     }
 
     public function category()
@@ -78,7 +78,7 @@ class Transaction extends Model
 
         $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($userID, $type, $date);
 
-        return $this->select($fields)
+        $statements = $this->select($fields)
             ->join('transaction_types', 'transaction_types.id', '=', 'transactions.transaction_type_id')
             ->join('categories', function ($join) use ($userID){
 				$join->where('categories.user_id', $userID);
@@ -86,11 +86,16 @@ class Transaction extends Model
 			})
             ->where('transactions.user_id', $userID)
             ->where('transaction_type_id', $type)
-            ->whereBetween('transaction_date', ["'".$startDate."'", "'".$endDate."'"])
+            ->whereBetween('transaction_date', [$startDate, $endDate])
             ->groupBy('categories.id')
             ->groupBy('categories.name')
-            ->union($provisionsWithoutTransaction)
-            ->get();
+            ->union($provisionsWithoutTransaction);
+
+
+        //dd($statements->get());
+
+
+        return $statements->get();
     }
 
     public function getTotal($statement, $type = 'effected_value')
