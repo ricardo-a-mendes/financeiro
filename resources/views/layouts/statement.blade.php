@@ -189,7 +189,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="transaction_value">Valor</label>
-                                    <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="Valor">
+                                    <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="{{trans('app.labels.value')}}">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -288,7 +288,7 @@
                 var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';
 
                 var modal = $(this);
-                modal.find('.modal-title').text('Detalhes da categoria "' + category + '"');
+                modal.find('.modal-title').text('{{trans('category.labels.details_of')}} "' + category + '"');
 
                 $.ajax({
                     url: url_details+'/'+category_id+'/'+monthToAdd,

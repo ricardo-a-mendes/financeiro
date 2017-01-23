@@ -16,6 +16,7 @@ return [
     'labels' => [
         'category' => 'Category|Categories',
         'new' => 'New Category',
+        'details_of' => 'Details of',
         'edit' => 'Edit Category',
         '' => '',
     ],

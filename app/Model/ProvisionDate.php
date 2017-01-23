@@ -10,4 +10,9 @@ class ProvisionDate extends Model
     {
         return $this->belongsTo(Provision::class);
     }
+
+    public function getProvisionDateBRAttribute()
+    {
+        return date('d/m/Y', strtotime($this->target_date));
+    }
 }

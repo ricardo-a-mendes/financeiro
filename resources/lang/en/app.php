@@ -45,6 +45,7 @@ return [
         'total' => 'Total',
         'type' => 'Type',
         'value' => 'Value',
+        'view' => 'View',
         'yearly' => 'Yearly',
     ],
     'menu' => [

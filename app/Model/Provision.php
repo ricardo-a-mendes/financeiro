@@ -18,7 +18,7 @@ class Provision extends FinancialModel
         return $this->belongsTo(Category::class);
     }
 
-    public function provisionDate()
+    public function provisionDates()
     {
         return $this->hasMany(ProvisionDate::class);
     }

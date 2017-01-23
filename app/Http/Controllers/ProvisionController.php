@@ -9,6 +9,7 @@ use App\Model\Provision;
 use App\Model\ProvisionDate;
 use App\Model\TransactionType;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Session;
 
@@ -114,6 +115,21 @@ class ProvisionController extends Controller
 
         Session::flash('success', trans('provision.messages.updated_successfully'));
         return redirect()->route('provision.index');
+    }
+
+    public function specificProvision($categoryID)
+    {
+        $provisions = $this->provision
+            ->join('provision_dates', 'provision_dates.provision_id', '=', 'provisions.id')
+            ->where('provisions.category_id', $categoryID)
+            ->get();
+
+        $total = $this->provision
+            ->join('provision_dates', 'provision_dates.provision_id', '=', 'provisions.id')
+            ->where('provisions.category_id', $categoryID)
+            ->sum('value');
+
+        return view('provision.specific_details', compact('provisions', 'total'));
     }
 
     public function destroy($id)

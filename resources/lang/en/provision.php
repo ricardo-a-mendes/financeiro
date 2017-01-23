@@ -14,6 +14,7 @@ return [
     */
 
     'labels' => [
+        'specific_of' => 'Specific provision of ":categoryName" category',
         'effected' => 'Effected',
         'provision' => 'Provision|Provisions',
         'provisioned' => 'Provisioned',

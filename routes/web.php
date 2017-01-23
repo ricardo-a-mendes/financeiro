@@ -18,6 +18,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('statement/{monthToAdd?}', 'StatementController@index')->name('statement');
     Route::post('statement', 'StatementController@store')->name('transaction.store');
     Route::get('category-details/{categoryID}/{monthToAdd?}', 'StatementController@categoryDetails')->name('statement.category.details');
+    Route::get('provision-specific-details/{categoryID}', 'ProvisionController@specificProvision')->name('provision.specific.details');
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('account', 'AccountController', ['except' => ['show']]);
