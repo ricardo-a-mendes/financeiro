@@ -22,10 +22,16 @@
 			<tr>
 				<td>{{$provision->id}}</td>
 				<td><a data-toggle="tooltip" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $provision->category->id])}}">{{$provision->category->name}}</a></td>
-				<td>{{Number::formatCurrency($provision->value)}}</td>
 				<td>
-					@if($provision->provisionDate->count() > 0)
-						<span data-modal_title="{{trans('provision.labels.specific_of', ['categoryName' => $provision->category->name])}}"  data-category_id="{{$provision->category->id}}" data-toggle="modal" data-target="#modalDetails">
+                    @if($provision->provisionDates->count() > 0)
+                        {{Number::formatCurrency($provision->provisionDates->count()*$provision->value)}}
+                    @else
+                        {{Number::formatCurrency($provision->value)}}
+                    @endif
+				</td>
+				<td>
+					@if($provision->provisionDates->count() > 0)
+						<span data-modal_title="{{trans('provision.labels.specific_of', ['categoryName' => $provision->category->name])}}"  data-provision_id="{{$provision->id}}" data-toggle="modal" data-target="#modalDetails">
 							<span class="glyphicon glyphicon-calendar cursor-pointer" data-toggle="tooltip" data-placement="right" title="{{trans('app.labels.view')}}"></span>
 						</span>
 					@else
@@ -78,17 +84,16 @@
 			$('#modalDetails').on('show.bs.modal', function (event) {
 				var span = $(event.relatedTarget) // Span that triggered the modal
 				var category = span.data('category') // Extract info from data-* attributes
-				var category_id = span.data('category_id') // Extract info from data-* attributes
+				var provision_id = span.data('provision_id') // Extract info from data-* attributes
 				var modal_title = span.data('modal_title') // Extract info from data-* attributes
 
-				var url_details = '{{route('provision.specific.details', ['categoryID' => ''])}}';
+				var url_details = '{{route('provision.specific.details', ['provisionID' => ''])}}';
 
 				var modal = $(this);
 				modal.find('.modal-title').text(modal_title+'.');
-				console.log(modal_title);
 
 				$.ajax({
-					url: url_details+'/'+category_id,
+					url: url_details+'/'+provision_id,
 					success: function (tableDetails) {
 						modal.find('.modal-body').html(tableDetails);
 					}

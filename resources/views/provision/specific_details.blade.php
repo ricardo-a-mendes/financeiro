@@ -7,12 +7,10 @@
     </thead>
     <tbody>
     @forelse($provisions as $provision)
-        @foreach($provision->provisionDates as $provisionDate)
         <tr>
-            <td>{{$provisionDate->ProvisionDateBR}}</td>
+            <td>{{date('d/m/Y', strtotime($provision->target_date))}}</td>
             <td>{{Number::formatCurrency($provision->value)}}</td>
         </tr>
-        @endforeach
     @empty
         <tr>
             <td colspan="2">{{trans('app.messages.no_items_found')}}</td>
@@ -22,7 +20,7 @@
     <tfoot>
     <tr>
         <td>{{trans('app.labels.total')}}</td>
-        <td>{{Number::formatCurrency($total)}}</td>
+        <td>{{Number::formatCurrency($provisions->count()*$provision->value)}}</td>
     </tr>
     </tfoot>
 </table>

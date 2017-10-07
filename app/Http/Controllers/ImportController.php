@@ -104,11 +104,11 @@ class ImportController extends Controller
 			fclose($handle);
 
 			$csv = array_slice($csv, 1); //Remove Header
-			foreach($csv as $transaction) {
+			foreach($csv as $uniqueId => $transaction) {
 				$value = filter_var($transaction['value'], FILTER_SANITIZE_NUMBER_FLOAT)/100;
 				$transactions[] = [
 					'description' => $this->sanitize($transaction['description']),
-					'uniqueId' => '',
+					'uniqueId' => $uniqueId,
 					'type' => ($value > 0) ? 'credit' : 'debit',
 					'value' => abs($value),
 					'date' => Carbon::createFromFormat('d/m/Y', $transaction['date']) // \DateTime()
@@ -204,7 +204,7 @@ class ImportController extends Controller
             $transactionInfo = json_decode($transactions[$uniqueId]);
 
             $category = $this->category->find($categories[$uniqueId]);
-            $account = $this->account->find(1);
+            $account = $this->account->find(1); //TODO: Check this: Why '1'?
             $transactionType = $this->transactionType->where('unique_name', $transactionInfo->type)->first();
 
             if (is_null($transactionInfo->category_id) || $transactionInfo->category_id == 0) {

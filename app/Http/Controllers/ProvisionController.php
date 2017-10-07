@@ -117,19 +117,18 @@ class ProvisionController extends Controller
         return redirect()->route('provision.index');
     }
 
-    public function specificProvision($categoryID)
+    public function specificProvision($provisionID)
     {
+        //TODO: Add User ID on filter
+        //TODO: Criar funcao para mostrar a data de acordo com a liguagem do abimente - apresentacao na view
         $provisions = $this->provision
+            ->select('provisions.value', 'provisions.created_at', 'provision_dates.target_date')
+            //->select('provisions.*')
             ->join('provision_dates', 'provision_dates.provision_id', '=', 'provisions.id')
-            ->where('provisions.category_id', $categoryID)
+            ->where('provisions.id', $provisionID)
             ->get();
 
-        $total = $this->provision
-            ->join('provision_dates', 'provision_dates.provision_id', '=', 'provisions.id')
-            ->where('provisions.category_id', $categoryID)
-            ->sum('value');
-
-        return view('provision.specific_details', compact('provisions', 'total'));
+        return view('provision.specific_details', compact('provisions'));
     }
 
     public function destroy($id)

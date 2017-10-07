@@ -25,7 +25,7 @@ class Provision extends FinancialModel
 
     public function getSpecificDateAttribute()
     {
-        if ($this->provisionDate->count() > 0) {
+        if (isset($this->provisionDate) && $this->provisionDate->count() > 0) {
             $specificDate = new Carbon($this->provisionDate->first()->target_date);
             return $specificDate->format('Y-m-d');
         }
