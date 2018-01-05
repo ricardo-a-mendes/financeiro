@@ -135,7 +135,7 @@
                     <div class="form-group">
                         <label for="description">{{trans('app.labels.check_out_csv_model')}}: </label>
                         <a href="{{asset('files/Exemplo_Importacao_Transacoes.csv')}}">{{trans('app.labels.download')}}</a>
-
+                        <!-- TODO: Add checkbox to ignore first line (header one) just if de user want it -->
                         <div class="alert alert-warning small"><p><span  class="glyphicon glyphicon-info-sign">&nbsp;</span>{{trans('app.labels.header_line_ignored')}}!</p></div>
                     </div>
 
