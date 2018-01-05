@@ -201,7 +201,7 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="category">{{trans_choice('category.labels.dategpry', 1)}}</label>
+                                    <label for="category">{{trans_choice('category.labels.category', 1)}}</label>
                                     <select name="category" class="form-control">
                                         <option value="invalid_option">{{trans('app.labels.select')}}</option>
                                         @foreach($categories as $categoryId => $categoryName)

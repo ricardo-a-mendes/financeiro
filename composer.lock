@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a539b12fb0426ee06ae5177882f6252c",
+    "content-hash": "68442844b90c87fa7293db4d6442cf06",
     "packages": [
         {
             "name": "asgrim/ofxparser",
