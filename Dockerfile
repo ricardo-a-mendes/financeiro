@@ -36,6 +36,8 @@ RUN wget http://xdebug.org/files/xdebug-2.5.4.tgz && \
 #Enabling module rewrite.
 RUN a2enmod rewrite
 
+#Copy config files
+COPY server_config/000-default.conf /etc/apache2/sites-enabled
 COPY server_config/xdebug.ini /usr/local/etc/php/conf.d
 
 WORKDIR /var/www
