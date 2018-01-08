@@ -129,7 +129,7 @@ class ImportController extends Controller
         //Creating default array fo transactions
         foreach ($bankAccount->statement->transactions as $bankTransaction)
             $transactions[] = [
-                'description' => $this->sanitize($bankTransaction->memo),
+                'description' => $this->sanitize($bankTransaction->name) . ' (' . $bankTransaction->memo . ')',
                 'uniqueId' => $bankTransaction->uniqueId,
                 'type' => ($bankTransaction->amount > 0) ? 'credit' : 'debit',
                 'value' => abs($bankTransaction->amount),

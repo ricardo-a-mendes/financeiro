@@ -73,5 +73,5 @@
 		</form>
 	</div>
 
-	@include('layouts.modal_new_category');
+	@include('layouts.modal_new_category')
 @endsection

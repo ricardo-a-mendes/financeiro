@@ -73,7 +73,7 @@ class Transaction extends Model
                     provision_dates.id is null
                 )
             ) as provision_value,
-            sum(transactions.value) as effected_value'
+            sum(transactions.value) as posted_value'
         );
 
         $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($userID, $type, $date);

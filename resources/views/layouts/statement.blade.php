@@ -51,7 +51,7 @@
                     <tr>
                         <th style="width: 50%">&nbsp;</th>
                         <th style="width: 25%">{{trans('provision.labels.provisioned')}}</th>
-                        <th style="width: 25%">{{trans('provision.labels.effected')}}</th>
+                        <th style="width: 25%">{{trans('provision.labels.posted')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -77,7 +77,7 @@
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($creditItem->provision_value)}}</td>
-                            <td>{{Number::formatCurrency($creditItem->effected_value)}}</td>
+                            <td>{{Number::formatCurrency($creditItem->posted_value)}}</td>
                         </tr>
                     @endforeach
 
@@ -95,7 +95,7 @@
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
                             </td>
                             <td>{{Number::formatCurrency($debitItem->provision_value)}}</td>
-                            <td class="{{($debitItem->value > $debitItem->effected_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->effected_value)}}</td>
+                            <td class="{{($debitItem->value > $debitItem->posted_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -315,7 +315,7 @@
                 },
 
                 xAxis: {
-                    categories: ['{{trans('provision.labels.provisioned')}}', '{{trans('provision.labels.effected')}}']
+                    categories: ['{{trans('provision.labels.provisioned')}}', '{{trans('provision.labels.posted')}}']
                 },
 
                 yAxis: {
@@ -345,9 +345,9 @@
                     data: [{{$totalCreditProvision}}, {{$totalCredit}}],
                     stack: 'income'
                 }, {
-                    name: '{{trans('app.labels.spent')}}',
+                    name: '{{trans('app.labels.expenses')}}',
                     data: [{{$totalDebitProvision}}, {{$totalDebit}}],
-                    stack: 'spent'
+                    stack: 'expenses'
                 }]
             });
 

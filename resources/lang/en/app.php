@@ -21,7 +21,7 @@ return [
         'close' => 'Close',
         'check_out_csv_model' => 'Check out the CSV file model',//Veja o modelo do arquivo CSV
         'comparative_graph' => 'Comparative Graph',
-        'currency_symbol' => 'US$',
+        'currency_symbol' => 'CAD$',
         'current' => 'Current',
         'current_month' => 'Current Month',
         'current_year' => 'Current Year',
@@ -32,6 +32,7 @@ return [
         'details' => 'Details',
         'download' => 'Download',
         'edit' => 'Edit',
+        'expenses' => 'Expenses',
         'header_line_ignored' => 'First CSV\'s line will be ignored', //A primeira linha no arquivo CSV será ignorada
         'import' => 'Import',
         'import_file' => 'Import File',
