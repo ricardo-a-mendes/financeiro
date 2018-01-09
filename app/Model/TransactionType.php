@@ -5,7 +5,8 @@ namespace App\Model;
 use App\FinancialModel;
 
 const TRANSACTION_CREDIT = 'credit';
-    const TRANSACTION_DEBIT = 'debit';
+const TRANSACTION_DEBIT = 'debit';
+const TRANSACTION_POST = 'pos';
 
 class TransactionType extends FinancialModel
 {

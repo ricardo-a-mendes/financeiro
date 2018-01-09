@@ -127,14 +127,25 @@ class ImportController extends Controller
         $transactions = [];
 
         //Creating default array fo transactions
-        foreach ($bankAccount->statement->transactions as $bankTransaction)
+        foreach ($bankAccount->statement->transactions as $bankTransaction) {
+            /** @var \OfxParser\Entities\Transaction $bankTransaction */
+            $description = $bankTransaction->memo;
+            if ((empty($description) || $bankTransaction->type == 'CHECK' || $bankTransaction->type == 'POS') && isset($bankTransaction->name)) {
+                $description = $bankTransaction->name;
+            }
+            if ($bankTransaction->type == 'CREDIT' && isset($bankTransaction->name)) {
+                $description .= ' - ' . $bankTransaction->name;
+            }
+
+            //TODO: $bankTransaction->date esta falhando, veirficar o formato (salario)
             $transactions[] = [
-                'description' => $this->sanitize($bankTransaction->name) . ' (' . $bankTransaction->memo . ')',
+                'description' => $this->sanitize($description),
                 'uniqueId' => $bankTransaction->uniqueId,
                 'type' => ($bankTransaction->amount > 0) ? 'credit' : 'debit',
                 'value' => abs($bankTransaction->amount),
                 'date' => $bankTransaction->date, // \DateTime()
             ];
+        }
 
         return $transactions;
     }
@@ -191,6 +202,8 @@ class ImportController extends Controller
         //Because digits were removed
         $string = preg_replace('/(PERIODO A)/', ' ', $string);
 
+        $string = preg_replace('/BR TO BR/', 'CASH WITHDRAWAL', $string);
+
         return trim($string);
     }
 
@@ -203,7 +216,15 @@ class ImportController extends Controller
         foreach ($import as $uniqueId) {
             $transactionInfo = json_decode($transactions[$uniqueId]);
 
-            $category = $this->category->find($categories[$uniqueId]);
+            try {
+                //TODO: Verificar uniqueID (pq erro em alguns casos)
+                $category = $this->category->find($categories[$uniqueId]);
+            } catch (\Exception $exception) {
+                $category = null;
+            }
+            if (is_null($category)) {
+                $category = $this->category->findByName('Undefined');
+            }
             $account = $this->account->find(1); //TODO: Check this: Why '1'?
             $transactionType = $this->transactionType->where('unique_name', $transactionInfo->type)->first();
 

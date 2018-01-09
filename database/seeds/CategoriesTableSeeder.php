@@ -16,6 +16,7 @@ class CategoriesTableSeeder extends Seeder
 		$userModel = new User();
 		$user = $userModel->where('name', 'Ricardo')->first();
 
+        factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Undefined']);
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Salário']);
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Aluguel']);
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Financiamento Apartamento']);
@@ -27,6 +28,6 @@ class CategoriesTableSeeder extends Seeder
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Carro']);
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Despesas Bancárias']);
         factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Transferência entre contas']);
-        factory(Category::class)->create(['user_id' => $user->id, 'name' => 'Indefinida']);
+
     }
 }
