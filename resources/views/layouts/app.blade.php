@@ -152,5 +152,6 @@
         });
     </script>
     @yield('js')
+    @yield('js_modal')
 </body>
 </html>

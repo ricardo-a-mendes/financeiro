@@ -127,7 +127,7 @@ class ImportController extends Controller
         $transactions = [];
 
         //Creating default array fo transactions
-        foreach ($bankAccount->statement->transactions as $bankTransaction) {
+        foreach ($bankAccount->statement->transactions as $uniqueId => $bankTransaction) {
             /** @var \OfxParser\Entities\Transaction $bankTransaction */
             $description = $bankTransaction->memo;
             if ((empty($description) || $bankTransaction->type == 'CHECK' || $bankTransaction->type == 'POS') && isset($bankTransaction->name)) {
@@ -140,7 +140,7 @@ class ImportController extends Controller
             //TODO: $bankTransaction->date esta falhando, veirficar o formato (salario)
             $transactions[] = [
                 'description' => $this->sanitize($description),
-                'uniqueId' => $bankTransaction->uniqueId,
+                'uniqueId' => $uniqueId,
                 'type' => ($bankTransaction->amount > 0) ? 'credit' : 'debit',
                 'value' => abs($bankTransaction->amount),
                 'date' => $bankTransaction->date, // \DateTime()

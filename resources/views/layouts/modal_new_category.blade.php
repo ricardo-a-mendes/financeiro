@@ -23,7 +23,7 @@
         </div>
     </div>
     
-@section('js')
+@section('js_modal')
 
     <script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
     <script type="text/javascript">

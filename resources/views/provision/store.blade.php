@@ -6,6 +6,17 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group">
+					<label for="category">{{trans_choice('category.labels.category',1)}}</label>
+					<select name="category" class="form-control">
+						<option value="invalid_option">{{trans('app.labels.select')}}</option>
+						@foreach($categories as $categoryId => $categoryName)
+							<option {{($categoryId == old('category', $provision->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
 					<label for="exampleInputEmail1">{{trans_choice('provision.labels.provision', 1)}}</label>
 					<div class="input-group">
 						<span class="input-group-addon">$</span>
@@ -14,17 +25,6 @@
 					<input type="hidden" name="id" value="{{$provision->id}}">
 					{{ csrf_field() }}
 					{{ method_field($method) }}
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<label for="category">{{trans_choice('category.labels.category',1)}}</label>
-					<select name="category" class="form-control">
-						<option value="invalid_option">{{trans('app.labels.select')}}</option>
-						@foreach($categories as $categoryId => $categoryName)
-							<option {{($categoryId == old('category', $provision->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
-						@endforeach
-					</select>
 				</div>
 			</div>
 			<div class="col-md-4">

@@ -13,7 +13,7 @@
 			<thead>
 			<tr>
 				<!-- TODO: Add checkbox to select/deselect all -->
-				<th>#</th>
+				<th><input type="checkbox" checked id="checkAll"></th>
 				<th>Data</th>
 				<th>Descrição</th>
 				<th>Valor</th>
@@ -24,7 +24,7 @@
 			@forelse($enhancedTransactions as $enhancedTransaction)
 				<input type="hidden" name="transaction[{{$enhancedTransaction->uniqueId}}]" value="{{json_encode($enhancedTransaction)}}">
 				<tr>
-					<td><input type="checkbox" {{($enhancedTransaction->existent_transaction)?'':'checked'}} name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+					<td><input type="checkbox" {{($enhancedTransaction->existent_transaction)?'disabled':'checked'}} name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
 					<td>{{$enhancedTransaction->date->format('d/m/Y')}}</td>
 
 					@if($enhancedTransaction->existent_transaction)
@@ -35,20 +35,18 @@
 
 					<td class="{{($enhancedTransaction->type == 'credit')?'text-green success':'text-red danger'}}">{{Number::formatCurrency($enhancedTransaction->value)}}</td>
 					<td>
-						@if(is_null($enhancedTransaction->category_id) || $enhancedTransaction->category_id == 0)
-							<select name="category[{{$enhancedTransaction->uniqueId}}]" class="form-control combo_category">
-								<option value="invalid_option">{{trans('app.labels.select')}}</option>
-								@foreach($categories as $categoryId => $categoryName)
-									<option {{($categoryId == 0)?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
-								@endforeach
-							</select>&nbsp;
-							<span data-toggle="modal" data-target="#modalNewCategory">
-								<span class="glyphicon glyphicon-plus cursor-pointer" data-toggle="tooltip" title="Nova Categoria">
-								</span>
+
+						<select name="category[{{$enhancedTransaction->uniqueId}}]" class="form-control combo_category">
+							<option value="invalid_option">{{trans('app.labels.select')}}</option>
+							@foreach($categories as $categoryId => $categoryName)
+								<option {{($categoryId == $enhancedTransaction->category_id)?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
+							@endforeach
+						</select>&nbsp;
+						<span data-toggle="modal" data-target="#modalNewCategory">
+							<span class="glyphicon glyphicon-plus cursor-pointer" data-toggle="tooltip" title="Nova Categoria">
 							</span>
-						@else
-							{{$enhancedTransaction->category_name}}
-						@endif
+						</span>
+
 					</td>
 				</tr>
 			@empty
@@ -74,4 +72,20 @@
 	</div>
 
 	@include('layouts.modal_new_category')
+
+@section('js')
+	<script type="text/javascript">
+        $(function () {
+            $('#checkAll').on('click', function () {
+                $('input[type=checkbox]').each(function () {
+                    if ($('#checkAll').is(':checked') && $(this).attr('disabled') != 'disabled') {
+                        $(this).attr('checked', 'checked')
+                    } else {
+                        $(this).removeAttr('checked');
+                    }
+                });
+            });
+        });
+	</script>
+@endsection
 @endsection
