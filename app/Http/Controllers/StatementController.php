@@ -39,40 +39,27 @@ class StatementController extends Controller
         try {
             $date = new Carbon();
 
+            $monthToAdd = (is_integer($monthToAdd)) ? $monthToAdd : 0;
+
             if ($monthToAdd !== 0)
                 $date->addMonth($monthToAdd);
 
             $statementDate = $date->format('m-Y');
 
+            //Debit
             $statementDebit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_DEBIT, $date);
-
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
 
+            //Credit
             $statementCredit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
             $totalCreditProvision = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_PROVISION);
 
+            //View assets
             $categories = $this->category->getCombo();
             $accounts = $this->account->getCombo();
             $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
-
-            /*
-            $totalProvisioned = 4500;
-            $totalPercent = $totalCredit;
-
-            $earnedPercent = round(100*($totalCredit-$totalProvisioned)/$totalPercent);
-            $provisionedPercent = round(100*($totalProvisioned-$totalDebit)/$totalPercent);
-            $spentPercent = round(100*$totalDebit/$totalPercent);
-
-            $graph = [
-                'balance' => $earnedPercent,
-                'provisioned' => $provisionedPercent,
-                'spent' => $spentPercent,
-            ];
-            */
-
-
 
         } catch (Exception $e) {
             $statementDebit = [];

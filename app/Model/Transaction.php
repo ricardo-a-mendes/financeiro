@@ -12,7 +12,7 @@ class Transaction extends Model
     const STATEMENT_CREDIT = 1;
     const STATEMENT_DEBIT = 2;
     const TOTAL_TYPE_VALUE = 'value';
-    const TOTAL_TYPE_EFFECTED = 'effected_value';
+    const TOTAL_TYPE_POSTED = 'posted_value';
     const TOTAL_TYPE_PROVISION = 'provision_value';
 
     public $provision;
@@ -98,9 +98,9 @@ class Transaction extends Model
         return $statements->get();
     }
 
-    public function getTotal($statement, $type = 'effected_value')
+    public function getTotal($statement, $type = self::TOTAL_TYPE_POSTED)
     {
-        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_PROVISION, self::TOTAL_TYPE_EFFECTED]))
+        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_PROVISION, self::TOTAL_TYPE_POSTED]))
             throw new \InvalidArgumentException('Invalid Type');
 
         $total = 0;
