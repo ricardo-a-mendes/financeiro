@@ -39,6 +39,7 @@ return [
         'income' => 'Income',
         'listed_month' => 'Listed Month',
         'listed_year' => 'Listed Year',
+        'loading' => 'Loading',
         'monthly' => 'Monthly',
         'next' => 'Next',
         'prior' => 'Prior',
