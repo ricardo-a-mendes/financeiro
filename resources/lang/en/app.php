@@ -62,12 +62,12 @@ return [
         'login' => 'Login',
         'logout' => 'Logout',
         'register' => 'Register',
-        'registration' => 'Registration',
+        'configuration' => 'Configuration',
         'statement' => 'Statement',
     ],
     'messages' => [
         'no_items_found' => 'No Items Found.',
-        'delete_confirmation' => 'Are you sure that you want to delete the follow item'
+        'delete_confirmation' => 'Are you sure that you want to delete the follow item?',
+        'file_not_allowed' => 'Sorry, this type of file is not allowed.'
     ]
-
 ];

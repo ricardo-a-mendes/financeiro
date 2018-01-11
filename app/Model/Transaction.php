@@ -91,10 +91,6 @@ class Transaction extends Model
             ->groupBy('categories.name')
             ->union($provisionsWithoutTransaction);
 
-
-        //dd($statements->get());
-
-
         return $statements->get();
     }
 

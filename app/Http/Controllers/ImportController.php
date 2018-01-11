@@ -75,10 +75,11 @@ class ImportController extends Controller
         //Everything is OK... Let's Rock
         if ($canProcess) {
             $categories = $this->category->getCombo();
+            $path = $request->file('import_file')->path();
 
             switch ($originalExt) {
-                case 'ofx': $parsedTransactions = $this->parseOFX($request->file('import_file')->path()); break;
-                case 'csv': $parsedTransactions = $this->parseCSV($request->file('import_file')->path()); break;
+                case 'ofx': $parsedTransactions = $this->parseOFX($path); break;
+                case 'csv': $parsedTransactions = $this->parseCSV($path); break;
             }
 
             $enhancedTransactions = $this->enhanceTransaction($parsedTransactions);
@@ -86,7 +87,7 @@ class ImportController extends Controller
         }
 
         //Can't Process =(
-        Session::flash('info', 'Arquivo não permitido para importação.');
+        Session::flash('info', trans('app.messages.file_not_allowed'));
         return redirect()->route('statement');
     }
 
@@ -109,7 +110,7 @@ class ImportController extends Controller
 				$transactions[] = [
 					'description' => $this->sanitize($transaction['description']),
 					'uniqueId' => $uniqueId,
-					'type' => ($value > 0) ? 'credit' : 'debit',
+					'type' => ($value > 0) ? TransactionType::TRANSACTION_TYPE_CREDIT : TransactionType::TRANSACTION_TYPE_DEBIT,
 					'value' => abs($value),
 					'date' => Carbon::createFromFormat('d/m/Y', $transaction['date']) // \DateTime()
 				];
@@ -130,18 +131,19 @@ class ImportController extends Controller
         foreach ($bankAccount->statement->transactions as $uniqueId => $bankTransaction) {
             /** @var \OfxParser\Entities\Transaction $bankTransaction */
             $description = $bankTransaction->memo;
-            if ((empty($description) || $bankTransaction->type == 'CHECK' || $bankTransaction->type == 'POS') && isset($bankTransaction->name)) {
+            $transactionType = strtolower($bankTransaction->type);
+            if ((empty($description) || $transactionType == TransactionType::TRANSACTION_TYPE_CREDIT || $transactionType == TransactionType::TRANSACTION_TYPE_POST) && isset($bankTransaction->name)) {
                 $description = $bankTransaction->name;
             }
-            if ($bankTransaction->type == 'CREDIT' && isset($bankTransaction->name)) {
+
+            if ($transactionType == TransactionType::TRANSACTION_TYPE_CREDIT && isset($bankTransaction->name)) {
                 $description .= ' - ' . $bankTransaction->name;
             }
 
-            //TODO: $bankTransaction->date esta falhando, veirficar o formato (salario)
             $transactions[] = [
                 'description' => $this->sanitize($description),
                 'uniqueId' => $uniqueId,
-                'type' => ($bankTransaction->amount > 0) ? 'credit' : 'debit',
+                'type' => ($bankTransaction->amount > 0) ? TransactionType::TRANSACTION_TYPE_CREDIT : TransactionType::TRANSACTION_TYPE_DEBIT,
                 'value' => abs($bankTransaction->amount),
                 'date' => $bankTransaction->date, // \DateTime()
             ];
@@ -216,15 +218,12 @@ class ImportController extends Controller
         foreach ($import as $uniqueId) {
             $transactionInfo = json_decode($transactions[$uniqueId]);
 
-            try {
-                //TODO: Verificar uniqueID (pq erro em alguns casos)
-                $category = $this->category->find($categories[$uniqueId]);
-            } catch (\Exception $exception) {
-                $category = null;
-            }
+            $category = $this->category->find($categories[$uniqueId]);
+
             if (is_null($category)) {
                 $category = $this->category->findByName('Undefined');
             }
+
             $account = $this->account->find(1); //TODO: Check this: Why '1'?
             $transactionType = $this->transactionType->where('unique_name', $transactionInfo->type)->first();
 

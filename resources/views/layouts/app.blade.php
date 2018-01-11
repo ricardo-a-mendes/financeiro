@@ -62,7 +62,7 @@
                         <li><a href="{{route('statement')}}">{{trans('app.menu.extract_yearly')}}</a></li>
                         <li><a href="{{route('statement')}}">{{trans('app.menu.statement')}}</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.menu.registration')}} <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.menu.configuration')}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{route('account.index')}}">{{trans_choice('account.labels.account', 2)}}</a></li>
                                 <li><a href="{{route('category.index')}}">{{trans_choice('category.labels.category', 2)}}</a></li>
