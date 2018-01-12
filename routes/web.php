@@ -24,4 +24,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('account', 'AccountController', ['except' => ['show']]);
     Route::resource('provision', 'ProvisionController', ['except' => ['show']]);
     Route::resource('reference', 'TransactionReferenceController', ['except' => ['show']]);
+    Route::resource('my_account', 'UserAccountController', ['except' => ['show']]);
 });

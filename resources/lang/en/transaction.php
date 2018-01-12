@@ -18,6 +18,8 @@ return [
     'labels' => [
         'import' => 'Import Transactions',
         'new' => 'New Transaction',
+        'new_credit' => 'New Credit Transaction',
+        'new_debit' => 'New Debit Transaction',
         'type' => 'Transaction Type',
     ],
 ];

@@ -111,8 +111,8 @@ class StatementController extends Controller
     public function store(TransactionRequest $request)
     {
         $category = $this->category->find($request->input('category'));
-        $account = $this->account->find($request->input('account'));
-        $transactionType = $this->transactionType->find($request->input('transactionType'));
+        $account = $this->account->find(1);
+        $transactionType = $this->transactionType->findByUniqueName($request->input('transactionType'));
 
         $transaction = new Transaction();
         $transaction->account()->associate($account);

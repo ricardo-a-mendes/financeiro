@@ -12,15 +12,11 @@ class AccountTypesTableSeeder extends Seeder
     public function run()
     {
         factory(\App\Model\AccountType::class)->create([
-            'unique_name' => 'conta_corrente',
+            'unique_name' => 'owner',
         ]);
 
         factory(\App\Model\AccountType::class)->create([
-            'unique_name' => 'conta_poupanca',
-        ]);
-
-        factory(\App\Model\AccountType::class)->create([
-            'unique_name' => 'cartao_credito',
+            'unique_name' => 'guest',
         ]);
     }
 }

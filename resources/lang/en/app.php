@@ -16,6 +16,7 @@ return [
     'labels' => [
         'actions' => 'Actions',
         'amount' => 'Amount',
+        'balance' => 'Balance',
         'browse_file' => 'Browse',
         'cancel' => 'Cancel',
         'close' => 'Close',
@@ -50,6 +51,7 @@ return [
         'spent' => 'Spent',
         'total' => 'Total',
         'type' => 'Type',
+        'user' => 'User|Users',
         'value' => 'Value',
         'values' => 'Values',
         'view' => 'View',
@@ -62,8 +64,10 @@ return [
         'login' => 'Login',
         'logout' => 'Logout',
         'register' => 'Register',
-        'configuration' => 'Configuration',
+        'preferences' => 'Preferences',
+        'settings' => 'Settings',
         'statement' => 'Statement',
+        'user_account' => 'My Account',
     ],
     'messages' => [
         'no_items_found' => 'No Items Found.',

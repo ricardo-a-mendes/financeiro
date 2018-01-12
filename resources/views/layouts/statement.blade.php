@@ -6,8 +6,11 @@
             <div class="row">
                 <div class="col-md-4">
                     <h3>{{trans('app.labels.monthly')}}&nbsp;
-                        <span data-toggle="modal" data-target="#modalNewTransaction">
-                            <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new')}}" class="glyphicon glyphicon-plus small cursor-pointer"></span>
+                        <span data-toggle="modal" data-target="#modalNewTransaction" data-transaction_type="debit" data-modal_title="{{trans('transaction.labels.new_debit')}}">
+                            <span style="color: red" data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new_debit')}}" class="glyphicon glyphicon-plus small cursor-pointer"></span>
+                        </span>
+                        <span data-toggle="modal" data-target="#modalNewTransaction" data-transaction_type="credit" data-modal_title="{{trans('transaction.labels.new_credit')}}">
+                            <span style="color: #2ca02c" data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.new_credit')}}" class="glyphicon glyphicon-plus small cursor-pointer"></span>
                         </span>
                         <span data-toggle="modal" data-target="#modalImportStatement">&nbsp;
                             <span data-toggle="tooltip" data-placement="top" title="{{trans('transaction.labels.import')}}" class="glyphicon glyphicon-import small cursor-pointer"></span>
@@ -56,7 +59,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <th>{{trans('app.labels.amount')}}</th>
+                        <th>{{trans('app.labels.balance')}}</th>
                         <th class="{{($totalCreditProvision-$totalDebitProvision >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditProvision-$totalDebitProvision >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditProvision-$totalDebitProvision)}}</th>
                         <th class="{{($totalCredit-$totalDebit >= 0)?'success text-green':'danger text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit-$totalDebit >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit-$totalDebit)}}</th>
                     </tr>
@@ -194,13 +197,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="transaction_value">{{trans('app.labels.value')}}</label>
-                                    <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="{{trans('app.labels.value')}}">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="number" step="0.01" min="0.01" class="form-control" name="transaction_value" id="transaction_value" placeholder="{{trans('app.labels.value')}}">
+
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="transaction_date">{{trans('app.labels.date')}}</label>
-                                    <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" name="transaction_date" id="transaction_date" value="{{date('Y-m-d')}}">
+                                        <span class="input-group-addon "><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -213,29 +223,7 @@
                                             <option value="{{$categoryId}}">{{$categoryName}}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="account">{{trans_choice('account.labels.account', 1)}}</label>
-                                    <select name="account" class="form-control">
-                                        <option value="invalid_option">{{trans('app.labels.select')}}</option>
-                                        @foreach($accounts as $accountId => $accountName)
-                                            <option value="{{$accountId}}">{{$accountName}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="transactionType">{{trans('transaction.labels.type')}}</label>
-                                    <select name="transactionType" class="form-control">
-                                        <option value="invalid_option">{{trans('app.labels.select')}}</option>
-                                        @foreach($transactionTypes as $transactionTypeId => $transactionTypeName)
-                                            <option value="{{$transactionTypeId}}">{{trans('transaction.'.$transactionTypeName)}}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="hidden" name="transactionType" id="transactionType" value="" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -284,7 +272,17 @@
                 }
             });
 
-            //Modal for Trasaction Details of a selected Category
+            //Modal for New Transaction
+            $('#modalNewTransaction').on('show.bs.modal', function (event) {
+                var span = $(event.relatedTarget) // Span that triggered the modal
+                var transaction_type = span.data('transaction_type') // Extract info from data-* attributes
+                var title = span.data('modal_title') // Extract info from data-* attributes
+                var modal = $(this);
+                modal.find('#transactionType').val(transaction_type);
+                modal.find('#myModalLabel').html(title);
+            });
+
+            //Modal for Transaction Details of a selected Category
             $('#modalDetails').on('show.bs.modal', function (event) {
                 var span = $(event.relatedTarget) // Span that triggered the modal
                 var category = span.data('category') // Extract info from data-* attributes

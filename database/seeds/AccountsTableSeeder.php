@@ -13,33 +13,22 @@ class AccountsTableSeeder extends Seeder
     public function run()
     {
         $accountTypeModel = new App\Model\AccountType();
-        $accountType = $accountTypeModel->findByUniqueName('conta_corrente');
+        $userModel = new User();
 
-		$userModel = new User();
-		$user = $userModel->where('name', 'Ricardo')->first();
+        $userOwner = $userModel->where('name', 'Ricardo')->first();
+        $accountTypeOwner = $accountTypeModel->findByUniqueName('owner');
+
+        $userGuest = $userModel->where('name', 'Amanda')->first();
+        $accountTypeGuest = $accountTypeModel->findByUniqueName('guest');
 
         factory(\App\Model\Account::class)->create([
-            'account_type_id' => $accountType->id,
-            'user_id' => $user->id,
-            'name' => 'Itau',
+            'account_type_id' => $accountTypeOwner->id,
+            'user_id' => $userOwner->id
         ]);
 
         factory(\App\Model\Account::class)->create([
-            'account_type_id' => $accountType->id,
-			'user_id' => $user->id,
-            'name' => 'Santander',
-        ]);
-
-        factory(\App\Model\Account::class)->create([
-            'account_type_id' => $accountType->id,
-			'user_id' => $user->id,
-            'name' => 'Banco do Brasil',
-        ]);
-
-        factory(\App\Model\Account::class)->create([
-            'account_type_id' => $accountType->id,
-			'user_id' => $user->id,
-            'name' => 'Caixa',
+            'account_type_id' => $accountTypeGuest->id,
+			'user_id' => $userGuest->id
         ]);
     }
 }

@@ -28,7 +28,6 @@ class TransactionRequest extends FormRequest
 			'transaction_value' => 'required',
 			'transaction_date' => 'required',
 			'category' => 'required|combo',
-			'account' => 'required|combo',
 			'transactionType' => 'required|combo',
         ];
     }
