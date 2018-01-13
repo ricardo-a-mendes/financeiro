@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountsTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-		if (!Schema::hasTable('accounts')) {
-			Schema::create('accounts', function (Blueprint $table) {
+		if (!Schema::hasTable('categories')) {
+			Schema::create('categories', function (Blueprint $table) {
 				$table->increments('id');
-				$table->unsignedInteger('account_type_id');
-				$table->foreign('account_type_id')->references('id')->on('account_types');
+                $table->unsignedInteger('account_id');
+                $table->foreign('account_id')->references('id')->on('accounts');
+				$table->string('name');
 				$table->unsignedSmallInteger('status')->default(1);
 				$table->timestamps();
 			});
@@ -31,6 +32,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('categories');
     }
 }

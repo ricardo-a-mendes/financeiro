@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoriesTable extends Migration
+class CreateTransactionReferencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-		if (!Schema::hasTable('categories')) {
-			Schema::create('categories', function (Blueprint $table) {
+		if (!Schema::hasTable('transaction_references')) {
+			Schema::create('transaction_references', function (Blueprint $table) {
 				$table->increments('id');
+				$table->string('description');
+                $table->unsignedInteger('account_id');
+                $table->foreign('account_id')->references('id')->on('accounts');
 				$table->unsignedInteger('user_id');
 				$table->foreign('user_id')->references('id')->on('users');
-				$table->string('name');
-				$table->unsignedSmallInteger('status')->default(1);
+				$table->unsignedInteger('category_id')->default(0);
 				$table->timestamps();
 			});
 		}
@@ -32,6 +34,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('transaction_references');
     }
 }

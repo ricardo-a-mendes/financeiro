@@ -6,7 +6,11 @@ use App\FinancialModel;
 
 class Account extends FinancialModel
 {
-   public function accountType()
+    protected $fillable = [
+        'account_type_id', 'status',
+    ];
+
+    public function accountType()
     {
         return $this->belongsTo(AccountType::class);
     }

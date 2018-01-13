@@ -18,6 +18,8 @@ class CreateProvisionDatesTable extends Migration
 				$table->increments('id');
 				$table->unsignedInteger('provision_id');
 				$table->foreign('provision_id')->references('id')->on('provisions');
+                $table->unsignedInteger('account_id');
+                $table->foreign('account_id')->references('id')->on('accounts');
 				$table->unsignedInteger('user_id');
 				$table->foreign('user_id')->references('id')->on('users');
 				$table->timestamp('target_date');

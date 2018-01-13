@@ -12,4 +12,9 @@ class AccountType extends FinancialModel
     {
         return trans('account.'.$this->unique_name);
     }
+
+    public function getByUniqueName(string $uniqueName)
+    {
+        return $this->where('unique_name', $uniqueName)->first();
+    }
 }
