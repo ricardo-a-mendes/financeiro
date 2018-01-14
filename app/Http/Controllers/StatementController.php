@@ -46,19 +46,20 @@ class StatementController extends Controller
 
             $statementDate = $date->format('m-Y');
 
+            $accountId = Auth::user()->account->id;
+
             //Debit
-            $statementDebit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_DEBIT, $date);
+            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
 
             //Credit
-            $statementCredit = $transaction->getStatement(Auth::id(), Transaction::STATEMENT_CREDIT, $date);
+            $statementCredit = $transaction->getStatement($accountId, Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
             $totalCreditProvision = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_PROVISION);
 
             //View assets
             $categories = $this->category->getCombo();
-            $accounts = $this->account->getCombo();
             $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
 
         } catch (Exception $e) {
@@ -77,7 +78,6 @@ class StatementController extends Controller
             'totalCreditProvision',
             'statementDate',
             'categories',
-            'accounts',
             'transactionTypes',
             'monthToAdd'
         ));

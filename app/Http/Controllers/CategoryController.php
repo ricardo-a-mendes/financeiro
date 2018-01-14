@@ -45,7 +45,7 @@ class CategoryController extends Controller
 		if (is_null($existentCategory)) {
 			$category = new $this->category;
 			$category->name = $categoryName;
-			$category->user_id = Auth::id();
+			$category->account_id = Auth::user()->account->id;
 			$category->save();
 		} else {
 			$category = $existentCategory;

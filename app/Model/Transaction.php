@@ -43,7 +43,7 @@ class Transaction extends Model
         return date('d/m/Y', strtotime($this->transaction_date));
     }
 
-    public function getStatement($userID, $type, \DateTime $date = null)
+    public function getStatement(int $accountID, string $type, \DateTime $date = null)
     {
         if (!in_array($type, [self::STATEMENT_CREDIT, self::STATEMENT_DEBIT]))
             throw new \InvalidArgumentException('Invalid Type');
@@ -62,10 +62,10 @@ class Transaction extends Model
                 sum(provisions.value)
             from 
                 provisions
-            left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.user_id = '.$userID.'
+            left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.account_id = '.$accountID.'
                 
             where 
-            	provisions.user_id = '.$userID.'
+            	provisions.account_id = '.$accountID.'
                 and provisions.category_id = categories.id
                 and (
                     provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
@@ -76,15 +76,15 @@ class Transaction extends Model
             sum(transactions.value) as posted_value'
         );
 
-        $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($userID, $type, $date);
+        $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($accountID, $type, $date);
 
         $statements = $this->select($fields)
             ->join('transaction_types', 'transaction_types.id', '=', 'transactions.transaction_type_id')
-            ->join('categories', function ($join) use ($userID){
-				$join->where('categories.user_id', $userID);
+            ->join('categories', function ($join) use ($accountID){
+				$join->where('categories.account_id', $accountID);
 				$join->on('categories.id', 'transactions.category_id');
 			})
-            ->where('transactions.user_id', $userID)
+            ->where('transactions.account_id', $accountID)
             ->where('transaction_type_id', $type)
             ->whereBetween('transaction_date', [$startDate, $endDate])
             ->groupBy('categories.id')

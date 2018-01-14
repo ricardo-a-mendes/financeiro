@@ -8,18 +8,15 @@ use Illuminate\Support\Facades\Schema;
 
 class FinancialModel extends Model
 {
-    public function findAll($userID = 0, $onlyActive = true, $columns = ['*'])
+    public function findAll($accountId = 0, $onlyActive = true, $columns = ['*'])
     {
         $builder = $this->newQuery();
 
         if ($onlyActive && Schema::hasColumn($this->getTable(), 'status'))
             $builder->where('status', 1);
 
-        if ($userID > 0 && Schema::hasColumn($this->getTable(), 'user_id'))
-            $builder->where(function ($query) {
-                $query->where('user_id', 1)//Admin Categories (Everybody must see)
-                ->orWhere('user_id', Auth::id());
-            });
+        if ($accountId > 0 && Schema::hasColumn($this->getTable(), 'account_id'))
+            $builder->where('account_id', $accountId);
 
         return $builder->get($columns);
     }

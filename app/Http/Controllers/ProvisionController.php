@@ -43,7 +43,8 @@ class ProvisionController extends Controller
 
     public function index()
     {
-        $provisions = $this->provision->findAll(Auth::id());
+        $accountId = Auth::user()->account->id;
+        $provisions = $this->provision->findAll($accountId);
         return view('provision.index', compact('provisions'));
     }
 
@@ -70,6 +71,7 @@ class ProvisionController extends Controller
         $transactionType = $this->transactionType->find($request->input('transactionType'));
         $provision->transactionType()->associate($transactionType);
 
+        $provision->account_id = Auth::user()->account->id;
         $provision->user_id = Auth::id();
         $provision->value = $request->input('value');
 
@@ -78,6 +80,7 @@ class ProvisionController extends Controller
         if ($request->has('specific_provision_option') && $request->has('specific_date')) {
             $provisionDate = new ProvisionDate();
             $dateTime = new Carbon($request->input('specific_date'));
+            $provisionDate->account_id = Auth::user()->account->id;
             $provisionDate->user_id = Auth::id();
             $provisionDate->target_date = $dateTime->format('Y-m-d');
             $provisionDate->provision()->associate($provision);

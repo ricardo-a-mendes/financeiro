@@ -32,7 +32,7 @@ class Provision extends FinancialModel
         return null;
     }
 
-    public function getWithoutTransaction($userID, $type, \DateTime $date = null)
+    public function getWithoutTransaction($accountID, $type, \DateTime $date = null)
     {
         if (is_null($date))
             $date = new \DateTime();
@@ -48,21 +48,21 @@ class Provision extends FinancialModel
         );
 
         return $this->select($fields)
-            ->leftJoin('provision_dates', function ($join) use ($userID){
-				$join->where('provision_dates.user_id', $userID);
+            ->leftJoin('provision_dates', function ($join) use ($accountID){
+				$join->where('provision_dates.account_id', $accountID);
 				$join->on('provision_dates.provision_id', 'provisions.id');
 			})
-            ->leftJoin('categories', function ($join) use ($userID){
-				$join->where('categories.user_id', $userID);
+            ->leftJoin('categories', function ($join) use ($accountID){
+				$join->where('categories.account_id', $accountID);
 				$join->on('categories.id', 'provisions.category_id');
 			})
-            ->leftJoin('transactions', function($join) use ($userID, $startDate, $endDate){
-                $join->where('transactions.user_id', $userID);
+            ->leftJoin('transactions', function($join) use ($accountID, $startDate, $endDate){
+                $join->where('transactions.account_id', $accountID);
                 $join->on('transactions.category_id', 'categories.id');
                 $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
             })
             ->where('provisions.status', 1)
-            ->where('provisions.user_id', $userID)
+            ->where('provisions.account_id', $accountID)
             ->where('provisions.transaction_type_id', $type)
             ->whereNull('transactions.id')
             ->whereRaw('(
