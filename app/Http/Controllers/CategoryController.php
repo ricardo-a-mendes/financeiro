@@ -22,7 +22,8 @@ class CategoryController extends Controller
 
 	public function index()
 	{
-		$categories = $this->category->findAll(Auth::id());
+	    $accountId = Auth::user()->account->id;
+		$categories = $this->category->findAll($accountId);
 		return view('layouts.category_index', compact('categories'));
 	}
 
