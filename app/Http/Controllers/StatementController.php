@@ -39,7 +39,7 @@ class StatementController extends Controller
         try {
             $date = new Carbon();
 
-            $monthToAdd = (is_integer($monthToAdd)) ? $monthToAdd : 0;
+            $monthToAdd = (int )$monthToAdd;
 
             if ($monthToAdd !== 0)
                 $date->addMonth($monthToAdd);
