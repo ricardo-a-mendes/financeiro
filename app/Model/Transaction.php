@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,11 @@ class Transaction extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function transactionType()

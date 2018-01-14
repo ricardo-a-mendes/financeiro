@@ -195,7 +195,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div id="divValue" class="form-group">
                                     <label for="transaction_value">{{trans('app.labels.value')}}</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
@@ -274,20 +274,27 @@
 
             //Modal for New Transaction
             $('#modalNewTransaction').on('show.bs.modal', function (event) {
-                var span = $(event.relatedTarget) // Span that triggered the modal
-                var transaction_type = span.data('transaction_type') // Extract info from data-* attributes
-                var title = span.data('modal_title') // Extract info from data-* attributes
+                var span = $(event.relatedTarget); // Span that triggered the modal
+                var transaction_type = span.data('transaction_type'); // Extract info from data-* attributes
+                var title = span.data('modal_title'); // Extract info from data-* attributes
                 var modal = $(this);
+
+                var valueClass = 'has-success';
+                if (transaction_type == 'debit') {
+                    valueClass = 'has-error';
+                }
+
+                modal.find('#divValue').addClass(valueClass);
                 modal.find('#transactionType').val(transaction_type);
-                modal.find('#myModalLabel').html(title);
+                modal.find('#myModalLabel').html(title + ' ' + transaction_type);
             });
 
             //Modal for Transaction Details of a selected Category
             $('#modalDetails').on('show.bs.modal', function (event) {
-                var span = $(event.relatedTarget) // Span that triggered the modal
-                var category = span.data('category') // Extract info from data-* attributes
-                var category_id = span.data('category_id') // Extract info from data-* attributes
-                var monthToAdd = span.data('month_to_add') // Extract info from data-* attributes
+                var span = $(event.relatedTarget); // Span that triggered the modal
+                var category = span.data('category'); // Extract info from data-* attributes
+                var category_id = span.data('category_id'); // Extract info from data-* attributes
+                var monthToAdd = span.data('month_to_add'); // Extract info from data-* attributes
                 var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';
 
                 var modal = $(this);

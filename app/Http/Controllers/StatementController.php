@@ -110,16 +110,17 @@ class StatementController extends Controller
 
     public function store(TransactionRequest $request)
     {
+        $user = Auth::user();
+        $account = $user->account;
         $category = $this->category->find($request->input('category'));
-        $account = $this->account->find(1);
         $transactionType = $this->transactionType->findByUniqueName($request->input('transactionType'));
 
         $transaction = new Transaction();
         $transaction->account()->associate($account);
+        $transaction->user()->associate($user);
         $transaction->category()->associate($category);
         $transaction->transactionType()->associate($transactionType);
 
-        $transaction->user_id = Auth::id();
         $transaction->description = $request->input('description');
         $transaction->value = $request->input('transaction_value');
         $transaction->transaction_date = $request->input('transaction_date');
