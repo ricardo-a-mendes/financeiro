@@ -122,13 +122,16 @@ class ProvisionController extends Controller
 
     public function specificProvision($provisionID)
     {
-        //TODO: Add User ID on filter
+        $accountId = Auth::user()->account->id;
+
         //TODO: Criar funcao para mostrar a data de acordo com a liguagem do abimente - apresentacao na view
         $provisions = $this->provision
             ->select('provisions.value', 'provisions.created_at', 'provision_dates.target_date')
             //->select('provisions.*')
             ->join('provision_dates', 'provision_dates.provision_id', '=', 'provisions.id')
             ->where('provisions.id', $provisionID)
+            ->where('provisions.account_id', $accountId)
+            ->where('provision_dates.account_id', $accountId)
             ->get();
 
         return view('provision.specific_details', compact('provisions'));

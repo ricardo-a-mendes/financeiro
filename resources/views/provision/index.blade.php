@@ -31,7 +31,7 @@
 				</td>
 				<td>
 					@if($provision->provisionDates->count() > 0)
-						<span data-modal_title="{{trans('provision.labels.specific_of', ['categoryName' => $provision->category->name])}}"  data-provision_id="{{$provision->id}}" data-toggle="modal" data-target="#modalDetails">
+						<span data-modal_title="{{trans('provision.labels.specific_of', ['categoryName' => $provision->category->name])}}"  data-provision_id="{{$provision->id}}" data-loading="{{trans('app.labels.loading')}}" data-toggle="modal" data-target="#modalDetails">
 							<span class="glyphicon glyphicon-calendar cursor-pointer" data-toggle="tooltip" data-placement="right" title="{{trans('app.labels.view')}}"></span>
 						</span>
 					@else
@@ -87,15 +87,24 @@
 		$(function(){
 			//Modal for Specific Provision Details
 			$('#modalDetails').on('show.bs.modal', function (event) {
-				var span = $(event.relatedTarget) // Span that triggered the modal
-				var category = span.data('category') // Extract info from data-* attributes
-				var provision_id = span.data('provision_id') // Extract info from data-* attributes
-				var modal_title = span.data('modal_title') // Extract info from data-* attributes
+				var span = $(event.relatedTarget); // Span that triggered the modal
+				var category = span.data('category'); // Extract info from data-* attributes
+				var provision_id = span.data('provision_id'); // Extract info from data-* attributes
+				var modal_title = span.data('modal_title'); // Extract info from data-* attributes
+				var loading = span.data('loading');
 
 				var url_details = '{{route('provision.specific.details', ['provisionID' => ''])}}';
 
+				var loadingHTML = '<p>'+loading+'...</p>';
+                loadingHTML = loadingHTML + '<div class="progress">';
+                loadingHTML = loadingHTML + '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">';
+                loadingHTML = loadingHTML + '<span class="sr-only">50% Complete</span>';
+                loadingHTML = loadingHTML + '</div>';
+                loadingHTML = loadingHTML + '</div>';
+
 				var modal = $(this);
 				modal.find('.modal-title').text(modal_title+'.');
+                modal.find('.modal-body').html(loadingHTML);
 
 				$.ajax({
 					url: url_details+'/'+provision_id,
