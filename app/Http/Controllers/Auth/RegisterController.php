@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Model\Account;
+use App\Model\AccountType;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -63,7 +65,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $accountTypeModel = new AccountType();
+        $accountTypeOwner = $accountTypeModel->findByUniqueName('owner');
+        $account = Account::create([
+            'account_type_id' => $accountTypeOwner->id,
+            'status' => 1
+        ]);
+
+        $categorySeeder = new \CategoriesTableSeeder();
+        $categorySeeder->setAccountId($account->id)->run();
+
         return User::create([
+            'account_id' => $account->id,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
