@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\FinancialModel;
+use App\User;
 
 class Account extends FinancialModel
 {
@@ -13,5 +14,10 @@ class Account extends FinancialModel
     public function accountType()
     {
         return $this->belongsTo(AccountType::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }

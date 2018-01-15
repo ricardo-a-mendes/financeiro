@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('provision-specific-details/{categoryID}', 'ProvisionController@specificProvision')->name('provision.specific.details');
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
-    Route::resource('account', 'AccountController', ['except' => ['show']]);
+    //Route::resource('account', 'AccountController', ['except' => ['show']]);
     Route::resource('provision', 'ProvisionController', ['except' => ['show']]);
     Route::resource('reference', 'TransactionReferenceController', ['except' => ['show']]);
     Route::resource('my_account', 'UserAccountController', ['except' => ['show']]);

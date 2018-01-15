@@ -13,14 +13,14 @@ return [
     |
     */
 
-    'conta_corrente' => 'Conta Corrente',
-    'conta_poupanca' => 'Conta Poupança',
-    'cartao_credito' => 'Cartão de Crédito',
     'labels' => [
         'account' => 'Account|Accounts',
-        'type' => 'Account Type',
-        'new' => 'New Account',
-        '' => '',
+        'change_pass' => 'Change Password',
+        'email' => 'E-mail',
+        'my_account' => 'My Account',
+        'name' => 'Name',
+        'new' => 'New User',
+        'user_not_found' => 'User not found|No users found',
         '' => '',
     ],
     'messages' => [

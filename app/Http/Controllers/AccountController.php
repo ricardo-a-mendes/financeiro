@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AccountRequest;
+use App\Http\Requests\UserRequest;
 use App\Model\Account;
 use App\Model\AccountType;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ class AccountController extends Controller
 		return view('layouts.account_store', compact('method', 'route', 'account', 'accountTypes'));
 	}
 
-	public function store(AccountRequest $request)
+	public function store(UserRequest $request)
 	{
         $account = new $this->account;
         $account->name = $request->input('account');
@@ -67,7 +67,7 @@ class AccountController extends Controller
         return view('layouts.account_store', compact('method', 'route', 'account', 'accountTypes'));
     }
 
-	public function update(AccountRequest $request, $id)
+	public function update(UserRequest $request, $id)
 	{
         $account = $this->account->find($id);
         $account->name = $request->input('account');
