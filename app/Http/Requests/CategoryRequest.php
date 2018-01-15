@@ -13,6 +13,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
+        //TODO: Check if category belongs to user account
         return true;
     }
 

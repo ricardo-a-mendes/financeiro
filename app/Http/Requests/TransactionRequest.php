@@ -13,6 +13,7 @@ class TransactionRequest extends FormRequest
      */
     public function authorize()
     {
+        //TODO: Check if Transaction belongs to user account
         return true;
     }
 
