@@ -16,8 +16,13 @@ class Account extends FinancialModel
         return $this->belongsTo(AccountType::class);
     }
 
-    public function users()
+    public function users(bool $justActive = true)
     {
-        return $this->hasMany(User::class);
+        $users =  $this->hasMany(User::class);
+        if ($justActive) {
+            $users->where('is_active', 1);
+        }
+
+        return $users;
     }
 }

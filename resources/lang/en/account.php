@@ -21,7 +21,7 @@ return [
         'name' => 'Name',
         'new' => 'New User',
         'user_not_found' => 'User not found|No users found',
-        '' => '',
+        'change_pass' => 'Change Password',
     ],
     'messages' => [
         'created_successfully' => 'Account created successfully!',

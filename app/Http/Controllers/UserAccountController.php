@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Model\Account;
+use App\User;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UserAccountController extends Controller
 {
+    use ResetsPasswords;
+
     public function index()
     {
         /** @var Account $account */
@@ -17,5 +23,23 @@ class UserAccountController extends Controller
         return view('layouts.user_account_index', compact(
             'accountUsers'
         ));
+    }
+
+
+    public function update(UserRequest $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        if ($request->has('name')) {
+            $user->name = $request->get('name');
+            $user->save();
+        }
+
+        if ($request->has('password')) {
+            $this->resetPassword($user, $request->get('password'));
+        }
+
+        Session::flash('success', trans('account.messages.updated_successfully'));
+        return redirect()->route('my_account.index');
     }
 }

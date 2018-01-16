@@ -43,6 +43,8 @@ return [
         'loading' => 'Loading',
         'monthly' => 'Monthly',
         'next' => 'Next',
+        'password' => 'Password',
+        'password_confirmation' => 'Password Confirmation',
         'prior' => 'Prior',
         'save' => 'Save',
         'select' => 'Select',

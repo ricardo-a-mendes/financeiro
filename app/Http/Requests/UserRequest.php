@@ -23,8 +23,16 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $validation = [
             'name' => 'required|min:3'
         ];
+
+        if ($this->request->has('password')) {
+            $validation = [
+                'password' => 'required|min:5|confirmed'
+            ];
+        }
+
+        return $validation;
     }
 }
