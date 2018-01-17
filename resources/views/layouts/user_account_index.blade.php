@@ -22,7 +22,7 @@
 				</div>
 				<div class="form-group">
 					<button class="btn btn-success" type="submit">{{trans('app.labels.save')}}</button>
-					<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalChangePass">{{trans('account.labels.change_pass')}}</button>
+					<button class="btn btn-primary" type="button" data-toggle="modal" data-user_name="{{\Illuminate\Support\Facades\Auth::user()->name}}" data-user_id="{{\Illuminate\Support\Facades\Auth::id()}}" data-target="#modalChangePass">{{trans('account.labels.change_pass')}}</button>
 				</div>
 			</form>
 		</div>
@@ -42,8 +42,8 @@
 							<td>{{$accountUser->name}}</td>
 							<td>{{$accountUser->email}}</td>
 							<td>
-								<span class="cursor-pointer" data-user="{{$accountUser->name}}" data-category_id="{{$accountUser->id}}" data-toggle="modal" data-target="#deleteProvision">
-									<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-trash"></span>
+								<span class="cursor-pointer" data-user_name="{{$accountUser->name}}" data-user_id="{{$accountUser->id}}" data-toggle="modal" data-target="#modalChangePass">
+									<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-cog"></span>
 								</span>
 							</td>
 						</tr>
@@ -60,13 +60,13 @@
     <!-- Modal Change Pass -->
     <div class="modal fade" id="modalChangePass" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <form method="post" action="{{route('my_account.update', ['id' => \Illuminate\Support\Facades\Auth::id()])}}">
+            <form method="post" id="formUpdate" action="{{route('my_account.update', ['id' => ''])}}">
                 {{ csrf_field() }}
                 {{ method_field('put') }}
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">{{trans('account.labels.change_pass')}}</h4>
+                        <h4 class="modal-title" id="modalTitle">{{trans('account.labels.change_pass_to')}}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -98,7 +98,20 @@
     <script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#modalChangePass').modal({'backdrop': 'static', 'show': false});
+            //$('#modalChangePass').modal({'backdrop': 'static', 'show': false});
+            //Modal for Change Password
+            $('#modalChangePass').on('show.bs.modal', function (event) {
+                var span = $(event.relatedTarget); // Span that triggered the modal
+                var user_name = span.data('user_name'); // Extract info from data-* attributes
+                var user_id = span.data('user_id'); // Extract info from data-* attributes
+                var modal = $(this);
+
+                var base_title = modal.find('#modalTitle').html();
+                var url_action = modal.find('#formUpdate').attr('action');
+                console.log(url_action);
+                modal.find('#modalTitle').html(base_title + ' ' + user_name);
+                modal.find('#formUpdate').attr('action', url_action + '/' + user_id);
+            });
         });
     </script>
 @endsection

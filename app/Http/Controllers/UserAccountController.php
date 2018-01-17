@@ -26,16 +26,18 @@ class UserAccountController extends Controller
     }
 
 
-    public function update(UserRequest $request)
+    public function update(UserRequest $request, $userId)
     {
         /** @var User $user */
-        $user = Auth::user();
+
         if ($request->has('name')) {
+            $user = Auth::user();
             $user->name = $request->get('name');
             $user->save();
         }
 
         if ($request->has('password')) {
+            $user = User::find($userId);
             $this->resetPassword($user, $request->get('password'));
         }
 

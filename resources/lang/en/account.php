@@ -16,6 +16,7 @@ return [
     'labels' => [
         'account' => 'Account|Accounts',
         'change_pass' => 'Change Password',
+        'change_pass_to' => 'Change Password to',
         'email' => 'E-mail',
         'my_account' => 'My Account',
         'name' => 'Name',
