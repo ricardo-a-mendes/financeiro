@@ -25,11 +25,8 @@ class FinancialModel extends Model
     {
         $builder = $this->newQuery();
 
-        if (Schema::hasColumn($this->getTable(), 'user_id')) {
-            $builder->where(function ($query) {
-                $query->where('user_id', 1)//Admin Categories (Everybody must see)
-                ->orWhere('user_id', Auth::id());
-            });
+        if (Schema::hasColumn($this->getTable(), 'account_id')) {
+            $builder->where('account_id', Auth::user()->account->id);
         }
 
         if ($onlyActive && Schema::hasColumn($this->getTable(), 'status'))

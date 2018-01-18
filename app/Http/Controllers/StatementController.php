@@ -49,7 +49,7 @@ class StatementController extends Controller
             $accountId = Auth::user()->account->id;
 
             //Debit
-            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
+            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date); die;
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
 

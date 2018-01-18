@@ -180,6 +180,7 @@ class ImportController extends Controller
             } else {
                 $transactionReference = new $this->transactionReference;
                 $transactionReference->description = $transaction['description'];
+                $transactionReference->account_id = Auth::user()->account->id;
                 $transactionReference->user_id = Auth::id();
                 $transactionReference->save();
             }

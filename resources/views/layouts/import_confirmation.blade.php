@@ -22,9 +22,17 @@
 			</thead>
 			<tbody>
 			@forelse($enhancedTransactions as $enhancedTransaction)
+				@if(!$enhancedTransaction->existent_transaction)
 				<input type="hidden" name="transaction[{{$enhancedTransaction->uniqueId}}]" value="{{json_encode($enhancedTransaction)}}">
 				<tr>
-					<td><input type="checkbox" {{($enhancedTransaction->existent_transaction)?'disabled':'checked'}} name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+
+
+					@if($categories->has($enhancedTransaction->category_id))
+						<td><input type="checkbox" checked name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+					@else
+						<td><input type="checkbox" name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+					@endif
+
 					<td>{{$enhancedTransaction->date->format('d/m/Y')}}</td>
 
 					@if($enhancedTransaction->existent_transaction)
@@ -49,6 +57,7 @@
 
 					</td>
 				</tr>
+				@endif
 			@empty
 				<tr>
 					<td colspan="4">Nenhuma transação importada.</td>
