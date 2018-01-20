@@ -49,7 +49,7 @@ class StatementController extends Controller
             $accountId = Auth::user()->account->id;
 
             //Debit
-            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date); die;
+            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
             $totalDebit = $transaction->getTotal($statementDebit);
             $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
 
@@ -135,4 +135,47 @@ class StatementController extends Controller
         //Todo: Implement 'destroy' method (Delete Data)
     }
 
+    public function yearly()
+    {
+        $statementsDB = [];
+        $statements = [];
+        $yearMonths = [];
+        $accountId = Auth::user()->account->id;
+        $dateFormat = 'Y-m-d';
+        $startsAt = new Carbon("2017-10-01");
+        $endsAt = new Carbon("2018-09-30");
+
+        $statementsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, 2)");
+
+        foreach ($statementsCollection as $statementDB) {
+            $statementsDB[$statementDB->category_id][$statementDB->yearmonth] = $statementDB;
+        }
+
+        $startsAt->subMonth();
+        for($i = 0; $i < 12; $i++) {
+            $yearMonth = $startsAt->addMonth();
+            $yearMonths[$yearMonth->format('Ym')] = $yearMonth->format('M Y');
+        }
+
+        foreach ($statementsDB as $k => $statementDB) {
+            $statements[$k] = $statementDB;
+            foreach ($yearMonths as $yearMonth => $yearMonthDescription) {
+                if (!key_exists($yearMonth, $statementDB)) {
+                    $statements[$k][$yearMonth] = [];
+                }
+            }
+        }
+        $categories = $this->category->getCombo();
+        $totalCreditProvision = $totalDebitProvision = $totalCredit = $totalDebit = $monthToAdd = 0;
+        return view('layouts.statement_yearly', compact(
+            'yearMonths',
+            'statements',
+            'totalCreditProvision',
+            'totalCredit',
+            'totalDebitProvision',
+            'totalDebit',
+            'monthToAdd',
+            'categories'
+        ));
+    }
 }
