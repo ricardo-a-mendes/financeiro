@@ -26,19 +26,24 @@ class StatementController extends Controller
      * @var TransactionType
      */
     private $transactionType;
+    /**
+     * @var Transaction
+     */
+    private $transaction;
 
-    public function __construct(Category $category, Account $account, TransactionType $transactionType)
+    public function __construct(Category $category, Account $account, Transaction $transaction, TransactionType $transactionType)
     {
         $this->category = $category;
         $this->account = $account;
+        $this->transaction = $transaction;
         $this->transactionType = $transactionType;
     }
 
-    public function index(Transaction $transaction, $monthToAdd = 0)
+    public function index($monthToAdd = 0)
     {
         try {
             $date = new Carbon();
-
+            $transaction = $this->transaction;
             $monthToAdd = (int )$monthToAdd;
 
             if ($monthToAdd !== 0)
@@ -137,39 +142,35 @@ class StatementController extends Controller
 
     public function yearly()
     {
-        $statementsDB = [];
-        $statements = [];
         $yearMonths = [];
         $accountId = Auth::user()->account->id;
         $dateFormat = 'Y-m-d';
         $startsAt = new Carbon("2017-10-01");
-        $endsAt = new Carbon("2018-09-30");
+        $endsAt = new Carbon("2017-10-01");
 
-        $statementsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, 2)");
-
-        foreach ($statementsCollection as $statementDB) {
-            $statementsDB[$statementDB->category_id][$statementDB->yearmonth] = $statementDB;
-        }
-
-        $startsAt->subMonth();
+        $endsAt->subMonth();
         for($i = 0; $i < 12; $i++) {
-            $yearMonth = $startsAt->addMonth();
+            $yearMonth = $endsAt->addMonth();
             $yearMonths[$yearMonth->format('Ym')] = $yearMonth->format('M Y');
         }
 
-        foreach ($statementsDB as $k => $statementDB) {
-            $statements[$k] = $statementDB;
-            foreach ($yearMonths as $yearMonth => $yearMonthDescription) {
-                if (!key_exists($yearMonth, $statementDB)) {
-                    $statements[$k][$yearMonth] = [];
-                }
-            }
-        }
+        //$creditsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, ".Transaction::STATEMENT_CREDIT.")");
+        $creditsCollection = $this->transaction->getCreditTransactions($startsAt, $endsAt, $accountId);
+        $creditStatementsDB = $this->indexStatement($creditsCollection);
+        $creditStatements = $this->doPivot($creditStatementsDB, $yearMonths);
+
+        //$debitsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, ".Transaction::STATEMENT_DEBIT.")");
+        $debitsCollection = $this->transaction->getDebitTransactions($startsAt, $endsAt, $accountId);
+        $debitStatementsDB = $this->indexStatement($debitsCollection);
+        $debitStatements = $this->doPivot($debitStatementsDB, $yearMonths);
+
         $categories = $this->category->getCombo();
         $totalCreditProvision = $totalDebitProvision = $totalCredit = $totalDebit = $monthToAdd = 0;
+
         return view('layouts.statement_yearly', compact(
             'yearMonths',
-            'statements',
+            'creditStatements',
+            'debitStatements',
             'totalCreditProvision',
             'totalCredit',
             'totalDebitProvision',
@@ -177,5 +178,41 @@ class StatementController extends Controller
             'monthToAdd',
             'categories'
         ));
+    }
+
+    /**
+     * Do index to the statement collection
+     *
+     * @param $statementCollection
+     * @return array
+     */
+    private function indexStatement($statementCollection)
+    {
+        $indexedStatement = [];
+        foreach ($statementCollection as $transaction) {
+            $indexedStatement[$transaction->category_id][$transaction->yearmonth] = $transaction;
+        }
+        return $indexedStatement;
+    }
+
+    /**
+     * Do the Pivot
+     *
+     * @param $collection
+     * @param $pivotBase
+     * @return array
+     */
+    protected function doPivot($collection, $pivotBase)
+    {
+        $output = [];
+        foreach ($collection as $k => $data) {
+            $output[$k] = $data;
+            foreach ($pivotBase as $pivotKey => $pivotDescription) {
+                if (!key_exists($pivotKey, $data)) {
+                    $output[$k][$pivotKey] = [];
+                }
+            }
+        }
+        return $output;
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Model;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +17,7 @@ class Transaction extends Model
     const TOTAL_TYPE_VALUE = 'value';
     const TOTAL_TYPE_POSTED = 'posted_value';
     const TOTAL_TYPE_PROVISION = 'provision_value';
+    const STATEMENT_DB_DATE_FORMAT = 'Y-m-d';
 
     public $provision;
     public $transaction;
@@ -49,6 +52,25 @@ class Transaction extends Model
         return date('d/m/Y', strtotime($this->transaction_date));
     }
 
+    public function getDebitTransactions(Carbon $startsAt, Carbon $endsAt, int $accountId)
+    {
+        return $this->getTransactions($startsAt, $endsAt, $accountId, self::STATEMENT_DEBIT);
+    }
+
+    public function getCreditTransactions(Carbon $startsAt, Carbon $endsAt, int $accountId)
+    {
+        return $this->getTransactions($startsAt, $endsAt, $accountId, self::STATEMENT_CREDIT);
+    }
+
+    private function getTransactions(Carbon $startsAt, Carbon $endsAt, int $accountId, int $transactionType)
+    {
+        return DB::select("CALL sp_statement(?, ?, ?, ?)", [
+                $startsAt->format(self::STATEMENT_DB_DATE_FORMAT),
+                $endsAt->format(self::STATEMENT_DB_DATE_FORMAT),
+                $accountId,
+                $transactionType
+            ]);
+    }
     public function getStatement(int $accountID, string $type, \DateTime $date = null)
     {
         if (!in_array($type, [self::STATEMENT_CREDIT, self::STATEMENT_DEBIT]))

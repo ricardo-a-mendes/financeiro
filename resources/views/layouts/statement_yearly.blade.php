@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
 
 
             <div class="row">
@@ -24,13 +24,21 @@
                     {{--<tr>--}}
                         {{--<td colspan="3"></td>--}}
                     {{--</tr>--}}
-                    {{--<tr class="success">--}}
-                        {{--<th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>--}}
+                    <tr class="success">
+                        <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
                         {{--<th>{{Number::formatCurrency($totalCreditProvision)}}</th>--}}
                         {{--<th>{{Number::formatCurrency($totalCredit)}}</th>--}}
-                    {{--</tr>--}}
-                    {{--@foreach($statementCredit as $creditItem)--}}
-                        {{--<tr class="credit-rows">--}}
+                        @foreach($yearMonths as $yearMonth)
+                            <th>{{$yearMonth}}</th>
+                        @endforeach
+                    </tr>
+                    @foreach($creditStatements as $catId => $category)
+                        <tr class="credit-rows">
+                            <td>{{$categories[$catId]}}</td>
+                            @foreach($category as $yearMonth => $creditItem)
+                                @if(empty($creditItem))
+                                    <td>0.00</td>
+                                @else
                             {{--<td>--}}
                                  {{--<span data-month_to_add="{{$monthToAdd}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">--}}
                                     {{--<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>--}}
@@ -38,9 +46,11 @@
                                 {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>--}}
                             {{--</td>--}}
                             {{--<td>{{Number::formatCurrency($creditItem->provision_value)}}</td>--}}
-                            {{--<td>{{Number::formatCurrency($creditItem->posted_value)}}</td>--}}
-                        {{--</tr>--}}
-                    {{--@endforeach--}}
+                                <td>{{$creditItem->posted_value}}</td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endforeach
 
                     <tr class="danger">
                         <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
@@ -50,9 +60,11 @@
                             <th>{{$yearMonth}}</th>
                         @endforeach
                     </tr>
-                    @foreach($statements as $catId => $category)
+                    @foreach($debitStatements as $catId => $category)
                         <tr class="debit-rows">
-                            <td>{{$categories[$catId]}}</td>
+                            <td>
+                                {{$categories[$catId]}}
+                            </td>
                             @foreach($category as $yearMonth => $debitItem)
                                 @if(empty($debitItem))
                                     <td>0.00</td>
