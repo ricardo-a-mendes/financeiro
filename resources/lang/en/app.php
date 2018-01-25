@@ -61,8 +61,8 @@ return [
     ],
     'menu' => [
         'alerts' => 'Alerts',
-        'extract_yearly' => 'Yearly Extract',
-        'extract_monthly' => 'Monthly Extract',
+        'extract_yearly' => 'Yearly View',
+        'extract_monthly' => 'Monthly View',
         'login' => 'Login',
         'logout' => 'Logout',
         'register' => 'Register',

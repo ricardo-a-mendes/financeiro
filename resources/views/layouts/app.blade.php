@@ -60,7 +60,6 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{route('statement')}}">{{trans('app.menu.extract_monthly')}}</a></li>
                         <li><a href="{{route('statement.yearly')}}">{{trans('app.menu.extract_yearly')}}</a></li>
-                        <li><a href="{{route('statement')}}">{{trans('app.menu.statement')}}</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.menu.settings')}} <span class="caret"></span></a>
                             <ul class="dropdown-menu">

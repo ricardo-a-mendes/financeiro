@@ -1,10 +1,16 @@
 @extends('layouts.app')
-
+@section('css')
+    {{-- http://seiyria.com/bootstrap-slider/ --}}
+    <link href="{{ asset('/css/bootstrap-slider.min.css') }}" rel="stylesheet">
+@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
 
 
+            <div class="row">
+                <input style="background: #BABABA" id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+            </div>
             <div class="row">
 {{--                <h4>{{trans('app.labels.listed_month')}}: {{$statementDate}}</h4>--}}
                 <table class="table table-responsive table-hover">
@@ -28,6 +34,7 @@
                         <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
                         {{--<th>{{Number::formatCurrency($totalCreditProvision)}}</th>--}}
                         {{--<th>{{Number::formatCurrency($totalCredit)}}</th>--}}
+                        
                         @foreach($yearMonths as $yearMonth)
                             <th>{{$yearMonth}}</th>
                         @endforeach
@@ -46,7 +53,7 @@
                                 {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>--}}
                             {{--</td>--}}
                             {{--<td>{{Number::formatCurrency($creditItem->provision_value)}}</td>--}}
-                                <td>{{$creditItem->posted_value}}</td>
+                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$creditItem->posted_value}}</span></td>
                                 @endif
                             @endforeach
                         </tr>
@@ -56,15 +63,17 @@
                         <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
                         {{--<th>{{Number::formatCurrency($totalDebitProvision)}}</th>--}}
                         {{--<th>{{Number::formatCurrency($totalDebit)}}</th>--}}
+                        <th>&nbsp;</th>
                         @foreach($yearMonths as $yearMonth)
                             <th>{{$yearMonth}}</th>
                         @endforeach
                     </tr>
                     @foreach($debitStatements as $catId => $category)
                         <tr class="debit-rows">
-                            <td>
+                            <td rowspan="2">
                                 {{$categories[$catId]}}
                             </td>
+                            <td>Posted</td>
                             @foreach($category as $yearMonth => $debitItem)
                                 @if(empty($debitItem))
                                     <td>0.00</td>
@@ -75,7 +84,26 @@
                                     {{--</span>--}}
                                     {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>--}}
                                 {{--</td>--}}
-                                <td>{{$debitItem->posted_value}}</td>
+                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$debitItem->posted_value}}</span></td>
+                                {{--<td><a href="http://localhost:8383/details/{{$debitItem->year}}/{{$debitItem->month}}/{{$debitItem->category_id}}">{{$debitItem->posted_value}}</a></td>--}}
+                                {{--<td class="{{($debitItem->posted_value > $debitItem->provision_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>--}}
+                                @endif
+                            @endforeach
+                        </tr>
+                        <tr class="debit-rows">
+                            <td>Provision</td>
+                            @foreach($category as $yearMonth => $debitItem)
+                                @if(empty($debitItem))
+                                    <td>0.00</td>
+                                @else
+                                {{--<td>--}}
+                                    {{--<span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">--}}
+                                        {{--<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>--}}
+                                    {{--</span>--}}
+                                    {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>--}}
+                                {{--</td>--}}
+                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$debitItem->provision_value}}</span></td>
+                                {{--<td><a href="http://localhost:8383/details/{{$debitItem->year}}/{{$debitItem->month}}/{{$debitItem->category_id}}">{{$debitItem->posted_value}}</a></td>--}}
                                 {{--<td class="{{($debitItem->posted_value > $debitItem->provision_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>--}}
                                 @endif
                             @endforeach
@@ -133,27 +161,27 @@
     {{--</div>--}}
 
     <!-- Modal Category Details -->
-    {{--<div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">--}}
-        {{--<div class="modal-dialog" role="document">--}}
-            {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--}}
-                    {{--<h4 class="modal-title" id="myModalLabel">Modal title</h4>--}}
-                {{--</div>--}}
-                {{--<div class="modal-body">--}}
-                    {{--<p>{{trans('app.labels.loading')}}...</p>--}}
-                    {{--<div class="progress">--}}
-                        {{--<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">--}}
-                            {{--<span class="sr-only">50% Complete</span>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="modal-footer">--}}
-                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
+    <div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="modalDetailsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{trans('app.labels.loading')}}...</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                            <span class="sr-only">50% Complete</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal New Transaction -->
     {{--<div class="modal fade" id="modalNewTransaction" tabindex="-1" role="dialog" aria-labelledby="modalNewTransaction">--}}
@@ -222,8 +250,15 @@
     <script type="text/javascript" src="{{asset('js/bootstrap/modal.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/Highcharts-5.0.6/code/highcharts-3d.js')}}"></script>
+    <script type="text/javascript" src="{{asset('js/bootstrap-slider.min.js')}}"></script>
     <script type="text/javascript">
-        {{--$(function(){--}}
+        $(function(){
+
+            $('#ex1').slider({
+                formatter: function(value) {
+                    return 'Current value: ' + value;
+                }
+            });
             {{--//Upload Styled Input--}}
             {{--$(document).on('change', ':file', function() {--}}
                 {{--var input = $(this);--}}
@@ -238,19 +273,19 @@
                 {{--$('#import_file_form').submit();--}}
             {{--});--}}
 
-            {{--//Show/Hide details--}}
-            {{--$('#credit, #debit').on('click', function (){--}}
-                {{--var type = $(this)[0].id;--}}
-                {{--if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top cursor-pointer') {--}}
-                    {{--$('.'+type+'-rows').hide();--}}
-                    {{--$(this).removeClass('glyphicon-triangle-top');--}}
-                    {{--$(this).addClass('glyphicon-triangle-bottom');--}}
-                {{--} else {--}}
-                    {{--$('.'+type+'-rows').show();--}}
-                    {{--$(this).removeClass('glyphicon-triangle-bottom');--}}
-                    {{--$(this).addClass('glyphicon-triangle-top');--}}
-                {{--}--}}
-            {{--});--}}
+            //Show/Hide details
+            $('#credit, #debit').on('click', function (){
+                var type = $(this)[0].id;
+                if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top cursor-pointer') {
+                    $('.'+type+'-rows').hide();
+                    $(this).removeClass('glyphicon-triangle-top');
+                    $(this).addClass('glyphicon-triangle-bottom');
+                } else {
+                    $('.'+type+'-rows').show();
+                    $(this).removeClass('glyphicon-triangle-bottom');
+                    $(this).addClass('glyphicon-triangle-top');
+                }
+            });
 
             {{--//Modal for New Transaction--}}
             {{--$('#modalNewTransaction').on('show.bs.modal', function (event) {--}}
@@ -269,24 +304,24 @@
                 {{--modal.find('#myModalLabel').html(title + ' ' + transaction_type);--}}
             {{--});--}}
 
-            {{--//Modal for Transaction Details of a selected Category--}}
-            {{--$('#modalDetails').on('show.bs.modal', function (event) {--}}
-                {{--var span = $(event.relatedTarget); // Span that triggered the modal--}}
-                {{--var category = span.data('category'); // Extract info from data-* attributes--}}
-                {{--var category_id = span.data('category_id'); // Extract info from data-* attributes--}}
-                {{--var monthToAdd = span.data('month_to_add'); // Extract info from data-* attributes--}}
-                {{--var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';--}}
+            //Modal for Transaction Details of a selected Category
+            $('#modalDetails').on('show.bs.modal', function (event) {
+                var span = $(event.relatedTarget); // Span that triggered the modal
+                var category = span.data('category'); // Extract info from data-* attributes
+                var category_id = span.data('category_id'); // Extract info from data-* attributes
+                var monthToAdd = span.data('month_to_add'); // Extract info from data-* attributes
+                var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';
 
-                {{--var modal = $(this);--}}
-                {{--modal.find('.modal-title').text('{{trans('category.labels.details_of')}} "' + category + '"');--}}
+                var modal = $(this);
+                modal.find('.modal-title').text('{{trans('category.labels.details_of')}} "' + category + '"');
 
-                {{--$.ajax({--}}
-                    {{--url: url_details+'/'+category_id+'/'+monthToAdd,--}}
-                    {{--success: function (tableDetails) {--}}
-                        {{--modal.find('.modal-body').html(tableDetails);--}}
-                    {{--}--}}
-                {{--});--}}
-            {{--}).modal({'backdrop': 'static', 'show': false});--}}
+                $.ajax({
+                    url: url_details+'/'+category_id+'/'+monthToAdd,
+                    success: function (tableDetails) {
+                        modal.find('.modal-body').html(tableDetails);
+                    }
+                });
+            }).modal({'backdrop': 'static', 'show': false});
 
             {{--var myChart = Highcharts.chart('MyChart', {--}}
                 {{--chart: {--}}
@@ -342,6 +377,6 @@
             {{--});--}}
 
             {{--$('.highcharts-credits').hide();--}}
-        {{--});--}}
+        });
     </script>
 @endsection
