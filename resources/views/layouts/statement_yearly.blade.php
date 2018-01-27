@@ -2,109 +2,113 @@
 @section('css')
     {{-- http://seiyria.com/bootstrap-slider/ --}}
     <link href="{{ asset('/css/bootstrap-slider.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        .slider.slider-horizontal {
+            width: 800px;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
-
-
+            <div id="MyChart"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="row">
-                <input style="background: #BABABA" id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                <form method="post" id="formMonthsToAdd" action="{{route('statement.yearly.filter')}}">
+                    {{csrf_field()}}
+                    <input name="monthsToAdd" style="background: #BABABA" id="ex1" data-slider-id='ex1Slider' type="text"
+                           data-slider-min="1"
+                           data-slider-max="12"
+                           data-slider-step="1"
+                           data-slider-value="{{$sliderPosition}}"
+                           data-slider-ticks="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                           data-slider-ticks-labels="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+                    />
+                </form>
             </div>
             <div class="row">
-{{--                <h4>{{trans('app.labels.listed_month')}}: {{$statementDate}}</h4>--}}
                 <table class="table table-responsive table-hover">
-                    {{--<thead>--}}
-                    {{--<tr>--}}
-                        {{--<th style="width: 50%">&nbsp;</th>--}}
-                        {{--<th style="width: 25%">{{trans('provision.labels.provisioned')}}</th>--}}
-                        {{--<th style="width: 25%">{{trans('provision.labels.posted')}}</th>--}}
-                    {{--</tr>--}}
-                    {{--</thead>--}}
                     <tbody>
-                    {{--<tr>--}}
-                        {{--<th>{{trans('app.labels.balance')}}</th>--}}
-                        {{--<th class="{{($totalCreditProvision-$totalDebitProvision >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCreditProvision-$totalDebitProvision >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCreditProvision-$totalDebitProvision)}}</th>--}}
-                        {{--<th class="{{($totalCredit-$totalDebit >= 0)?'success text-green':'danger text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit-$totalDebit >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit-$totalDebit)}}</th>--}}
-                    {{--</tr>--}}
-                    {{--<tr>--}}
-                        {{--<td colspan="3"></td>--}}
-                    {{--</tr>--}}
-                    <tr class="success">
-                        <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
-                        {{--<th>{{Number::formatCurrency($totalCreditProvision)}}</th>--}}
-                        {{--<th>{{Number::formatCurrency($totalCredit)}}</th>--}}
-                        
-                        @foreach($yearMonths as $yearMonth)
-                            <th>{{$yearMonth}}</th>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                            <th>{{$yearMonthDescription}}</th>
                         @endforeach
                     </tr>
-                    @foreach($creditStatements as $catId => $category)
+                    <tr>
+                        <th>{{trans('app.labels.balance')}}</th>
+                        <th>&nbsp;</th>
+                        @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                            <th class="{{($totalCredit[$yearMonth]-$totalDebit[$yearMonth] >= 0)?'success text-green':'danger  text-red'}}"><span class="glyphicon glyphicon-thumbs-{{($totalCredit[$yearMonth]-$totalDebit[$yearMonth] >= 0)?'up':'down'}}"></span> {{Number::formatCurrency($totalCredit[$yearMonth]-$totalDebit[$yearMonth])}}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <td colspan="{{count($yearMonths)+2}}"></td>
+                    </tr>
+                    <tr class="success">
+                        <th><span id="credit" class="glyphicon glyphicon-triangle-bottom cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
+                        <th>&nbsp;</th>
+                        @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                            <th>{{Number::formatCurrency($totalCredit[$yearMonth])}}</th>
+                        @endforeach
+                    </tr>
+
+                    @foreach($creditStatements as $catId => $statements)
                         <tr class="credit-rows">
-                            <td>{{$categories[$catId]}}</td>
-                            @foreach($category as $yearMonth => $creditItem)
-                                @if(empty($creditItem))
+                            <td rowspan="2">{{$categories[$catId]}}</td>
+                            <td>Posted</td>
+                            @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                                @if(is_null($statements[$yearMonth]->category_id))
                                     <td>0.00</td>
                                 @else
-                            {{--<td>--}}
-                                 {{--<span data-month_to_add="{{$monthToAdd}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">--}}
-                                    {{--<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>--}}
-                                {{--</span>--}}
-                                {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>--}}
-                            {{--</td>--}}
-                            {{--<td>{{Number::formatCurrency($creditItem->provision_value)}}</td>--}}
-                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$creditItem->posted_value}}</span></td>
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->posted_value)}}</span></td>
+                                @endif
+                            @endforeach
+                        </tr>
+                        <tr class="credit-rows">
+                            <td>Provision</td>
+                            @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                                @if(is_null($statements[$yearMonth]->category_id))
+                                    <td>0.00</td>
+                                @else
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provision_value)}}</span></td>
                                 @endif
                             @endforeach
                         </tr>
                     @endforeach
 
                     <tr class="danger">
-                        <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
-                        {{--<th>{{Number::formatCurrency($totalDebitProvision)}}</th>--}}
-                        {{--<th>{{Number::formatCurrency($totalDebit)}}</th>--}}
+                        <th><span id="debit" class="glyphicon glyphicon-triangle-bottom cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
                         <th>&nbsp;</th>
-                        @foreach($yearMonths as $yearMonth)
-                            <th>{{$yearMonth}}</th>
+                        @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                            <th>{{Number::formatCurrency($totalDebit[$yearMonth])}}</th>
                         @endforeach
                     </tr>
-                    @foreach($debitStatements as $catId => $category)
+                    @foreach($debitStatements as $catId => $statements)
                         <tr class="debit-rows">
                             <td rowspan="2">
                                 {{$categories[$catId]}}
                             </td>
                             <td>Posted</td>
-                            @foreach($category as $yearMonth => $debitItem)
-                                @if(empty($debitItem))
-                                    <td>0.00</td>
+                            @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                                @if(is_null($statements[$yearMonth]->category_id))
+                                    <td>$ 0.00</td>
                                 @else
-                                {{--<td>--}}
-                                    {{--<span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">--}}
-                                        {{--<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>--}}
-                                    {{--</span>--}}
-                                    {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>--}}
-                                {{--</td>--}}
-                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$debitItem->posted_value}}</span></td>
-                                {{--<td><a href="http://localhost:8383/details/{{$debitItem->year}}/{{$debitItem->month}}/{{$debitItem->category_id}}">{{$debitItem->posted_value}}</a></td>--}}
-                                {{--<td class="{{($debitItem->posted_value > $debitItem->provision_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>--}}
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->posted_value)}}</span></td>
                                 @endif
                             @endforeach
                         </tr>
                         <tr class="debit-rows">
                             <td>Provision</td>
-                            @foreach($category as $yearMonth => $debitItem)
-                                @if(empty($debitItem))
-                                    <td>0.00</td>
+                            @foreach($yearMonths as $yearMonth => $yearMonthDescription)
+                                @if(is_null($statements[$yearMonth]->category_id))
+                                    <td>$ 0.00</td>
                                 @else
-                                {{--<td>--}}
-                                    {{--<span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">--}}
-                                        {{--<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>--}}
-                                    {{--</span>--}}
-                                    {{--<a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>--}}
-                                {{--</td>--}}
-                                <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">{{$debitItem->provision_value}}</span></td>
-                                {{--<td><a href="http://localhost:8383/details/{{$debitItem->year}}/{{$debitItem->month}}/{{$debitItem->category_id}}">{{$debitItem->posted_value}}</a></td>--}}
-                                {{--<td class="{{($debitItem->posted_value > $debitItem->provision_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>--}}
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provision_value)}}</span></td>
                                 @endif
                             @endforeach
                         </tr>
@@ -114,9 +118,7 @@
             </div>
 
         </div>
-        <div class="col-md-5">
-            <div id="MyChart"></div>
-        </div>
+
     </div>
 
     <!-- Modal Import Statement Files -->
@@ -258,6 +260,9 @@
                 formatter: function(value) {
                     return 'Current value: ' + value;
                 }
+            }).on('slideStop', function (slider) {
+                console.log(slider.value);
+                $('#formMonthsToAdd').submit();
             });
             {{--//Upload Styled Input--}}
             {{--$(document).on('change', ':file', function() {--}}
@@ -273,10 +278,14 @@
                 {{--$('#import_file_form').submit();--}}
             {{--});--}}
 
+            $('.debit-rows').hide();
+            $('.credit-rows').hide();
+
             //Show/Hide details
             $('#credit, #debit').on('click', function (){
                 var type = $(this)[0].id;
-                if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top cursor-pointer') {
+
+                if ($(this).attr('class') == 'glyphicon cursor-pointer glyphicon-triangle-top') {
                     $('.'+type+'-rows').hide();
                     $(this).removeClass('glyphicon-triangle-top');
                     $(this).addClass('glyphicon-triangle-bottom');
@@ -322,6 +331,78 @@
                     }
                 });
             }).modal({'backdrop': 'static', 'show': false});
+
+            var incomeData = {{$totalCreditGraph}};
+
+            console.log(incomeData);
+
+            var expansesData = [
+                [201710, 2.62],
+                [201711, 2.41],
+                [201712, 2.05],
+                [201801, 1.7],
+                [201802, 1.1],
+                [201803, 0]
+            ];
+
+            console.log(expansesData);
+
+            var provisionData = [
+                [201710, 2.3],
+                [201711, 2],
+                [201712, 1.85],
+                [201801, 1.49],
+                [201802, 1.08],
+                [201803, 2.39],
+            ];
+
+            Highcharts.chart('MyChart', {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'General vision over the time'
+                },
+                subtitle: {
+                    text: 'Credit X Debit X Provision'
+                },
+                xAxis: {
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Amount ({{trans('app.labels.currency_symbol')}})'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+                },
+
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            enabled: true
+                        }
+                    }
+                },
+
+                series: [{
+                    name: '{{trans('app.labels.income')}}',
+                    color: 'green',
+                    data: incomeData
+                }, {
+                    name: '{{trans('app.labels.expenses')}}',
+                    color: 'red',
+                    data: expansesData
+                }, {
+                    name: '{{trans('provision.labels.provisioned')}}',
+                    color: 'orange',
+                    data: provisionData
+                }]
+            });
 
             {{--var myChart = Highcharts.chart('MyChart', {--}}
                 {{--chart: {--}}
@@ -376,7 +457,7 @@
                 {{--}]--}}
             {{--});--}}
 
-            {{--$('.highcharts-credits').hide();--}}
+            $('.highcharts-credits').hide();
         });
     </script>
 @endsection

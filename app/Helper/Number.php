@@ -4,16 +4,18 @@ namespace App\Helper;
 
 class Number
 {
-    public static function formatCurrency($value, $locale = 'ca')
+    public static function formatCurrency($value, $showCurrency = false, $locale = 'ca')
     {
-        $currency = 'CAD';
+        $localeCurrency = 'CAD';
         $decimal = '.';
         $thousand = ',';
         if ($locale == 'br') {
-            $currency = 'R';
+            $localeCurrency = 'R';
             $decimal = ',';
             $thousand = '.';
         }
+
+        $currency = $showCurrency ? $localeCurrency : '';
 
         return $currency . '$ ' . number_format($value, 2, $decimal, $thousand);
     }

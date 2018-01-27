@@ -67,7 +67,7 @@
                         <td colspan="3"></td>
                     </tr>
                     <tr class="success">
-                        <th><span id="credit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.credit')}}</th>
+                        <th><span id="credit" class="glyphicon cursor-pointer glyphicon-triangle-top">&nbsp;</span>{{trans('transaction.credit')}}</th>
                         <th>{{Number::formatCurrency($totalCreditProvision)}}</th>
                         <th>{{Number::formatCurrency($totalCredit)}}</th>
                     </tr>
@@ -85,7 +85,7 @@
                     @endforeach
 
                     <tr class="danger">
-                        <th><span id="debit" class="glyphicon glyphicon-triangle-top cursor-pointer">&nbsp;</span>{{trans('transaction.debit')}}</th>
+                        <th><span id="debit" class="glyphicon cursor-pointer glyphicon-triangle-top">&nbsp;</span>{{trans('transaction.debit')}}</th>
                         <th>{{Number::formatCurrency($totalDebitProvision)}}</th>
                         <th>{{Number::formatCurrency($totalDebit)}}</th>
                     </tr>
@@ -261,7 +261,7 @@
             //Show/Hide details
             $('#credit, #debit').on('click', function (){
                 var type = $(this)[0].id;
-                if ($(this).attr('class') == 'glyphicon glyphicon-triangle-top cursor-pointer') {
+                if ($(this).attr('class') == 'glyphicon cursor-pointer glyphicon-triangle-top') {
                     $('.'+type+'-rows').hide();
                     $(this).removeClass('glyphicon-triangle-top');
                     $(this).addClass('glyphicon-triangle-bottom');

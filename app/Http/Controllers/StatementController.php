@@ -8,6 +8,7 @@ use App\Model\Category;
 use App\Model\Transaction;
 use App\Model\TransactionType;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use League\Flysystem\Exception;
@@ -140,32 +141,59 @@ class StatementController extends Controller
         //Todo: Implement 'destroy' method (Delete Data)
     }
 
-    public function yearly()
+    public function yearly(Request $request)
     {
         $yearMonths = [];
+        $totalCredit = [];
+        $totalDebit = [];
         $accountId = Auth::user()->account->id;
         $dateFormat = 'Y-m-d';
         $startsAt = new Carbon("2017-10-01");
         $endsAt = new Carbon("2017-10-01");
 
+        $empty = new \stdClass();
+        $empty->yearmonth = null;
+        $empty->year = null;
+        $empty->month = null;
+        $empty->category_id = null;
+        $empty->category = null;
+        $empty->provision_value = 0.00;
+        $empty->posted_value = 0.00;
+
+        $monthsToShow = $request->get('monthsToAdd') ?: 6;
+        $sliderPosition = $request->get('monthsToAdd') ?: 6;
+
         $endsAt->subMonth();
-        for($i = 0; $i < 12; $i++) {
+        for($i = 0; $i < $monthsToShow; $i++) {
             $yearMonth = $endsAt->addMonth();
             $yearMonths[$yearMonth->format('Ym')] = $yearMonth->format('M Y');
+            $totalCredit[$yearMonth->format('Ym')] = 0;
+            $totalDebit[$yearMonth->format('Ym')] = 0;
         }
 
-        //$creditsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, ".Transaction::STATEMENT_CREDIT.")");
         $creditsCollection = $this->transaction->getCreditTransactions($startsAt, $endsAt, $accountId);
+        foreach ($creditsCollection as $creditTransaction) {
+            $totalCredit[$creditTransaction->yearmonth] += $creditTransaction->posted_value;
+        }
+        foreach ($totalCredit as $yearmonth => $totalCreditItem) {
+            //$d = \DateTime::createFromFormat('Ym', $yearmonth);
+            //$totalCreditGraph[] = "{$d->format('M')}, {$totalCreditItem}";
+            $totalCreditGraph[] = [(int)$yearmonth, $totalCreditItem];
+        }
+        //$totalCreditGraph = '['.implode('],[', $totalCreditGraph).']';
+        $totalCreditGraph = json_encode($totalCreditGraph);
         $creditStatementsDB = $this->indexStatement($creditsCollection);
-        $creditStatements = $this->doPivot($creditStatementsDB, $yearMonths);
+        $creditStatements = $this->doPivot($creditStatementsDB, $yearMonths, $empty);
 
-        //$debitsCollection = DB::select("CALL sp_statement('{$startsAt->format($dateFormat)}', '{$endsAt->format($dateFormat)}', {$accountId}, ".Transaction::STATEMENT_DEBIT.")");
         $debitsCollection = $this->transaction->getDebitTransactions($startsAt, $endsAt, $accountId);
+        foreach ($debitsCollection as $debitTransaction) {
+            $totalDebit[$debitTransaction->yearmonth] += $debitTransaction->posted_value;
+        }
         $debitStatementsDB = $this->indexStatement($debitsCollection);
-        $debitStatements = $this->doPivot($debitStatementsDB, $yearMonths);
+        $debitStatements = $this->doPivot($debitStatementsDB, $yearMonths, $empty);
 
         $categories = $this->category->getCombo();
-        $totalCreditProvision = $totalDebitProvision = $totalCredit = $totalDebit = $monthToAdd = 0;
+        $totalCreditProvision = $totalDebitProvision = $monthToAdd = 0;
 
         return view('layouts.statement_yearly', compact(
             'yearMonths',
@@ -173,10 +201,12 @@ class StatementController extends Controller
             'debitStatements',
             'totalCreditProvision',
             'totalCredit',
+            'totalCreditGraph',
             'totalDebitProvision',
             'totalDebit',
             'monthToAdd',
-            'categories'
+            'categories',
+            'sliderPosition'
         ));
     }
 
@@ -200,16 +230,17 @@ class StatementController extends Controller
      *
      * @param $collection
      * @param $pivotBase
+     * @param array $empty
      * @return array
      */
-    protected function doPivot($collection, $pivotBase)
+    protected function doPivot($collection, $pivotBase, $empty = [])
     {
         $output = [];
         foreach ($collection as $k => $data) {
             $output[$k] = $data;
             foreach ($pivotBase as $pivotKey => $pivotDescription) {
                 if (!key_exists($pivotKey, $data)) {
-                    $output[$k][$pivotKey] = [];
+                    $output[$k][$pivotKey] = $empty;
                 }
             }
         }

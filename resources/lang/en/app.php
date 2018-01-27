@@ -41,6 +41,7 @@ return [
         'listed_month' => 'Listed Month',
         'listed_year' => 'Listed Year',
         'loading' => 'Loading',
+        'month' => 'Month',
         'monthly' => 'Monthly',
         'next' => 'Next',
         'password' => 'Password',
