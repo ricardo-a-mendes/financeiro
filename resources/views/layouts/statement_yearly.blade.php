@@ -332,28 +332,25 @@
                 });
             }).modal({'backdrop': 'static', 'show': false});
 
-            var incomeData = {{$totalCreditGraph}};
 
-            console.log(incomeData);
+            var incomeData = {!! $totalsCreditGraph !!};
 
             var expansesData = [
-                [201710, 2.62],
-                [201711, 2.41],
-                [201712, 2.05],
-                [201801, 1.7],
-                [201802, 1.1],
-                [201803, 0]
+                ['Oct', 2000.62],
+                ['Nov', 2000.41],
+                ['Dec', 1285.05],
+                ['Jan', 1349.7],
+                ['Feb', 1408.1],
+                ['Mar', 2539]
             ];
 
-            console.log(expansesData);
-
             var provisionData = [
-                [201710, 2.3],
-                [201711, 2],
-                [201712, 1.85],
-                [201801, 1.49],
-                [201802, 1.08],
-                [201803, 2.39],
+                ['Oct', 2100],
+                ['Nov', 2100],
+                ['Dec', 2200],
+                ['Jan', 1300],
+                ['Feb', 3000],
+                ['Mar', 2539]
             ];
 
             Highcharts.chart('MyChart', {

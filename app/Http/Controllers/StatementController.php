@@ -146,6 +146,7 @@ class StatementController extends Controller
         $yearMonths = [];
         $totalCredit = [];
         $totalDebit = [];
+        $totalsCreditGraph = [];
         $accountId = Auth::user()->account->id;
         $dateFormat = 'Y-m-d';
         $startsAt = new Carbon("2017-10-01");
@@ -176,12 +177,12 @@ class StatementController extends Controller
             $totalCredit[$creditTransaction->yearmonth] += $creditTransaction->posted_value;
         }
         foreach ($totalCredit as $yearmonth => $totalCreditItem) {
-            //$d = \DateTime::createFromFormat('Ym', $yearmonth);
-            //$totalCreditGraph[] = "{$d->format('M')}, {$totalCreditItem}";
-            $totalCreditGraph[] = [(int)$yearmonth, $totalCreditItem];
+            $d = \DateTime::createFromFormat('Ym', $yearmonth);
+            $totalsCreditGraph[] = [$d->format('M') , $totalCreditItem];
         }
-        //$totalCreditGraph = '['.implode('],[', $totalCreditGraph).']';
-        $totalCreditGraph = json_encode($totalCreditGraph);
+
+        $totalsCreditGraph = json_encode($totalsCreditGraph);
+
         $creditStatementsDB = $this->indexStatement($creditsCollection);
         $creditStatements = $this->doPivot($creditStatementsDB, $yearMonths, $empty);
 
@@ -195,6 +196,18 @@ class StatementController extends Controller
         $categories = $this->category->getCombo();
         $totalCreditProvision = $totalDebitProvision = $monthToAdd = 0;
 
+        $a = [
+            ["Oct", 2000.62],
+            ["Nov", 2000.41],
+            ["Dec", 1285.05],
+            ["Jan", 1349.7],
+            ["Feb", 1408.1],
+            ["Mar", 2539]
+        ];
+
+        $a = json_encode($a);
+        //$a = [1, 2, 3];
+
         return view('layouts.statement_yearly', compact(
             'yearMonths',
             'creditStatements',
@@ -202,11 +215,13 @@ class StatementController extends Controller
             'totalCreditProvision',
             'totalCredit',
             'totalCreditGraph',
+            'totalsCreditGraph',
             'totalDebitProvision',
             'totalDebit',
             'monthToAdd',
             'categories',
-            'sliderPosition'
+            'sliderPosition',
+            'a'
         ));
     }
 
