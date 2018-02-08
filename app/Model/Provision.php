@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\FinancialModel;
 use Carbon\Carbon;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
 class Provision extends FinancialModel
@@ -56,10 +57,10 @@ class Provision extends FinancialModel
 				$join->where('categories.account_id', $accountID);
 				$join->on('categories.id', 'provisions.category_id');
 			})
-            ->leftJoin('transactions', function($join) use ($accountID, $startDate, $endDate){
+            ->leftJoin('transactions', function(JoinClause $join) use ($accountID, $startDate, $endDate){
                 $join->where('transactions.account_id', $accountID);
                 $join->on('transactions.category_id', 'categories.id');
-                $join->on('transactions.transaction_date', 'between', DB::raw("'{$startDate}' and '{$endDate}'"));
+                $join->whereBetween('transactions.transaction_date', ["'".$startDate."'","'".$endDate."'"]);
             })
             ->where('provisions.status', 1)
             ->where('provisions.account_id', $accountID)

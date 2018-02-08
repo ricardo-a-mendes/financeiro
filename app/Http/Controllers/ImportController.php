@@ -111,7 +111,7 @@ class ImportController extends Controller
 					'description' => $this->sanitize($transaction['description']),
 					'uniqueId' => $uniqueId,
 					'type' => ($value > 0) ? TransactionType::TRANSACTION_TYPE_CREDIT : TransactionType::TRANSACTION_TYPE_DEBIT,
-					'value' => abs($value),
+					'value' => abs($transaction['value']),
 					'date' => Carbon::createFromFormat('d/m/Y', $transaction['date']) // \DateTime()
 				];
 			}

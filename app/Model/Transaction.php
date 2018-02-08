@@ -114,7 +114,7 @@ class Transaction extends Model
 			})
             ->where('transactions.account_id', $accountID)
             ->where('transaction_type_id', $type)
-            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->whereBetween('transaction_date', ["'".$startDate."'", "'".$endDate."'"])
             ->groupBy('categories.id')
             ->groupBy('categories.name')
             ->union($provisionsWithoutTransaction);

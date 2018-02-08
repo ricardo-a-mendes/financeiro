@@ -18,32 +18,18 @@
                     </h3>
                 </div>
                 <div class="col-md-8">
-                    <nav class="navbar navbar-default">
-                        <div class="container-fluid">
-                            <!-- Collect the nav links, forms, and other content for toggling -->
-                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                                <ul class="nav navbar-nav">
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.labels.prior')}} <span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{route('statement', ['monthToAdd' => -1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-1 months'))}}</a></li>
-                                            <li><a href="{{route('statement', ['monthToAdd' => -2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-2 months'))}}</a></li>
-                                            <li><a href="{{route('statement', ['monthToAdd' => -3])}}">{{date('m-Y', strtotime(date('Y-m-d'). '-3 months'))}}</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="{{route('statement')}}">{{trans('app.labels.current_month')}} ({{date('m-Y')}})</a></li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.labels.next')}} <span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{route('statement', ['monthToAdd' => 1])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+1 months'))}}</a></li>
-                                            <li><a href="{{route('statement', ['monthToAdd' => 2])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+2 months'))}}</a></li>
-                                            <li><a href="{{route('statement', ['monthToAdd' => 3])}}">{{date('m-Y', strtotime(date('Y-m-d'). '+3 months'))}}</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div><!-- /.navbar-collapse -->
-                        </div><!-- /.container-fluid -->
-                    </nav>
+                    <h3>Select a month</h3>
+                    <form class="form" action="{{route('statement.monthly')}}" method="post">
+                        {{csrf_field()}}
+                    <div class="form-group">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <input type="month" class="form-control" name="yearMonth" id="yearMonth">
+                            </li>
+                            <li><button class="btn btn-primary" type="submit">Consultar</button></li>
+                        </ul>
+                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -74,7 +60,7 @@
                     @foreach($statementCredit as $creditItem)
                         <tr class="credit-rows">
                             <td>
-                                 <span data-month_to_add="{{$monthToAdd}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                 <span data-month_to_add="{{$yearMonth}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
@@ -92,7 +78,7 @@
                     @foreach($statementDebit as $debitItem)
                         <tr class="debit-rows">
                             <td>
-                                <span data-month_to_add="{{$monthToAdd}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                <span data-month_to_add="{{$yearMonth}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>

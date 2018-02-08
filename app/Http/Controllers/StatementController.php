@@ -40,19 +40,15 @@ class StatementController extends Controller
         $this->transactionType = $transactionType;
     }
 
-    public function index($monthToAdd = 0)
+    public function index(Request $request)
     {
         try {
-            $date = new Carbon();
-            $transaction = $this->transaction;
-            $monthToAdd = (int )$monthToAdd;
-
-            if ($monthToAdd !== 0)
-                $date->addMonth($monthToAdd);
-
+            $yearMonth = str_replace('-', '', $request->post('yearMonth'));
+            $date = $yearMonth ? Carbon::createFromFormat('Ym', $yearMonth) : new Carbon();
             $statementDate = $date->format('m-Y');
 
             $accountId = Auth::user()->account->id;
+            $transaction = $this->transaction;
 
             //Debit
             $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
@@ -85,7 +81,7 @@ class StatementController extends Controller
             'statementDate',
             'categories',
             'transactionTypes',
-            'monthToAdd'
+            'yearMonth'
         ));
     }
 
@@ -147,8 +143,8 @@ class StatementController extends Controller
         $totalCredit = [];
         $totalDebit = [];
         $totalsCreditGraph = [];
+        $totalsDebitGraph = [];
         $accountId = Auth::user()->account->id;
-        $dateFormat = 'Y-m-d';
         $startsAt = new Carbon("2017-10-01");
         $endsAt = new Carbon("2017-10-01");
 
@@ -181,8 +177,6 @@ class StatementController extends Controller
             $totalsCreditGraph[] = [$d->format('M') , $totalCreditItem];
         }
 
-        $totalsCreditGraph = json_encode($totalsCreditGraph);
-
         $creditStatementsDB = $this->indexStatement($creditsCollection);
         $creditStatements = $this->doPivot($creditStatementsDB, $yearMonths, $empty);
 
@@ -190,23 +184,17 @@ class StatementController extends Controller
         foreach ($debitsCollection as $debitTransaction) {
             $totalDebit[$debitTransaction->yearmonth] += $debitTransaction->posted_value;
         }
+
+        foreach ($totalDebit as $yearmonth => $totalDebitItem) {
+            $d = \DateTime::createFromFormat('Ym', $yearmonth);
+            $totalsDebitGraph[] = [$d->format('M') , $totalDebitItem];
+        }
+        
         $debitStatementsDB = $this->indexStatement($debitsCollection);
         $debitStatements = $this->doPivot($debitStatementsDB, $yearMonths, $empty);
 
         $categories = $this->category->getCombo();
         $totalCreditProvision = $totalDebitProvision = $monthToAdd = 0;
-
-        $a = [
-            ["Oct", 2000.62],
-            ["Nov", 2000.41],
-            ["Dec", 1285.05],
-            ["Jan", 1349.7],
-            ["Feb", 1408.1],
-            ["Mar", 2539]
-        ];
-
-        $a = json_encode($a);
-        //$a = [1, 2, 3];
 
         return view('layouts.statement_yearly', compact(
             'yearMonths',
@@ -218,10 +206,10 @@ class StatementController extends Controller
             'totalsCreditGraph',
             'totalDebitProvision',
             'totalDebit',
+            'totalsDebitGraph',
             'monthToAdd',
             'categories',
-            'sliderPosition',
-            'a'
+            'sliderPosition'
         ));
     }
 
