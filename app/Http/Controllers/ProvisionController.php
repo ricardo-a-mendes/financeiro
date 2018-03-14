@@ -96,10 +96,9 @@ class ProvisionController extends Controller
         $provision = $this->provision->find($id);
         $categories = $this->category->getCombo();
         $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
-        $hasSpecificProvision = ($provision->provisionDate->count() > 0) ? 'yes' : 'no';
         $method = 'PUT';
         $route = route('provision.update', ['id' => $id]);
-        return view('provision.store', compact('provision', 'hasSpecificProvision', 'categories', 'transactionTypes', 'method', 'route'));
+        return view('provision.store', compact('provision', 'categories', 'transactionTypes', 'method', 'route'));
     }
 
     public function update(ProvisionRequest $request, $id)

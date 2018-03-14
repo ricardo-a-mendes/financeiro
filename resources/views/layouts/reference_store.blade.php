@@ -18,7 +18,7 @@
 					<select name="category" class="form-control combo_category">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($categories as $categoryId => $categoryName)
-							<option {{($categoryId == old('category', $transactionReference->category->id))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
+							<option {{($categoryId == old('category', ($transactionReference->category->id) ?? -1))?'selected':''}} value="{{$categoryId}}">{{$categoryName}}</option>
 						@endforeach
 					</select>
 					<span data-toggle="modal" data-target="#modalNewCategory">

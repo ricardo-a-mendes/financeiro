@@ -189,7 +189,7 @@ class StatementController extends Controller
             $d = \DateTime::createFromFormat('Ym', $yearmonth);
             $totalsDebitGraph[] = [$d->format('M') , $totalDebitItem];
         }
-        
+
         $debitStatementsDB = $this->indexStatement($debitsCollection);
         $debitStatements = $this->doPivot($debitStatementsDB, $yearMonths, $empty);
 

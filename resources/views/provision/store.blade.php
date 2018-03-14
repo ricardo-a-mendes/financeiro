@@ -4,7 +4,7 @@
 
 	<form method="post" action="{{$route}}">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="category">{{trans_choice('category.labels.category',1)}}</label>
 					<select name="category" class="form-control">
@@ -15,7 +15,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="exampleInputEmail1">{{trans_choice('provision.labels.provision', 1)}}</label>
 					<div class="input-group">
@@ -27,7 +27,7 @@
 					{{ method_field($method) }}
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="transactionType">{{trans('transaction.labels.type')}}</label>
 					<select name="transactionType" class="form-control">
@@ -40,20 +40,21 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-4">
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" name="specific_provision_option" id="specific" value="yes" {{(old('specific_provision_option', $hasSpecificProvision)=='yes')? 'checked="checked"' : ''}}>
-						{{trans('provision.labels.new_specific_provision')}}
-					</label>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group" id="specific_date">
-					<label for="specific_date">{{trans('app.labels.date')}}</label>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="transactionPeriod">{{trans('provision.labels.start_at')}}</label>
 					<div class="input-group">
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="date" min="{{date('Y-m-d')}}" class="form-control" name="specific_date" value="{{$provision->specificDate}}">
+						<input type="month" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('start_at', date('Y-m', strtotime($provision->start_at)))}}">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="transactionPeriod">{{trans('provision.labels.valid_until')}}</label>
+					<div class="input-group">
+						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+						<input type="month" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('valid_until', date('Y-m', strtotime($provision->valid_until)))}}">
 					</div>
 				</div>
 			</div>
@@ -68,24 +69,4 @@
 		</div>
 	</form>
 
-@endsection
-@section('js')
-	<script type="text/javascript">
-		$(function () {
-
-			var toggle_checkbox = function(){
-				if ($('#specific').is(':checked'))
-					$('#specific_date').show();
-				else
-					$('#specific_date').hide();
-			};
-
-			//for initial state (even when repopulating after validation)
-			toggle_checkbox();
-
-			$('#specific').on('click', function () {
-				toggle_checkbox();
-			});
-		});
-	</script>
 @endsection

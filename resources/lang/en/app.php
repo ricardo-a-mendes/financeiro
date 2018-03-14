@@ -46,6 +46,7 @@ return [
         'next' => 'Next',
         'password' => 'Password',
         'password_confirmation' => 'Password Confirmation',
+        'period' => 'Period',
         'prior' => 'Prior',
         'save' => 'Save',
         'select' => 'Select',

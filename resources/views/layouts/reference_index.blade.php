@@ -20,7 +20,7 @@
 				<tr>
 					<td>{{$reference->id}}</td>
 					<td>{{$reference->description}}</td>
-					<td>{{$reference->category->name}}</td>
+					<td>{{($reference->category->name) ?? ''}}</td>
 					<td>
 						<a href="{{route('reference.edit', ['id' => $reference->id])}}" data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.edit')}}" class="deco-none glyphicon glyphicon-pencil"></a>
 						&nbsp;|&nbsp;
