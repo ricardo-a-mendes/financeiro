@@ -14,7 +14,7 @@
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
-					<label for="category">{{trans_choice('category.labels.category', 1)}}</label>
+					<label for="category">{{trans_choice('category.labels.category', 1)}}</label><br>
 					<select name="category" class="form-control combo_category">
 						<option value="invalid_option">{{trans('app.labels.select')}}</option>
 						@foreach($categories as $categoryId => $categoryName)

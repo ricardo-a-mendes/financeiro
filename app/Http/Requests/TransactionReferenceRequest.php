@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Model\TransactionReference;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TransactionReferenceRequest extends FormRequest
@@ -13,8 +14,8 @@ class TransactionReferenceRequest extends FormRequest
      */
     public function authorize()
     {
-        //TODO: Check if Transaction Reference belongs to user account
-        return true;
+        $reference = TransactionReference::find($this->route('reference'));
+        return $reference && $reference->account_id == $this->user()->account_id;
     }
 
     /**

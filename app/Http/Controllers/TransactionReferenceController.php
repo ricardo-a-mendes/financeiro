@@ -32,7 +32,7 @@ class TransactionReferenceController extends Controller
         return view('layouts.reference_index', compact('references'));
     }
 
-    public function edit($id)
+    public function edit(TransactionReferenceRequest $request, $id)
     {
         $categories = $this->category->getCombo();
         $transactionReference = $this->reference->find($id);
