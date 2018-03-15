@@ -113,6 +113,15 @@ class ProvisionController extends Controller
 
         $provision->value = $request->input('value');
 
+        $startAt = Carbon::createFromFormat('Y-m', $request->input('start_at'));
+        $startAt->day = 1;
+
+        $validUntil = Carbon::createFromFormat('Y-m', $request->input('valid_until'));
+        $validUntil->day = $validUntil->format('t');
+
+        $provision->start_at = $startAt->format('Y-m-d');
+        $provision->valid_until = $validUntil->format('Y-m-d');
+
         $provision->save();
 
         Session::flash('success', trans('provision.messages.updated_successfully'));

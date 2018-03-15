@@ -45,7 +45,7 @@
 					<label for="transactionPeriod">{{trans('provision.labels.start_at')}}</label>
 					<div class="input-group">
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="month" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('start_at', date('Y-m', strtotime($provision->start_at)))}}">
+						<input type="month" class="form-control" id="start_at" name="start_at" placeholder="{{trans('app.labels.value')}}" value="{{old('start_at', date('Y-m', strtotime($provision->start_at)))}}">
 					</div>
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 					<label for="transactionPeriod">{{trans('provision.labels.valid_until')}}</label>
 					<div class="input-group">
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="month" class="form-control" id="meta" name="value" placeholder="{{trans('app.labels.value')}}" value="{{old('valid_until', date('Y-m', strtotime($provision->valid_until)))}}">
+						<input type="month" class="form-control" id="valid_until" name="valid_until" placeholder="{{trans('app.labels.value')}}" value="{{old('valid_until', date('Y-m', strtotime($provision->valid_until)))}}">
 					</div>
 				</div>
 			</div>
