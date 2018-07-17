@@ -1,0 +1,7 @@
+FROM mysql:5.7.22
+
+RUN apt-get update -y
+RUN apt-get install vim -y
+RUN apt-get install iputils-ping -y
+
+EXPOSE 3306

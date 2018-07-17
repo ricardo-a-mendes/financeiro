@@ -8,6 +8,8 @@ RUN apt-get install wget -y
 RUN apt-get install zip -y
 RUN apt-get install unzip -y
 RUN apt-get install zlib1g-dev -y
+RUN apt-get install iputils-ping -y
+RUN apt-get install mysql-client -y
 
 #Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
