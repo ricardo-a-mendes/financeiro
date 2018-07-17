@@ -14,7 +14,7 @@ return [
     */
 
     'labels' => [
-        'reference' => 'Reference|References',
+        'reference' => 'Reference|References (Transactions X Categories)',
         '' => '',
         '' => '',
     ],
