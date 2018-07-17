@@ -43,7 +43,7 @@
 							<td>{{$accountUser->email}}</td>
 							<td>
 								<span class="cursor-pointer" data-user_name="{{$accountUser->name}}" data-user_id="{{$accountUser->id}}" data-toggle="modal" data-target="#modalChangePass">
-									<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.delete')}}" class="glyphicon glyphicon-cog"></span>
+									<span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.change_password')}}" class="glyphicon glyphicon-cog"></span>
 								</span>
 							</td>
 						</tr>
@@ -58,7 +58,7 @@
 	</div>
 
     <!-- Modal Change Pass -->
-    <div class="modal fade" id="modalChangePass" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modalChangePass" data-modal_title="{{trans('account.labels.change_pass_to')}}" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <form method="post" id="formUpdate" action="{{route('my_account.update', ['id' => ''])}}">
                 {{ csrf_field() }}
@@ -108,8 +108,9 @@
 
                 var base_title = modal.find('#modalTitle').html();
                 var url_action = modal.find('#formUpdate').attr('action');
-                console.log(url_action);
-                modal.find('#modalTitle').html(base_title + ' ' + user_name);
+                var modal_change_pass_label = $('#modalChangePass').data('modal_title');
+
+                modal.find('#modalTitle').html(modal_change_pass_label + ' ' + user_name);
                 modal.find('#formUpdate').attr('action', url_action + '/' + user_id);
             });
         });

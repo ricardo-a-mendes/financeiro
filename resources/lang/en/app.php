@@ -20,6 +20,7 @@ return [
         'browse_file' => 'Browse',
         'cancel' => 'Cancel',
         'close' => 'Close',
+        'change_password' => 'Change Password',
         'check_out_csv_model' => 'Check out the CSV file model',//Veja o modelo do arquivo CSV
         'comparative_graph' => 'Comparative Graph',
         'currency_symbol' => 'CAD$',
