@@ -90,16 +90,16 @@ class Transaction extends Model
                 sum(provisions.value)
             from 
                 provisions
-            left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.account_id = '.$accountID.'
+            -- left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.account_id = '.$accountID.'
                 
             where 
             	provisions.account_id = '.$accountID.'
                 and provisions.category_id = categories.id
-                and (
-                    provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
-                    or 
-                    provision_dates.id is null
-                )
+                -- and (
+                    -- provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
+                    -- or 
+                --    provision_dates.id is null
+                -- )
             ) as provision_value,
             sum(transactions.value) as posted_value'
         );

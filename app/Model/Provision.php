@@ -49,10 +49,10 @@ class Provision extends FinancialModel
         );
 
         return $this->select($fields)
-            ->leftJoin('provision_dates', function ($join) use ($accountID){
-				$join->where('provision_dates.account_id', $accountID);
-				$join->on('provision_dates.provision_id', 'provisions.id');
-			})
+//            ->leftJoin('provision_dates', function ($join) use ($accountID){
+//				$join->where('provision_dates.account_id', $accountID);
+//				$join->on('provision_dates.provision_id', 'provisions.id');
+//			})
             ->leftJoin('categories', function ($join) use ($accountID){
 				$join->where('categories.account_id', $accountID);
 				$join->on('categories.id', 'provisions.category_id');
@@ -66,11 +66,11 @@ class Provision extends FinancialModel
             ->where('provisions.account_id', $accountID)
             ->where('provisions.transaction_type_id', $type)
             ->whereNull('transactions.id')
-            ->whereRaw('(
-                provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\'
-                or 
-                provision_dates.id is null
-            )')
+//            ->whereRaw('(
+//                provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\'
+//                or
+//                provision_dates.id is null
+//            )')
             ->groupBy('categories.id')
             ->groupBy('categories.name');
     }
