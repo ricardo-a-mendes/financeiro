@@ -16,7 +16,7 @@ class Transaction extends Model
     const STATEMENT_DEBIT = 2;
     const TOTAL_TYPE_VALUE = 'value';
     const TOTAL_TYPE_POSTED = 'posted_value';
-    const TOTAL_TYPE_PROVISION = 'provision_value';
+    const TOTAL_TYPE_PROVISION = 'provisioned_value';
     const STATEMENT_DB_DATE_FORMAT = 'Y-m-d';
 
     public $provision;
@@ -71,55 +71,26 @@ class Transaction extends Model
                 $transactionType
             ]);
     }
-    public function getStatement(int $accountID, string $type, \DateTime $date = null)
+
+    /**
+     * @param int $accountID
+     * @param int $type
+     * @param Carbon|null $date
+     * @return mixed
+     */
+    public function getStatement(int $accountID, int $type, Carbon $date = null)
     {
         if (!in_array($type, [self::STATEMENT_CREDIT, self::STATEMENT_DEBIT]))
             throw new \InvalidArgumentException('Invalid Type');
 
 
         if (is_null($date))
-            $date = new \DateTime();
+            $date = new Carbon();
 
-        $startDate = $date->format('Y-m-01 00:00:00');
-        $endDate = $date->format('Y-m-t 23:59:59');
+        $startDate = Carbon::createFromFormat('Y-m-d', $date->format('Y-m-01'));
+        $endDate = Carbon::createFromFormat('Y-m-d', $date->format('Y-m-t'));
 
-        $fields = DB::raw('
-            categories.id,
-            categories.name as category,
-            (select 
-                sum(provisions.value)
-            from 
-                provisions
-            -- left join provision_dates on provision_dates.provision_id = provisions.id and provision_dates.account_id = '.$accountID.'
-                
-            where 
-            	provisions.account_id = '.$accountID.'
-                and provisions.category_id = categories.id
-                -- and (
-                    -- provision_dates.target_date between \''.$startDate.'\' and \''.$endDate.'\' 
-                    -- or 
-                --    provision_dates.id is null
-                -- )
-            ) as provision_value,
-            sum(transactions.value) as posted_value'
-        );
-
-        $provisionsWithoutTransaction = $this->provision->getWithoutTransaction($accountID, $type, $date);
-
-        $statements = $this->select($fields)
-            ->join('transaction_types', 'transaction_types.id', '=', 'transactions.transaction_type_id')
-            ->join('categories', function ($join) use ($accountID){
-				$join->where('categories.account_id', $accountID);
-				$join->on('categories.id', 'transactions.category_id');
-			})
-            ->where('transactions.account_id', $accountID)
-            ->where('transaction_type_id', $type)
-            ->whereBetween('transaction_date', ["'".$startDate."'", "'".$endDate."'"])
-            ->groupBy('categories.id')
-            ->groupBy('categories.name')
-            ->union($provisionsWithoutTransaction);
-
-        return $statements->get();
+        return $this->getTransactions($startDate, $endDate, $accountID, $type);
     }
 
     public function getTotal($statement, $type = self::TOTAL_TYPE_POSTED)

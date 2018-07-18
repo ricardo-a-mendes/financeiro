@@ -60,12 +60,12 @@
                     @foreach($statementCredit as $creditItem)
                         <tr class="credit-rows">
                             <td>
-                                 <span data-month_to_add="{{$yearMonth}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                 <span data-month_to_add="{{$yearMonth}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->category_id}}" data-toggle="modal" data-target="#modalDetails">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                                 </span>
-                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->id])}}">{{$creditItem->category}}</a>
+                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->category_id])}}">{{$creditItem->category}}</a>
                             </td>
-                            <td>{{Number::formatCurrency($creditItem->provision_value)}}</td>
+                            <td>{{Number::formatCurrency($creditItem->provisioned_value)}}</td>
                             <td>{{Number::formatCurrency($creditItem->posted_value)}}</td>
                         </tr>
                     @endforeach
@@ -78,13 +78,13 @@
                     @foreach($statementDebit as $debitItem)
                         <tr class="debit-rows">
                             <td>
-                                <span data-month_to_add="{{$yearMonth}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->id}}" data-toggle="modal" data-target="#modalDetails">
+                                <span data-month_to_add="{{$yearMonth}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>
                                 </span>
-                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->id])}}">{{$debitItem->category}}</a>
+                                <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>
                             </td>
-                            <td>{{Number::formatCurrency($debitItem->provision_value)}}</td>
-                            <td class="{{($debitItem->value > $debitItem->posted_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>
+                            <td>{{Number::formatCurrency($debitItem->provisioned_value)}}</td>
+                            <td class="{{($debitItem->posted_value > $debitItem->provisioned_value)?'btn-danger':''}}">{{Number::formatCurrency($debitItem->posted_value)}}</td>
                         </tr>
                     @endforeach
                     </tbody>
