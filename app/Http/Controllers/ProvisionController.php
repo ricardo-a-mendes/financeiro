@@ -58,7 +58,7 @@ class ProvisionController extends Controller
         $hasSpecificProvision = 'no';
         $method = 'POST';
         $route = route('provision.store');
-        return view('provision.store', compact('provision', 'hasSpecificProvision', 'categories', 'transactionTypes', 'method', 'route'));
+        return view('provision.store_new', compact('provision', 'hasSpecificProvision', 'categories', 'transactionTypes', 'method', 'route'));
     }
 
     public function store(ProvisionRequest $request)
@@ -98,7 +98,7 @@ class ProvisionController extends Controller
         $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
         $method = 'PUT';
         $route = route('provision.update', ['id' => $id]);
-        return view('provision.store', compact('provision', 'categories', 'transactionTypes', 'method', 'route'));
+        return view('provision.store_existent', compact('provision', 'categories', 'transactionTypes', 'method', 'route'));
     }
 
     public function update(ProvisionRequest $request, $id)
