@@ -5,8 +5,6 @@ namespace App\Model;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Support\Facades\DB;
 
 class Transaction extends Model
@@ -16,7 +14,7 @@ class Transaction extends Model
     const STATEMENT_DEBIT = 2;
     const TOTAL_TYPE_VALUE = 'value';
     const TOTAL_TYPE_POSTED = 'posted_value';
-    const TOTAL_TYPE_PROVISION = 'provisioned_value';
+    const TOTAL_TYPE_PROVISIONED = 'provisioned_value';
     const STATEMENT_DB_DATE_FORMAT = 'Y-m-d';
 
     public $provision;
@@ -73,12 +71,12 @@ class Transaction extends Model
     }
 
     /**
-     * @param int $accountID
+     * @param int $accountId
      * @param int $type
      * @param Carbon|null $date
      * @return mixed
      */
-    public function getStatement(int $accountID, int $type, Carbon $date = null)
+    public function getMonthlyStatement(int $accountId, int $type, Carbon $date = null)
     {
         if (!in_array($type, [self::STATEMENT_CREDIT, self::STATEMENT_DEBIT]))
             throw new \InvalidArgumentException('Invalid Type');
@@ -90,12 +88,12 @@ class Transaction extends Model
         $startDate = Carbon::createFromFormat('Y-m-d', $date->format('Y-m-01'));
         $endDate = Carbon::createFromFormat('Y-m-d', $date->format('Y-m-t'));
 
-        return $this->getTransactions($startDate, $endDate, $accountID, $type);
+        return $this->getTransactions($startDate, $endDate, $accountId, $type);
     }
 
     public function getTotal($statement, $type = self::TOTAL_TYPE_POSTED)
     {
-        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_PROVISION, self::TOTAL_TYPE_POSTED]))
+        if (!in_array($type, [self::TOTAL_TYPE_VALUE, self::TOTAL_TYPE_PROVISIONED, self::TOTAL_TYPE_POSTED]))
             throw new \InvalidArgumentException('Invalid Type');
 
         $total = 0;

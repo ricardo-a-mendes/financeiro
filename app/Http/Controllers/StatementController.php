@@ -10,7 +10,6 @@ use App\Model\TransactionType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use League\Flysystem\Exception;
 
 class StatementController extends Controller
@@ -45,20 +44,20 @@ class StatementController extends Controller
         try {
             $yearMonth = str_replace('-', '', $request->post('yearMonth'));
             $date = $yearMonth ? Carbon::createFromFormat('Ym', $yearMonth) : new Carbon();
-            $statementDate = $date->format('m-Y');
+            $statementDate = $date->format('M-Y');
 
             $accountId = Auth::user()->account->id;
             $transaction = $this->transaction;
 
             //Debit
-            $statementDebit = $transaction->getStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
+            $statementDebit = $transaction->getMonthlyStatement($accountId, Transaction::STATEMENT_DEBIT, $date);
             $totalDebit = $transaction->getTotal($statementDebit);
-            $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISION);
+            $totalDebitProvision = $transaction->getTotal($statementDebit, Transaction::TOTAL_TYPE_PROVISIONED);
 
             //Credit
-            $statementCredit = $transaction->getStatement($accountId, Transaction::STATEMENT_CREDIT, $date);
+            $statementCredit = $transaction->getMonthlyStatement($accountId, Transaction::STATEMENT_CREDIT, $date);
             $totalCredit = $transaction->getTotal($statementCredit);
-            $totalCreditProvision = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_PROVISION);
+            $totalCreditProvision = $transaction->getTotal($statementCredit, Transaction::TOTAL_TYPE_PROVISIONED);
 
             //View assets
             $categories = $this->category->getCombo();
