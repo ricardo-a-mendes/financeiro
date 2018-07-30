@@ -60,7 +60,7 @@
                     @foreach($statementCredit as $creditItem)
                         <tr class="credit-rows">
                             <td>
-                                 <span data-month_to_add="{{$yearMonth}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->category_id}}" data-toggle="modal" data-target="#modalDetails">
+                                 <span data-month_to_add="{{$yearMonth}}" data-category="{{$creditItem->category}}" data-category_id="{{$creditItem->category_id}}" data-toggle="modal" data-target="#modalDetails" data-waiting_text="{{trans('app.labels.loading')}}">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open" style="cursor:pointer;">&nbsp;</span>
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $creditItem->category_id])}}">{{$creditItem->category}}</a>
@@ -78,7 +78,7 @@
                     @foreach($statementDebit as $debitItem)
                         <tr class="debit-rows">
                             <td>
-                                <span data-month_to_add="{{$yearMonth}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails">
+                                <span data-month_to_add="{{$yearMonth}}" data-category="{{$debitItem->category}}" data-category_id="{{$debitItem->category_id}}" data-toggle="modal" data-target="#modalDetails" data-waiting_text="{{trans('app.labels.loading')}}">
                                     <span data-toggle="tooltip" data-placement="top" title="{{trans('app.labels.details')}}" class="glyphicon glyphicon-eye-open cursor-pointer">&nbsp;</span>
                                 </span>
                                 <a data-toggle="tooltip" data-placement="right" title="{{trans('category.labels.edit')}}" href="{{route('category.edit', ['id' => $debitItem->category_id])}}">{{$debitItem->category}}</a>
@@ -282,9 +282,19 @@
                 var category_id = span.data('category_id'); // Extract info from data-* attributes
                 var monthToAdd = span.data('month_to_add'); // Extract info from data-* attributes
                 var url_details = '{{route('statement.category.details', ['categoryID' => ''])}}';
+                var loadingText = span.data('waiting_text');
 
                 var modal = $(this);
                 modal.find('.modal-title').text('{{trans('category.labels.details_of')}} "' + category + '"');
+
+                var waitingBody = '<p>'+loadingText+'...</p>\n' +
+                    '                    <div class="progress">\n' +
+                    '                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">\n' +
+                    '                            <span class="sr-only">50% Complete</span>\n' +
+                    '                        </div>\n' +
+                    '                    </div>';
+
+                modal.find('.modal-body').html(waitingBody);
 
                 $.ajax({
                     url: url_details+'/'+category_id+'/'+monthToAdd,
