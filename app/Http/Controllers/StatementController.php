@@ -84,14 +84,12 @@ class StatementController extends Controller
         ));
     }
 
-    public function categoryDetails($categoryID, $monthToAdd = 0)
+    public function categoryDetails($categoryID, $yearMonth)
     {
         $details = [];
         $total = 0;
-        $date = new Carbon();
-
-        if ($monthToAdd !== 0)
-            $date->addMonth($monthToAdd);
+        $yearMonth = $yearMonth . '01';
+        $date = Carbon::createFromFormat('Ymd', $yearMonth);
 
         $startDate = $date->format('Y-m-01 00:00:00');
         $endDate = $date->format('Y-m-t 23:59:59');
@@ -181,7 +179,10 @@ class StatementController extends Controller
 
         $debitsCollection = $this->transaction->getDebitTransactions($startsAt, $endsAt, $accountId);
         foreach ($debitsCollection as $debitTransaction) {
-            $totalDebit[$debitTransaction->yearmonth] += $debitTransaction->posted_value;
+            //Provision with NO transaction does not have 'yearmont'
+            if (isset($debitTransaction->yearmonth)) {
+                $totalDebit[$debitTransaction->yearmonth] += $debitTransaction->posted_value;
+            }
         }
 
         foreach ($totalDebit as $yearmonth => $totalDebitItem) {

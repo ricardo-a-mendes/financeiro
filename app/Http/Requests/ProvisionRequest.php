@@ -13,7 +13,9 @@ class ProvisionRequest extends FormRequest
      */
     public function authorize()
     {
-        //TODO: Check if provision belongs to user account
+//        $provisionId = $this->input('id');
+//        $provision = Provision::find($provisionId);
+//        return ($provision->account_id == Auth::user()->account->id);
         return true;
     }
 

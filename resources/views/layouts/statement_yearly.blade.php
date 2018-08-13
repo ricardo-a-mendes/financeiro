@@ -70,12 +70,12 @@
                             @endforeach
                         </tr>
                         <tr class="credit-rows">
-                            <td>Provision</td>
+                            <td>Provisioned</td>
                             @foreach($yearMonths as $yearMonth => $yearMonthDescription)
                                 @if(is_null($statements[$yearMonth]->category_id))
                                     <td>0.00</td>
                                 @else
-                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provision_value)}}</span></td>
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provisioned_value)}}</span></td>
                                 @endif
                             @endforeach
                         </tr>
@@ -103,12 +103,12 @@
                             @endforeach
                         </tr>
                         <tr class="debit-rows">
-                            <td>Provision</td>
+                            <td>Provisioned</td>
                             @foreach($yearMonths as $yearMonth => $yearMonthDescription)
                                 @if(is_null($statements[$yearMonth]->category_id))
                                     <td>$ 0.00</td>
                                 @else
-                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provision_value)}}</span></td>
+                                    <td><span class="cursor-pointer" data-month_to_add="0" data-category="{{$statements[$yearMonth]->category}}" data-category_id="{{$statements[$yearMonth]->category_id}}" data-toggle="modal" data-target="#modalDetails">{{Number::formatCurrency($statements[$yearMonth]->provisioned_value)}}</span></td>
                                 @endif
                             @endforeach
                         </tr>

@@ -23,12 +23,12 @@ Route::group(['middleware' => 'auth'], function () use ($yearMonthPattern) {
     Route::get('statement-yearly', 'StatementController@yearly')->name('statement.yearly');
     Route::post('statement-yearly', 'StatementController@yearly')->name('statement.yearly.filter');
     Route::post('statement', 'StatementController@store')->name('transaction.store');
-    Route::get('category-details/{categoryID}/{monthToAdd?}', 'StatementController@categoryDetails')->name('statement.category.details');
+    Route::get('category-details/{categoryID}/{yearMonth?}', 'StatementController@categoryDetails')->name('statement.category.details');
     Route::get('provision-specific-details/{categoryID}', 'ProvisionController@specificProvision')->name('provision.specific.details');
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     //Route::resource('account', 'AccountController', ['except' => ['show']]);
-    Route::resource('provision', 'ProvisionController', ['except' => ['show']]);
+    Route::resource('provision', 'ProvisionController', ['except' => ['show']]);//->middleware('can:view,App\Model\Provision');
     Route::resource('reference', 'TransactionReferenceController', ['except' => ['show']]);
     Route::resource('my_account', 'UserAccountController', ['except' => ['show']]);
 });

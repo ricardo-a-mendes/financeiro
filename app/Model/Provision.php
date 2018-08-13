@@ -7,6 +7,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Provision
+ * @package App\Model
+ *
+ * @method Provision find($id)
+ *
+ */
 class Provision extends FinancialModel
 {
     public function transactionType()

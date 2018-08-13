@@ -9,10 +9,13 @@ use App\Model\Provision;
 use App\Model\ProvisionDate;
 use App\Model\TransactionType;
 use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Session;
 
+/**
+ * Class ProvisionController
+ * @package App\Http\Controllers
+ */
 class ProvisionController extends Controller
 {
 
@@ -77,16 +80,6 @@ class ProvisionController extends Controller
 
         $provision->save();
 
-        if ($request->has('specific_provision_option') && $request->has('specific_date')) {
-            $provisionDate = new ProvisionDate();
-            $dateTime = new Carbon($request->input('specific_date'));
-            $provisionDate->account_id = Auth::user()->account->id;
-            $provisionDate->user_id = Auth::id();
-            $provisionDate->target_date = $dateTime->format('Y-m-d');
-            $provisionDate->provision()->associate($provision);
-            $provisionDate->save();
-        }
-
         Session::flash('success', trans('provision.messages.created_successfully'));
         return redirect()->route('provision.index');
     }
@@ -94,6 +87,10 @@ class ProvisionController extends Controller
     public function edit($id)
     {
         $provision = $this->provision->find($id);
+        if (Auth::user()->cannot('update', $provision)) {
+            echo 'sem acesso';
+            die;
+        }
         $categories = $this->category->getCombo();
         $transactionTypes = $this->transactionType->getCombo('id', 'unique_name');
         $method = 'PUT';
@@ -103,14 +100,20 @@ class ProvisionController extends Controller
 
     public function update(ProvisionRequest $request, $id)
     {
-        $provision = $this->provision->find($id);
+        $currentProvision = $this->provision->find($id);
+        $currentValidUntil = Carbon::createFromTimestamp(strtotime('-1 month'));
+        $currentProvision->valid_until = $currentValidUntil->format('Y-m-t');
+        $currentProvision->save();
 
+        $provision = new $this->provision;
         $category = $this->category->find($request->input('category'));
         $provision->category()->associate($category);
 
         $transactionType = $this->transactionType->find($request->input('transactionType'));
         $provision->transactionType()->associate($transactionType);
 
+        $provision->account_id = Auth::user()->account->id;
+        $provision->user_id = Auth::id();
         $provision->value = $request->input('value');
 
         $startAt = Carbon::createFromFormat('Y-m', $request->input('start_at'));

@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7",
         "asgrim/ofxparser": "^1.2",
         "laravel/framework": "5.5.*",
         "ramsey/uuid": "^3.7",
