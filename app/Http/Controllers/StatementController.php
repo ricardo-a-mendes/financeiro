@@ -42,7 +42,7 @@ class StatementController extends Controller
     public function index(Request $request)
     {
         try {
-            $yearMonth = str_replace('-', '', $request->post('yearMonth'));
+            $yearMonth = str_replace('-', '', $request->post('yearMonth')) ?: date("Ym");
             $date = $yearMonth ? Carbon::createFromFormat('Ym', $yearMonth) : new Carbon();
             $statementDate = $date->format('M-Y');
 
@@ -97,6 +97,7 @@ class StatementController extends Controller
         $category = $this->category->find($categoryID);
         $categoryTransactions = $category->transactions()
             ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->orderBy('transaction_date', 'desc')
             ->get();
 
         foreach ($categoryTransactions as $transaction) {

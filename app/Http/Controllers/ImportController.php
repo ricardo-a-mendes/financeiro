@@ -94,10 +94,14 @@ class ImportController extends Controller
     private function parseCSV($path)
     {
 		$transactions = [];
+        $csv = [];
 		$header = ['date', 'description', 'value'];
+		ini_set('auto_detect_line_endings', 1);
+
 		if (($handle = fopen($path, 'r')) !== FALSE)
 		{
-			while (($row = fgetcsv($handle, filesize($path), ';')) !== FALSE)
+            fgets($handle, filesize($path)); //This line makes (somehow) line endings compatible (\r and \r\n and \n)
+			while (($row = fgetcsv($handle, filesize($path), ',')) !== FALSE)
 			{
 				$csv[] = array_combine($header, $row);
 			}
