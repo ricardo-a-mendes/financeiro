@@ -14,6 +14,10 @@
     <!-- Styles -->
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 
+    <!-- https://github.com/raphaelfabeni/css-loader -->
+    <link href="{{ asset('/css/loader/css-loader.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/loader/loader-default.css') }}" rel="stylesheet">
+
     <style type="text/css">
         a.deco-none {color:#000000 !important; text-decoration:none;}
         .cursor-pointer {cursor: pointer;}
@@ -34,6 +38,7 @@
     </script>
 </head>
 <body>
+    <div class="loader loader-default" data-text="Please, wait a moment..."></div>
     <div id="app">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -149,8 +154,24 @@
     <script type="text/javascript" src="{{asset('js/bootstrap/dropdown.js')}}"></script>
     <script type="text/javascript" src="{{asset('js/bootstrap/tooltip.js')}}"></script>
     <script type="text/javascript">
+        function startLoader() {
+            $('.loader.loader-default').addClass('is-active');
+        }
+
+        function stopLoader() {
+            $('.loader.loader-default').removeClass('is-active');
+        }
+
         $(function() {
+            $('form').on('submit', function () {
+                startLoader();
+            });
+
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('button.disableOnClick').on('click', function () {
+                $(this).attr('disabled', 'disabled');
+            });
         });
     </script>
     @yield('js')

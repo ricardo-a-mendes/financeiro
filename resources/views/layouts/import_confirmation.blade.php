@@ -22,15 +22,15 @@
 			</thead>
 			<tbody>
 			@forelse($enhancedTransactions as $enhancedTransaction)
-				@if(!$enhancedTransaction->existent_transaction)
+{{--				@if(!$enhancedTransaction->existent_transaction)--}}
 				<input type="hidden" name="transaction[{{$enhancedTransaction->uniqueId}}]" value="{{json_encode($enhancedTransaction)}}">
 				<tr>
 
-
-					@if($categories->has($enhancedTransaction->category_id))
-						<td><input type="checkbox" checked name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
-					@else
+{{--					@if($categories->has($enhancedTransaction->category_id))--}}
+					@if($enhancedTransaction->existent_transaction)
 						<td><input type="checkbox" name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
+					@else
+						<td><input type="checkbox" checked name="import[]" value="{{$enhancedTransaction->uniqueId}}"></td>
 					@endif
 
 					<td>{{$enhancedTransaction->date->format('d/m/Y')}}</td>
@@ -42,7 +42,7 @@
 					@endif
 
 					<td class="{{($enhancedTransaction->type == 'credit')?'text-green success':'text-red danger'}}">{{Number::formatCurrency($enhancedTransaction->value)}}</td>
-					<td>
+					<td class="{{(0 != $enhancedTransaction->category_id)?'info':''}}">
 
 						<select name="category[{{$enhancedTransaction->uniqueId}}]" class="form-control combo_category">
 							<option value="invalid_option">{{trans('app.labels.select')}}</option>
@@ -57,7 +57,7 @@
 
 					</td>
 				</tr>
-				@endif
+{{--				@endif--}}
 			@empty
 				<tr>
 					<td colspan="4">Nenhuma transação importada.</td>

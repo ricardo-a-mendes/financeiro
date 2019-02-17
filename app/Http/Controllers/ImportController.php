@@ -8,6 +8,7 @@ use App\Model\Transaction;
 use App\Model\TransactionReference;
 use App\Model\TransactionType;
 use Carbon\Carbon;
+use Faker\Provider\pl_PL\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -79,7 +80,7 @@ class ImportController extends Controller
 
             switch ($originalExt) {
                 case 'ofx': $parsedTransactions = $this->parseOFX($path); break;
-                case 'csv': $parsedTransactions = $this->parseCSV($path); break;
+                case 'csv': $parsedTransactions = $this->parseCSV($path, $request->post('delimiter'), $request->post('date_format')); break;
             }
 
             $enhancedTransactions = $this->enhanceTransaction($parsedTransactions);
@@ -91,7 +92,7 @@ class ImportController extends Controller
         return redirect()->route('statement');
     }
 
-    private function parseCSV($path)
+    private function parseCSV($path, $delimiter = ";", $dateFormat = 'Y-m-d')
     {
 		$transactions = [];
         $csv = [];
@@ -100,8 +101,8 @@ class ImportController extends Controller
 
 		if (($handle = fopen($path, 'r')) !== FALSE)
 		{
-            fgets($handle, filesize($path)); //This line makes (somehow) line endings compatible (\r and \r\n and \n)
-			while (($row = fgetcsv($handle, filesize($path), ',')) !== FALSE)
+            //fgets($handle, filesize($path)); //This line makes (somehow) line endings compatible (\r and \r\n and \n)
+			while (($row = fgetcsv($handle, filesize($path), $delimiter)) !== FALSE)
 			{
 				$csv[] = array_combine($header, $row);
 			}
@@ -116,7 +117,7 @@ class ImportController extends Controller
 					'uniqueId' => $uniqueId,
 					'type' => ($value > 0) ? TransactionType::TRANSACTION_TYPE_CREDIT : TransactionType::TRANSACTION_TYPE_DEBIT,
 					'value' => abs($transaction['value']),
-					'date' => Carbon::createFromFormat('d/m/Y', $transaction['date']) // \DateTime()
+					'date' => Carbon::createFromFormat($dateFormat, $transaction['date']) // \DateTime()
 				];
 			}
 		}
@@ -124,25 +125,28 @@ class ImportController extends Controller
         return $transactions;
     }
 
-    private function parseOFX($path)
+    private function parseOFX($path, $dateFormat = 'Y-m-d')
     {
         $ofxParser = new \OfxParser\Parser();
         $ofx = $ofxParser->loadFromFile($path);
         $bankAccount = reset($ofx->bankAccounts);
         $transactions = [];
 
-        //Creating default array fo transactions
+        //Creating default array of transactions
         foreach ($bankAccount->statement->transactions as $uniqueId => $bankTransaction) {
             /** @var \OfxParser\Entities\Transaction $bankTransaction */
             $description = $bankTransaction->memo;
             $transactionType = strtolower($bankTransaction->type);
-            if ((empty($description) || $transactionType == TransactionType::TRANSACTION_TYPE_CREDIT || $transactionType == TransactionType::TRANSACTION_TYPE_POST) && isset($bankTransaction->name)) {
+            if (isset($bankTransaction->name)) {
                 $description = $bankTransaction->name;
             }
-
-            if ($transactionType == TransactionType::TRANSACTION_TYPE_CREDIT && isset($bankTransaction->name)) {
-                $description .= ' - ' . $bankTransaction->name;
-            }
+//            if ((empty($description) || $transactionType == TransactionType::TRANSACTION_TYPE_CREDIT || $transactionType == TransactionType::TRANSACTION_TYPE_POST) && isset($bankTransaction->name)) {
+//                $description = $bankTransaction->name;
+//            }
+//
+//            if ($transactionType == TransactionType::TRANSACTION_TYPE_CREDIT && isset($bankTransaction->name)) {
+//                $description .= ' - ' . $bankTransaction->name;
+//            }
 
             $transactions[] = [
                 'description' => $this->sanitize($description),
@@ -164,7 +168,7 @@ class ImportController extends Controller
 
             //Check if transaction already exists
             $existentTransaction = $this->transaction
-                ->where('description', $transaction['description'])
+                //->where('description', $transaction['description'])
                 ->where('value', $transaction['value'])
                 ->whereBetween('transaction_date', [
                     $transaction['date']->format('Y-m-d 00:00:00'),
@@ -172,7 +176,11 @@ class ImportController extends Controller
                 ])
                 ->first();
 
-            $transaction['existent_transaction'] = (!is_null($existentTransaction));
+            $fuzzyDescription = 0;
+            if (!is_null($existentTransaction)) {
+                similar_text($transaction['description'], $existentTransaction->description, $fuzzyDescription);
+            }
+            $transaction['existent_transaction'] = ($fuzzyDescription > 50);
             $transaction['transaction_reference_id'] = null;
             $transaction['category_id'] = 0;
             $transaction['category_name'] = null;
@@ -229,13 +237,15 @@ class ImportController extends Controller
                 $category = $this->category->findByName('Undefined');
             }
 
-            $account = $this->account->find(1); //TODO: Check this: Why '1'?
+            $account = $this->account->find(Auth::user()->account_id);
             $transactionType = $this->transactionType->where('unique_name', $transactionInfo->type)->first();
 
-            if (is_null($transactionInfo->category_id) || $transactionInfo->category_id == 0) {
-                $transactionReference = $this->transactionReference->find($transactionInfo->transaction_reference_id);
+            if ($transactionInfo->category_id != $category->id) {
+                $transactionReference = new TransactionReference();
                 $transactionReference->category()->associate($category);
+                $transactionReference->description = $transactionInfo->description;
                 $transactionReference->user_id = Auth::id();
+                $transactionReference->account_id = Auth::user()->account_id;
                 $transactionReference->save();
             }
 
